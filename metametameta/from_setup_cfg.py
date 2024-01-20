@@ -48,7 +48,7 @@ def generate_from_setup_cfg(name: str = "", source: str = "setup.cfg", output: s
 
         # Define the content to write to the __about__.py file
         about_content, names = general.any_metadict(metadata)
-        about_content = general.merge_sections(names, project_name, about_content)
+        about_content = general.merge_sections(names, project_name or "", about_content)
         return write_to_file(dir_path, about_content, output)
     return "No [metadata] section found in setup.cfg."
 

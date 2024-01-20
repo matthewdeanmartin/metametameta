@@ -47,7 +47,7 @@ def generate_from_pep621(name: str = "", source: str = "pyproject.toml", output:
             dir_path = f"./{project_name}"
 
         about_content, names = general.any_metadict(project_data)
-        about_content = general.merge_sections(names, project_name, about_content)
+        about_content = general.merge_sections(names, project_name or "", about_content)
         return write_to_file(dir_path, about_content, output)
     return "No [project] section found in pyproject.toml."
 
