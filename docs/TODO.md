@@ -1,3 +1,9 @@
+## UI
+
+- make quiet option
+- --verbose option
+- add logging
+
 ## Sources
 
 - Generate metadata for more source documents? (e.g. setup.cfg, setup.py, PEP pyproject toml meta)
