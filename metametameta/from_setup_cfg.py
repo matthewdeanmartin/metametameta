@@ -2,19 +2,22 @@
 This module contains the function to generate the __about__.py file from the setup.cfg file.
 """
 import configparser
+from pathlib import Path
+from typing import Optional
 
 from metametameta import general
 from metametameta.filesystem import write_to_file
 
 
-def read_setup_cfg_metadata() -> dict:
+def read_setup_cfg_metadata(setup_cfg_path:Optional[Path]=None) -> dict:
     """
     Read the setup.cfg file and extract the [metadata] section.
     Returns:
         dict: The [metadata] section of the setup.cfg file.
     """
     # Path to the setup.cfg file
-    setup_cfg_path = "setup.cfg"
+    if setup_cfg_path is None:
+        setup_cfg_path = Path("setup.cfg")
 
     # Initialize the parser and read the file
     config = configparser.ConfigParser()
@@ -37,7 +40,7 @@ def generate_from_setup_cfg(name: str = "", source: str = "setup.cfg", output: s
     Returns:
         str: Path to the file that was written.
     """
-    metadata = read_setup_cfg_metadata()
+    metadata = read_setup_cfg_metadata(Path(source))
     if metadata:
         # Directory name
         project_name = metadata.get("name")

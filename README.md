@@ -10,8 +10,52 @@ pipx install metametameta
 
 ## Usage
 
+Defaults to putting an `__about__.py` file in the module directory, assuming your package name is your main module name.
+
 ```bash
-metametameta --source pyproject.toml --target mypackage/__metadata__.py
+metametameta poetry
+```
+
+Or set everything explicitly:
+```bash
+metametameta poetry --name "something" --source some.toml --output OUTPUT "mod/meta/__meta__.py"
+```
+
+Subcommand per source.
+```text
+usage: metametameta [-h] {setup_cfg,pep621,poetry,importlib} ...
+
+metametameta: Generate __about__.py from various sources.
+
+positional arguments:
+  {setup_cfg,pep621,poetry,importlib}
+                        sub-command help
+    setup_cfg           Generate from setup.cfg
+    pep621              Generate from PEP 621 pyproject.toml
+    poetry              Generate from poetry pyproject.toml
+    importlib           Generate from installed package metadata
+
+options:
+  -h, --help            show this help message and exit
+```
+
+Subcommand help (they all have the same switches)
+```text
+usage: metametameta poetry [-h] [--name NAME] [--source SOURCE] [--output OUTPUT]
+
+options:
+  -h, --help       show this help message and exit
+  --name NAME      Name of the project (from file if omitted)
+  --source SOURCE  Path to pyproject.toml
+  --output OUTPUT  Output file
+```
+
+TODO: Programmatic interface.
+```python
+import metametameta as mmm
+
+# not implemented yet
+mmm.find_metadata("path/to/module")
 ```
 
 ## Motivation
