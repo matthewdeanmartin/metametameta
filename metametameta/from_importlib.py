@@ -1,12 +1,12 @@
 """
 Generate an __about__.py file from package metadata using importlib.metadata.
 """
+
 import importlib.metadata as md
 from typing import Any, cast
 
-from metametameta import general
 from metametameta.filesystem import write_to_file
-from metametameta.general import any_metadict
+from metametameta.general import any_metadict, merge_sections
 
 
 def get_package_metadata(package_name: str) -> dict[str, Any]:
@@ -27,7 +27,7 @@ def generate_from_importlib(name: str, source: str = "", output: str = "__about_
 
         about_content, names = any_metadict(pkg_metadata)
 
-        about_content = general.merge_sections(names, name, about_content)
+        about_content = merge_sections(names, name, about_content)
         return write_to_file(dir_path, about_content, output)
     else:
         return "No [project] section found in pyproject.toml."

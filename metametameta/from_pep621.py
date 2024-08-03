@@ -1,10 +1,11 @@
 """
 This module contains the function to generate the __about__.py file from the pyproject.toml file.
 """
+
 import toml
 
-from metametameta import general
 from metametameta.filesystem import write_to_file
+from metametameta.general import any_metadict, merge_sections
 
 
 def read_pep621_metadata(source: str = "pyproject.toml") -> dict:
@@ -46,8 +47,14 @@ def generate_from_pep621(name: str = "", source: str = "pyproject.toml", output:
         else:
             dir_path = f"./{project_name}"
 
-        about_content, names = general.any_metadict(project_data)
-        about_content = general.merge_sections(names, project_name or "", about_content)
+        result_tuple = None
+        try:
+            result_tuple = any_metadict(project_data)
+            about_content, names = result_tuple
+        except Exception:
+            print(result_tuple)
+            raise
+        about_content = merge_sections(names, project_name or "", about_content)
         return write_to_file(dir_path, about_content, output)
     return "No [project] section found in pyproject.toml."
 

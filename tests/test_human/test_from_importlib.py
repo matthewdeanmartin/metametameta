@@ -10,7 +10,7 @@ def test_generate_from_importlib(tmp_path, mocker):
         "name": package_name,
         "version": "1.0.2",
         "author": "Author Name",
-        "author-email": "author@example.com"
+        "author-email": "author@example.com",
         # Add more metadata fields as needed
     }
 

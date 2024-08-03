@@ -1,11 +1,15 @@
 """
 Console interface for metametameta.
 """
+
 import argparse
+import logging
+import logging.config
 import sys
 from collections.abc import Sequence
 from typing import Optional
 
+from metametameta import logging_config
 from metametameta.from_importlib import generate_from_importlib
 from metametameta.from_pep621 import generate_from_pep621
 from metametameta.from_poetry import generate_from_poetry
@@ -77,6 +81,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         int: The exit code.
     """
     parser = argparse.ArgumentParser(description="metametameta: Generate __about__.py from various sources.")
+
+    parser.add_argument("--verbose", action="store_true", help="verbose output")
+
     subparsers = parser.add_subparsers(help="sub-command help", dest="source")
 
     # Create a subparser for each generate function
@@ -110,7 +117,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     args = parser.parse_args(argv)
 
-    if args.func:
+    if args.verbose:
+        config = logging_config.generate_config()
+        logging.config.dictConfig(config)
+    else:
+        # Essentially, quiet mode
+        logging.basicConfig(level=logging.FATAL)
+
+    if hasattr(args, "func") and args.func:
         args.func(args)
         return 0
 

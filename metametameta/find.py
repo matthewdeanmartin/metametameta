@@ -1,6 +1,7 @@
 """
 Find metadata in a module file.
 """
+
 import inspect
 import os
 import re

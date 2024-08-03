@@ -32,7 +32,7 @@ clean: clean-pyc clean-test
 test: clean poetry.lock
 	@echo "Running unit tests"
 	$(VENV) pytest --doctest-modules metametameta
-	$(VENV) python -m unittest discover
+	# $(VENV) python -m unittest discover
 	$(VENV) py.test tests -vv -n 2 --cov=metametameta --cov-report=html --cov-fail-under 50
 	$(VENV) bash basic_test.sh
 

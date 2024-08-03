@@ -1,15 +1,16 @@
 """
 This module contains the function to generate the __about__.py file from the setup.cfg file.
 """
+
 import configparser
 from pathlib import Path
 from typing import Optional
 
-from metametameta import general
 from metametameta.filesystem import write_to_file
+from metametameta.general import any_metadict, merge_sections
 
 
-def read_setup_cfg_metadata(setup_cfg_path:Optional[Path]=None) -> dict:
+def read_setup_cfg_metadata(setup_cfg_path: Optional[Path] = None) -> dict:
     """
     Read the setup.cfg file and extract the [metadata] section.
     Returns:
@@ -50,8 +51,14 @@ def generate_from_setup_cfg(name: str = "", source: str = "setup.cfg", output: s
             dir_path = f"./{project_name}"
 
         # Define the content to write to the __about__.py file
-        about_content, names = general.any_metadict(metadata)
-        about_content = general.merge_sections(names, project_name or "", about_content)
+        result_tuple = None
+        try:
+            result_tuple = any_metadict(metadata)
+            about_content, names = result_tuple
+        except Exception:
+            print(result_tuple)
+            raise
+        about_content = merge_sections(names, project_name or "", about_content)
         return write_to_file(dir_path, about_content, output)
     return "No [metadata] section found in setup.cfg."
 

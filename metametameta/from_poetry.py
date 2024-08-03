@@ -2,12 +2,14 @@
 This module contains the functions to generate the __about__.py file from the [tool.poetry] section of the
 pyproject.toml file.
 """
+
 from pathlib import Path
 from typing import Any
 
 import toml
 
-from metametameta import filesystem, general
+from metametameta import filesystem
+from metametameta.general import any_metadict, merge_sections
 
 
 def read_poetry_metadata(
@@ -56,10 +58,10 @@ def generate_from_poetry(name: str = "", source: str = "pyproject.toml", output:
                     elif key == "from":
                         from_part = value
                     elif key == "format":
-                        _format_part = value
+                        pass
                 candidate_path = ""
                 if include_part:
-                    candidate_path =include_part
+                    candidate_path = include_part
                 if include_part and from_part:
                     candidate_from_path = Path(candidate_path) / from_part
                     if candidate_from_path.exists():
@@ -76,8 +78,9 @@ def generate_from_poetry(name: str = "", source: str = "pyproject.toml", output:
                 dir_path = "./"
             else:
                 dir_path = f"./{candidate}"
-            about_content, names = general.any_metadict(poetry_data)
-            about_content = general.merge_sections(names, candidate or "", about_content)
+            result_tuple = any_metadict(poetry_data)
+            about_content, names = result_tuple
+            about_content = merge_sections(names, candidate or "", about_content)
             # Define the content to write to the __about__.py file
             result = filesystem.write_to_file(dir_path, about_content, output)
             written.append(result)
@@ -85,5 +88,4 @@ def generate_from_poetry(name: str = "", source: str = "pyproject.toml", output:
 
 
 if __name__ == "__main__":
-
     generate_from_poetry()

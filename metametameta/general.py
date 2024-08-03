@@ -1,8 +1,12 @@
 """
 Utilities for generating source code metadata from existing metadata files.
 """
+
+import logging
 import re
 from typing import Optional, Union
+
+logger = logging.getLogger(__name__)
 
 
 def any_metadict(metadata: dict[str, Union[str, int, float, list[str]]]) -> tuple[str, list[str]]:
@@ -53,7 +57,7 @@ def any_metadict(metadata: dict[str, Union[str, int, float, list[str]]]) -> tupl
         #     content.append(f'__{key}__ = "{value}"')
         else:
             if not isinstance(value, (str, int, float)):
-                print("Skipping:", key, value)
+                logger.debug("Skipping:", key, value)
                 continue
             variable_name = key.lower().replace("-", "_")
             quoted_value = safe_quote(value)

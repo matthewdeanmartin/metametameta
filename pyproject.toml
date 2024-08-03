@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "metametameta"
-version = "0.1.0"
+version = "0.1.1"
 description = "Generate __about__.py with dunder meta."
 authors = ["Matthew Martin <matthewdeanmartin@gmail.com>"]
 keywords = ["packagin", "metadata", ]
@@ -38,7 +38,7 @@ documentation = "https://matthewdeanmartin.github.io/metametameta/metametameta/i
 
 [tool.poetry.scripts]
 metametameta = 'metametameta.__main__:main'
-mmm = 'mmm.__main__:main'
+mmm = 'metametameta.__main__:main'
 
 [tool.poetry.dependencies]
 python = ">=3.8"
@@ -47,7 +47,7 @@ python = ">=3.8"
 
 # Config
 toml = ">=0.10.2"
-
+colorlog = ">=6.8.2"
 # metadata, don't need it!
 # importlib-metadata = { version = ">=7.0.1", python = "<3.8" }
 
