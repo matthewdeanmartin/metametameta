@@ -3,7 +3,7 @@ name = "metametameta"
 version = "0.1.1"
 description = "Generate __about__.py with dunder meta."
 authors = ["Matthew Martin <matthewdeanmartin@gmail.com>"]
-keywords = ["packagin", "metadata", ]
+keywords = ["packaging", "metadata", ]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -41,7 +41,7 @@ metametameta = 'metametameta.__main__:main'
 mmm = 'metametameta.__main__:main'
 
 [tool.poetry.dependencies]
-python = ">=3.8"
+python = ">=3.9,<4.0"
 
 # packaging = ">=23.2"
 
@@ -53,26 +53,32 @@ colorlog = ">=6.8.2"
 
 
 [tool.poetry.dev-dependencies]
-
-# build tools
+# formatting
 black = ">=23.11.0"
+
+# dep tools
+deptry = "*"
+
+# testing tools
 pytest = ">=7.4.3"
 pytest-cov = ">=4.1.0"
 pytest-xdist =">=3.5.0"
 pytest-randomly=">=3.15.0"
 pytest-sugar =">=0.9.7"
 pytest-mock = "*"
-
+pytest-unused-fixtures = "*"
 hypothesis = ">=6.96.0"
 tox = "*"
+
+# tools
 pylint = ">=3.0.2"
 ruff = ">=0.1.9"
+pre-commit = ">=3.5.0"
 
 # types
 mypy = ">=1.8.0"
 types-toml = "*"
-types-colorama = "*"
-types-tqdm = "*"
+
 
 # more testing
 # pytest-snapshot = ">=0.9.0"
@@ -80,9 +86,9 @@ types-tqdm = "*"
 #anyio = ">=4.2.0"
 #trio = ">=0.23.2"
 
-pre-commit = ">=3.5.0"
 
 # docs
+keepachangelog-manager = ">=3.3.1"
 interrogate = ">=1.5.0"
 pydoctest = ">=0.1.22"
 pdoc3 = ">=0.10.0"

@@ -17,11 +17,13 @@ metametameta poetry
 ```
 
 Or set everything explicitly:
+
 ```bash
 metametameta poetry --name "something" --source some.toml --output OUTPUT "mod/meta/__meta__.py"
 ```
 
 Subcommand per source.
+
 ```text
 usage: metametameta [-h] {setup_cfg,pep621,poetry,importlib} ...
 
@@ -40,6 +42,7 @@ options:
 ```
 
 Subcommand help (they all have the same switches)
+
 ```text
 usage: metametameta poetry [-h] [--name NAME] [--source SOURCE] [--output OUTPUT]
 
@@ -51,6 +54,7 @@ options:
 ```
 
 TODO: Programmatic interface.
+
 ```python
 import metametameta as mmm
 

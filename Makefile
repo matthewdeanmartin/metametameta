@@ -111,7 +111,7 @@ make_docs:
 
 check_md:
 	$(VENV) mdformat README.md docs/*.md
-	# $(VENV) linkcheckMarkdown README.md # it is attempting to validate ssl certs
+	$(VENV) linkcheckMarkdown README.md
 	$(VENV) markdownlint README.md --config .markdownlintrc
 
 check_spelling:
