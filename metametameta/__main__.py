@@ -7,7 +7,7 @@ import logging
 import logging.config
 import sys
 from collections.abc import Sequence
-from typing import Optional
+from typing import Any, Optional
 
 from metametameta import logging_config
 from metametameta.from_importlib import generate_from_importlib
@@ -16,7 +16,7 @@ from metametameta.from_poetry import generate_from_poetry
 from metametameta.from_setup_cfg import generate_from_setup_cfg
 
 
-def process_args(args: argparse.Namespace) -> dict:
+def process_args(args: argparse.Namespace) -> dict[str, Any]:
     """
     Process the arguments from argparse.Namespace to a dict.
     Args:

@@ -13,7 +13,7 @@ def get_package_metadata(package_name: str) -> dict[str, Any]:
     """Get package metadata using importlib.metadata."""
     try:
         pkg_metadata: md.PackageMetadata = md.metadata(package_name)
-        return {key: value for key, value in cast(dict, pkg_metadata).items()}
+        return {key: value for key, value in cast(dict[str, Any], pkg_metadata).items()}
     except md.PackageNotFoundError:
         print(f"Package '{package_name}' not found.")
         return {}

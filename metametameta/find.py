@@ -5,20 +5,21 @@ Find metadata in a module file.
 import inspect
 import os
 import re
+from typing import Any
 
 
-def get_module_file(module):
+def get_module_file(module: Any) -> str:
     """Get the file associated with a module."""
     return inspect.getfile(module)
 
 
-def is_package(module):
+def is_package(module: Any) -> bool:
     """Check if a module is a package."""
     module_file = get_module_file(module)
     return os.path.basename(module_file) == "__init__.py"
 
 
-def get_meta(module_file):
+def get_meta(module_file: Any) -> dict[str, str]:
     """Extract metadata from the module file."""
     metadata = {}
     if module_file and os.path.isfile(module_file):

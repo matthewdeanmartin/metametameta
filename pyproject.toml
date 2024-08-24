@@ -278,3 +278,5 @@ brew = {name = "brew", version = ">=0.0.0", schema = "semver", if_os = "darwin"}
 poetry = {name = "poetry", version = "Poetry (version 1.5.1)", schema = "snapshot"}
 
 
+[tool.strict-build-script]
+minimum_test_coverage = 60
