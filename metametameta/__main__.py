@@ -103,7 +103,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser_pep621.add_argument("--name", type=str, default="", help="Name of the project (from file if omitted)")
     parser_pep621.add_argument("--source", type=str, default="pyproject.toml", help="Path to pyproject.toml")
     parser_pep621.add_argument("--output", type=str, default="__about__.py", help="Output file")
-    parser_pep621.set_defaults(func=handle_poetry)
+    parser_pep621.set_defaults(func=handle_pep621)
 
     # Arguments for poetry
     parser_poetry.add_argument("--name", type=str, default="", help="Name of the project (from file if omitted)")

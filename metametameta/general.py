@@ -57,7 +57,7 @@ def any_metadict(metadata: dict[str, Union[str, int, float, list[str]]]) -> tupl
         #     content.append(f'__{key}__ = "{value}"')
         else:
             if not isinstance(value, (str, int, float)):
-                logger.debug("Skipping:", key, value)
+                logger.debug(f"Skipping: {str(key)}")
                 continue
             variable_name = key.lower().replace("-", "_")
             quoted_value = safe_quote(value)

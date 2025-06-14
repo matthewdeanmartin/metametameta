@@ -22,6 +22,7 @@ set -e
 metametameta setup_cfg --name example --output example/__about_cfg__.py
 echo "-------------------------------------"
 metametameta pep621 --name example --output example/__about_pep621__.py
+metametameta pep621 --name example2 --output example/__about_pep621_2__.py
 echo "-------------------------------------"
 metametameta poetry --name example --output example/__about_poetry__.py
 echo "-------------------------------------"
