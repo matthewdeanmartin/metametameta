@@ -3,9 +3,12 @@ Find metadata in a module file.
 """
 
 import inspect
+import logging
 import os
 import re
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 
 def get_module_file(module: Any) -> str:

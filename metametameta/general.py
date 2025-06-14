@@ -64,6 +64,9 @@ def any_metadict(metadata: dict[str, Union[str, int, float, list[str]]]) -> tupl
             lines.append(f"__{variable_name}__ = {quoted_value}")
             names.append(f"__{variable_name}__")
     about_content = "\n".join(lines)
+    if logger.isEnabledFor(logging.DEBUG):
+        for line in lines:
+            logger.debug(line)
     return about_content, names
 
 

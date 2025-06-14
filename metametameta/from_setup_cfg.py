@@ -3,11 +3,14 @@ This module contains the function to generate the __about__.py file from the set
 """
 
 import configparser
+import logging
 from pathlib import Path
 from typing import Any, Optional
 
 from metametameta.filesystem import write_to_file
 from metametameta.general import any_metadict, merge_sections
+
+logger = logging.getLogger(__name__)
 
 
 def read_setup_cfg_metadata(setup_cfg_path: Optional[Path] = None) -> dict[str, Any]:
@@ -56,10 +59,12 @@ def generate_from_setup_cfg(name: str = "", source: str = "setup.cfg", output: s
             result_tuple = any_metadict(metadata)
             about_content, names = result_tuple
         except Exception:
-            print(result_tuple)
+            logger.warning("Can't parse metadata")
+            logger.warning(result_tuple)
             raise
         about_content = merge_sections(names, project_name or "", about_content)
         return write_to_file(dir_path, about_content, output)
+    logger.debug("No [metadata] section found in setup.cfg.")
     return "No [metadata] section found in setup.cfg."
 
 

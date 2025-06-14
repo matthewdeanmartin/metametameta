@@ -83,6 +83,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="metametameta: Generate __about__.py from various sources.")
 
     parser.add_argument("--verbose", action="store_true", help="verbose output")
+    parser.add_argument("--quiet", action="store_true", help="minimal output")
 
     subparsers = parser.add_subparsers(help="sub-command help", dest="source")
 
@@ -118,11 +119,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     args = parser.parse_args(argv)
 
     if args.verbose:
-        config = logging_config.generate_config()
-        logging.config.dictConfig(config)
+        level = "DEBUG"
+    elif args.quiet:
+        level = "FATAL"
     else:
-        # Essentially, quiet mode
-        logging.basicConfig(level=logging.FATAL)
+        level = "WARNING"
+
+    config = logging_config.generate_config(level)
+    logging.config.dictConfig(config)
 
     if hasattr(args, "func") and args.func:
         args.func(args)

@@ -3,6 +3,7 @@ This module contains the functions to generate the __about__.py file from the [t
 pyproject.toml file.
 """
 
+import logging
 from pathlib import Path
 from typing import Any
 
@@ -10,6 +11,8 @@ import toml
 
 from metametameta import filesystem
 from metametameta.general import any_metadict, merge_sections
+
+logger = logging.getLogger(__name__)
 
 
 def read_poetry_metadata(
@@ -84,6 +87,7 @@ def generate_from_poetry(name: str = "", source: str = "pyproject.toml", output:
             # Define the content to write to the __about__.py file
             result = filesystem.write_to_file(dir_path, about_content, output)
             written.append(result)
+    logger.debug("No [tool.poetry] section found in pyproject.toml.")
     return "No [tool.poetry] section found in pyproject.toml."
 
 

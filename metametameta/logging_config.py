@@ -6,7 +6,7 @@ import os
 from typing import Any
 
 
-def generate_config() -> dict[str, Any]:
+def generate_config(level: str = "DEBUG") -> dict[str, Any]:
     """
     Generate a logging configuration.
 
@@ -25,7 +25,7 @@ def generate_config() -> dict[str, Any]:
         },
         "handlers": {
             "default": {
-                "level": "DEBUG",
+                "level": level,
                 "formatter": "colored",
                 "class": "logging.StreamHandler",
                 "stream": "ext://sys.stdout",  # Default is stderr
@@ -34,7 +34,7 @@ def generate_config() -> dict[str, Any]:
         "loggers": {
             "metametameta": {
                 "handlers": ["default"],
-                "level": "DEBUG",
+                "level": level,
                 "propagate": False,
             }
         },

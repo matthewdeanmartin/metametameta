@@ -19,6 +19,7 @@ def find_metadata_in_file(file_path: Path) -> dict[str, Any]:
         # Match all possible metadata fields, assuming they follow the format __key__ = value
         matches = re.findall(r"__(\w+)__\s*=\s*['\"]([^'\"]+)['\"]", content)
         for key, value in matches:
+            logger.debug(f"Found {key} : {value}")
             metadata[key] = value
     return metadata
 
