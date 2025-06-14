@@ -47,14 +47,14 @@ python = ">=3.9,<4.0"
 
 # Config
 toml = ">=0.10.2"
-colorlog = ">=6.8.2"
+colorlog = ">=6.9.0"
 # metadata, don't need it!
 # importlib-metadata = { version = ">=7.0.1", python = "<3.8" }
 
 
 [tool.poetry.dev-dependencies]
 # formatting
-black = ">=23.11.0"
+black = ">=25.1.0"
 
 # dep tools
 deptry = "*"
@@ -76,7 +76,7 @@ ruff = ">=0.1.9"
 pre-commit = ">=3.5.0"
 
 # types
-mypy = ">=1.8.0"
+mypy = ">=1.16.0"
 types-toml = "*"
 
 
@@ -88,7 +88,8 @@ types-toml = "*"
 
 
 # docs
-keepachangelog-manager = ">=3.3.1"
+#keepachangelog= ">=2.0.0"
+#keepachangelog-manager = ">=3.3.1"
 interrogate = ">=1.5.0"
 pydoctest = ">=0.1.22"
 pdoc3 = ">=0.10.0"
