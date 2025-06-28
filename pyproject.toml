@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "metametameta"
-version = "0.1.2"
+version = "0.1.3"
 description = "Generate __about__.py with dunder meta."
 authors = ["Matthew Martin <matthewdeanmartin@gmail.com>"]
 keywords = ["packaging", "metadata", ]

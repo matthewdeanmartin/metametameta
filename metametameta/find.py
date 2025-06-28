@@ -2,6 +2,8 @@
 Find metadata in a module file.
 """
 
+# TODO: thing about this <matth 2025-06-06 p:3>
+
 import inspect
 import logging
 import os

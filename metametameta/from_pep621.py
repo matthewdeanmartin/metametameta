@@ -3,6 +3,7 @@ This module contains the function to generate the __about__.py file from the pyp
 """
 
 import logging
+from pathlib import Path
 from typing import Any, cast
 
 import toml
@@ -46,10 +47,21 @@ def generate_from_pep621(name: str = "", source: str = "pyproject.toml", output:
     project_data = read_pep621_metadata(source)
     if project_data:
         # Extract the project name and create a directory
-        project_name = project_data.get("name")
+        project_name = project_data.get("name", "")
+        if not project_name:
+            raise TypeError("Project name not found in [project] section of pyproject.toml.")
         if output != "__about__.py" and "/" in output or "\\" in output:
             dir_path = "./"
         else:
+            dir_path = f"./{project_name}"
+
+        # if the dir_path does not exist check if project_name.replace("-", "_") exists
+        if not Path(dir_path).exists():
+            project_name = project_name.replace("-", "_")
+            dir_path = f"./{project_name}"
+
+        if not Path(dir_path).exists():
+            project_name = project_name.replace("_", "-")
             dir_path = f"./{project_name}"
 
         result_tuple = None
