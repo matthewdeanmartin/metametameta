@@ -164,4 +164,4 @@ cython_debug/
 .build_history/
 
 .cli_tool_audit_cache/
-/example/
+example
