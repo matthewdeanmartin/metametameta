@@ -28,9 +28,9 @@ metametameta poetry --name example --output example/__about_poetry__.py
 echo "-------------------------------------"
 metametameta importlib --name toml --output example/__about_importlib__.py
 echo "Using on own source code.."
-metametameta setup_cfg
+# metametameta setup_cfg # messes with own source code!
 echo "-------------------------------------"
-metametameta pep621
+# metametameta pep621
 echo "-------------------------------------"
 metametameta importlib --name metametameta --output example/__about_importlib_for_mmm__.py
 echo "-------------Restoring to poetry based------------------------"
