@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from metametameta.from_poetry import generate_from_poetry

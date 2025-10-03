@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from metametameta.find import get_meta

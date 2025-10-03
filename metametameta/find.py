@@ -2,7 +2,7 @@
 Find metadata in a module file.
 """
 
-# TODO: thing about this <matth 2025-06-06 p:3>
+from __future__ import annotations
 
 import inspect
 import logging

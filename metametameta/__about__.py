@@ -16,7 +16,7 @@ __all__ = [
 ]
 
 __title__ = "metametameta"
-__version__ = "0.1.2"
+__version__ = "0.1.4"
 __description__ = "Generate __about__.py with dunder meta."
 __author__ = "Matthew Martin"
 __author_email__ = "matthewdeanmartin@gmail.com"

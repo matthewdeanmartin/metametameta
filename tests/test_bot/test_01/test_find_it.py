@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from metametameta.find_it import find_metadata_in_file, find_metadata_in_module, main

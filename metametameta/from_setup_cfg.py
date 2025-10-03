@@ -2,10 +2,12 @@
 This module contains the function to generate the __about__.py file from the setup.cfg file.
 """
 
+from __future__ import annotations
+
 import configparser
 import logging
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from metametameta.filesystem import write_to_file
 from metametameta.general import any_metadict, merge_sections
@@ -13,7 +15,7 @@ from metametameta.general import any_metadict, merge_sections
 logger = logging.getLogger(__name__)
 
 
-def read_setup_cfg_metadata(setup_cfg_path: Optional[Path] = None) -> dict[str, Any]:
+def read_setup_cfg_metadata(setup_cfg_path: Path | None = None) -> dict[str, Any]:
     """
     Read the setup.cfg file and extract the [metadata] section.
     Returns:

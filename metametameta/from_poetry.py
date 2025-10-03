@@ -3,6 +3,8 @@ This module contains the functions to generate the __about__.py file from the [t
 pyproject.toml file.
 """
 
+from __future__ import annotations
+
 import logging
 from pathlib import Path
 from typing import Any

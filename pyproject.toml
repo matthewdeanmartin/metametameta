@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "metametameta"
-version = "0.1.3"
+version = "0.1.4"
 description = "Generate __about__.py with dunder meta."
 authors = ["Matthew Martin <matthewdeanmartin@gmail.com>"]
 keywords = ["packaging", "metadata", ]
@@ -15,6 +15,8 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 include = [
     "metametameta/**/*.py",
@@ -41,9 +43,10 @@ metametameta = 'metametameta.__main__:main'
 mmm = 'metametameta.__main__:main'
 
 [tool.poetry.dependencies]
-python = ">=3.9,<4.0"
+python = ">=3.8,<4.0"
 
 # packaging = ">=23.2"
+rich_argparse= "*"
 
 # Config
 toml = ">=0.10.2"
@@ -54,52 +57,48 @@ colorlog = ">=6.9.0"
 
 [tool.poetry.dev-dependencies]
 # formatting
-black = ">=25.1.0"
+black = { version = ">=25.1.0", python = ">=3.9" }
 
 # dep tools
-deptry = "*"
+deptry = { version = "*", python = ">=3.9" }
 
 # testing tools
-pytest = ">=7.4.3"
-pytest-cov = ">=4.1.0"
-pytest-xdist =">=3.5.0"
-pytest-randomly=">=3.15.0"
-pytest-sugar =">=0.9.7"
-pytest-mock = "*"
-pytest-unused-fixtures = "*"
-hypothesis = ">=6.96.0"
-tox = "*"
+pytest = { version = ">=7.4.3", python = ">=3.9" }
+pytest-cov = { version = ">=4.1.0", python = ">=3.9" }
+pytest-xdist = { version = ">=3.5.0", python = ">=3.9" }
+pytest-randomly = { version = ">=3.15.0", python = ">=3.9" }
+pytest-sugar = { version = ">=0.9.7", python = ">=3.9" }
+pytest-mock = { version = "*", python = ">=3.9" }
+pytest-unused-fixtures = { version = "*", python = ">=3.9" }
+hypothesis = { version = ">=6.96.0", python = ">=3.9" }
+tox = { version = "*", python = ">=3.9" }
 
 # tools
-pylint = ">=3.0.2"
-ruff = ">=0.1.9"
-pre-commit = ">=3.5.0"
+pylint = { version = ">=3.0.2", python = ">=3.9" }
+ruff = { version = ">=0.1.9", python = ">=3.9" }
+pre-commit = { version = ">=3.5.0", python = ">=3.9" }
 
 # types
-mypy = ">=1.16.0"
-types-toml = "*"
-
-
-# more testing
-# pytest-snapshot = ">=0.9.0"
-# pytest-asyncio = ">=0.23.2"
-#anyio = ">=4.2.0"
-#trio = ">=0.23.2"
-
+mypy = { version = ">=1.16.0", python = ">=3.9" }
+types-toml = { version = "*", python = ">=3.9" }
 
 # docs
-#keepachangelog= ">=2.0.0"
-#keepachangelog-manager = ">=3.3.1"
-interrogate = ">=1.5.0"
-pydoctest = ">=0.1.22"
-pdoc3 = ">=0.10.0"
-mdformat = ">=0.7.17"
-linkcheckmd = ">=1.4.0"
-codespell = ">=2.2.6"
-pyenchant = ">=3.2.2"
-#
-# contract
-# griffe = ">=0.38.1"
+interrogate = { version = ">=1.5.0", python = ">=3.9" }
+pydoctest = { version = ">=0.1.22", python = ">=3.9" }
+pdoc3 = { version = ">=0.10.0", python = ">=3.9" }
+mdformat = { version = ">=0.7.17", python = ">=3.9" }
+linkcheckmd = { version = ">=1.4.0", python = ">=3.9" }
+codespell = { version = ">=2.2.6", python = ">=3.9" }
+pyenchant = { version = ">=3.2.2", python = ">=3.9" }
+
+# more testing (optional)
+# pytest-snapshot = { version = ">=0.9.0", python = ">=3.9" }
+# pytest-asyncio = { version = ">=0.23.2", python = ">=3.9" }
+# anyio = { version = ">=4.2.0", python = ">=3.9" }
+# trio = { version = ">=0.23.2", python = ">=3.9" }
+
+# contract (optional)
+# griffe = { version = ">=0.38.1", python = ">=3.9" }
 
 
 [tool.black]

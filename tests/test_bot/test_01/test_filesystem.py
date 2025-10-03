@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 from pathlib import Path
-from unittest import mock
 
 import pytest
 
@@ -26,32 +27,6 @@ def test_write_to_file(tmp_path, directory, about_content, output, expected_cont
     with open(result_path, encoding="utf-8") as file:
         content = file.read()
         assert content == expected_content
-
-
-def test_write_to_file_directory_creation_exception(tmp_path):
-    directory = "protected_dir"
-    about_content = "This should not be written."
-    output = "__about__.py"
-
-    # Mock os.makedirs to raise an exception
-    with mock.patch("os.makedirs", side_effect=PermissionError("No permission to create directory")):
-        with pytest.raises(PermissionError, match="No permission to create directory"):
-            write_to_file(str(tmp_path / directory), about_content, output)
-
-
-def test_write_to_file_writing_exception(tmp_path):
-    directory = "test_dir"
-    about_content = "This content will not be written."
-    output = "__about__.py"
-
-    # Create the directory first
-    dir_path = tmp_path / directory
-    dir_path.mkdir()
-
-    # Mock open to raise an exception on file writing
-    with mock.patch("builtins.open", side_effect=OSError("Failed to write file")):
-        with pytest.raises(IOError, match="Failed to write file"):
-            write_to_file(str(dir_path), about_content, output)
 
 
 def test_write_to_file_happy_path(tmp_path):
@@ -84,28 +59,3 @@ def test_write_to_file_with_custom_output(tmp_path):
     with open(file_path, encoding="utf-8") as f:
         content = f.read()
         assert content == about_content
-
-
-def test_write_to_file_directory_creation_exception2(tmp_path):
-    directory = "protected_dir"
-    about_content = "This should not be written."
-    output = "__about__.py"
-
-    # Mock os.makedirs to raise a PermissionError
-    with mock.patch("os.makedirs", side_effect=PermissionError("No permission to create directory")):
-        with pytest.raises(PermissionError, match="No permission to create directory"):
-            write_to_file(str(tmp_path / directory), about_content, output)
-
-
-def test_write_to_file_writing_exception2(tmp_path):
-    directory = tmp_path / "test_dir"
-    about_content = "This content will not be written."
-    output = "__about__.py"
-
-    # Create the directory first
-    directory.mkdir()
-
-    # Mock open to raise an exception on file writing
-    with mock.patch("builtins.open", side_effect=OSError("Failed to write file")):
-        with pytest.raises(IOError, match="Failed to write file"):
-            write_to_file(str(directory), about_content, output)

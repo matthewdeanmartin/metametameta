@@ -2,6 +2,8 @@
 This module contains the function to generate the __about__.py file from the pyproject.toml file.
 """
 
+from __future__ import annotations
+
 import logging
 from pathlib import Path
 from typing import Any, cast
@@ -29,7 +31,8 @@ def read_pep621_metadata(source: str = "pyproject.toml") -> dict[str, Any]:
 
     # Extract the [project] section
     project_data = data.get("project", {})
-    return cast(dict[str, Any], project_data)
+    # must be dict for 3.8 support
+    return cast(dict, project_data)
 
 
 def generate_from_pep621(name: str = "", source: str = "pyproject.toml", output: str = "__about__.py") -> str:

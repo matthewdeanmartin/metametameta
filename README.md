@@ -25,20 +25,23 @@ metametameta poetry --name "something" --source some.toml --output OUTPUT "mod/m
 Subcommand per source.
 
 ```text
-usage: metametameta [-h] {setup_cfg,pep621,poetry,importlib} ...
+Usage: metametameta [-h] [--verbose] [--quiet] {setup_cfg,pep621,poetry,importlib,setup_py} ...
 
 metametameta: Generate __about__.py from various sources.
 
-positional arguments:
-  {setup_cfg,pep621,poetry,importlib}
+Positional Arguments:
+  {setup_cfg,pep621,poetry,importlib,setup_py}
                         sub-command help
     setup_cfg           Generate from setup.cfg
     pep621              Generate from PEP 621 pyproject.toml
     poetry              Generate from poetry pyproject.toml
     importlib           Generate from installed package metadata
+    setup_py            Generate from setup.py using AST (experimental)
 
-options:
+Options:
   -h, --help            show this help message and exit
+  --verbose             verbose output
+  --quiet               minimal output
 ```
 
 Subcommand help (they all have the same switches)
@@ -53,13 +56,12 @@ options:
   --output OUTPUT  Output file
 ```
 
-TODO: Programmatic interface.
+## Programmatic interface.
 
 ```python
 import metametameta as mmm
 
-# not implemented yet
-mmm.find_metadata("path/to/module")
+mmm.generate_from_pep621()
 ```
 
 ## Motivation
@@ -89,7 +91,7 @@ sort of metadata](https://web.archive.org/web/20111010053227/http://jaynes.color
 ## Workflow
 
 On each build, regenerate the `__about__.py`. Pick one source of your canonical metadata, e.g. `pyproject.toml`,
-`setup.py`, `setup.cfg`.
+`setup.py` (experimental), `setup.cfg`.
 
 ## Using metadata
 

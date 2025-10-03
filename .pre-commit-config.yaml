@@ -1,24 +1,22 @@
 ---
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v6.0.0
     hooks:
       # each hook takes about 1s to run. These are expensive-ish checks
       - id: check-added-large-files
       - id: check-yaml
       - id: check-builtin-literals
-      - id: check-byte-order-marker
+      - id: fix-byte-order-marker
       - id: check-case-conflict
       - id: check-merge-conflict
       - id: check-symlinks
       - id: check-toml
       - id: debug-statements
       - id: detect-private-key
-      - id: fix-encoding-pragma
-        args: [ --remove ]
       - id: forbid-new-submodules
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.17.0
+    rev: v3.20.0
     hooks:
       - id: pyupgrade
         args: [ --py37-plus ]
@@ -57,7 +55,7 @@ repos:
   #                args:
   #                    - --profile black
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.6.2
+    rev: v0.13.3
     hooks:
       - id: ruff
         exclude: ^dead_code/
@@ -87,9 +85,9 @@ repos:
 #        additional_dependencies:
 #          - mdformat-gfm
 #          - mdformat-black
-  - repo: https://github.com/adamchainz/blacken-docs
-    rev: 1.18.0
-    hooks:
-    -   id: blacken-docs
-        additional_dependencies:
-        - black==23.12.1
+#  - repo: https://github.com/adamchainz/blacken-docs
+#    rev: 1.18.0
+#    hooks:
+#    -   id: blacken-docs
+#        additional_dependencies:
+#        - black==23.12.1

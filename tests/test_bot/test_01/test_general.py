@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from metametameta.general import any_metadict, safe_quote

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 
 from metametameta import generate_from_pep621
