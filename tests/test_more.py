@@ -32,7 +32,7 @@ from metametameta.general import any_metadict, merge_sections, safe_quote
         # Test case 3: Single author without email
         ({"authors": ["Just A. Name"]}, ['__author__ = "Just A. Name"'], ["__author__"]),
         # Test case 4: Multiple authors become credits
-        ({"authors": ["Dev One", "Dev Two"]}, ["__credits__ = \"['Dev One', 'Dev Two']\""], ["__credits__"]),
+        ({"authors": ["Dev One", "Dev Two"]}, ["__credits__ = ['Dev One', 'Dev Two']"], ["__credits__"]),
         # Test case 5: Empty authors list should be ignored
         ({"authors": []}, [], []),
         # Test case 6: Classifiers for status

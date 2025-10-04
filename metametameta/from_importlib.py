@@ -9,7 +9,7 @@ import logging
 from typing import Any, cast
 
 from metametameta.filesystem import write_to_file
-from metametameta.general import any_metadict, merge_sections
+from metametameta.general import any_metadict, merge_sections, validate_about_file
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +27,7 @@ def get_package_metadata(package_name: str) -> dict[str, Any]:
 
 
 # pylint: disable=unused-argument
-def generate_from_importlib(name: str, source: str = "", output: str = "__about__.py") -> str:
+def generate_from_importlib(name: str, source: str = "", output: str = "__about__.py", validate: bool = False) -> str:
     """Write package metadata to an __about__.py file."""
     pkg_metadata = get_package_metadata(name)
     if pkg_metadata:
@@ -36,7 +36,10 @@ def generate_from_importlib(name: str, source: str = "", output: str = "__about_
         about_content, names = any_metadict(pkg_metadata)
 
         about_content = merge_sections(names, name, about_content)
-        return write_to_file(dir_path, about_content, output)
+        file_path = write_to_file(dir_path, about_content, output)
+        if validate:
+            validate_about_file(file_path, pkg_metadata)
+        return file_path
     message = "No [project] section found in pyproject.toml."
     logger.debug(message)
     return message

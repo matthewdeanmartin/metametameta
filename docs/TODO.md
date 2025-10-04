@@ -1,12 +1,19 @@
+## Bug
+
+- if description is README.md it is very long and noisy
+
 ## UI
 
 - make quiet option
 - --verbose option
-- add logging
+- add logging - DONE
 
 ## Sources
 
-- Generate metadata for more source documents? (e.g. setup.cfg, setup.py, PEP pyproject toml meta)
+- Generate metadata for more source documents
+  - setup.cfg - DONE
+  - setup.py - DONE
+  - PEP pyproject toml meta - DONE
 - Restrict how much
 
 ## Finding meta data

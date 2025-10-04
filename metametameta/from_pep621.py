@@ -11,7 +11,7 @@ from typing import Any, cast
 import toml
 
 from metametameta.filesystem import write_to_file
-from metametameta.general import any_metadict, merge_sections
+from metametameta.general import any_metadict, merge_sections, validate_about_file
 
 logger = logging.getLogger(__name__)
 
@@ -36,14 +36,18 @@ def read_pep621_metadata(source: str = "pyproject.toml") -> dict[str, Any]:
 
 
 # pylint: disable=unused-argument
-def generate_from_pep621(name: str = "", source: str = "pyproject.toml", output: str = "__about__.py") -> str:
+def generate_from_pep621(
+    name: str = "", source: str = "pyproject.toml", output: str = "__about__.py", validate: bool = False
+) -> str:
     """
     Generate the __about__.py file from the pyproject.toml file.
 
     Args:
+        validate:
         name (str): Name of the project.
         source (str): Path to the pyproject.toml file.
         output (str): Name of the file to write to.
+        validate (bool): Validate file
 
     Returns:
         str: Path to the file that was written.
@@ -76,10 +80,15 @@ def generate_from_pep621(name: str = "", source: str = "pyproject.toml", output:
             print(result_tuple)
             raise
         about_content = merge_sections(names, project_name or "", about_content)
-        return write_to_file(dir_path, about_content, output)
+        file_path = write_to_file(dir_path, about_content, output)
+
+        if validate:
+            validate_about_file(file_path, project_data)
+
+        return file_path
     logger.debug("No [project] section found in pyproject.toml.")
     return "No [project] section found in pyproject.toml."
 
 
 if __name__ == "__main__":
-    generate_from_pep621()
+    print(generate_from_pep621(source="../pyproject.toml"))

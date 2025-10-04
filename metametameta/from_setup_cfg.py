@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from metametameta.filesystem import write_to_file
-from metametameta.general import any_metadict, merge_sections
+from metametameta.general import any_metadict, merge_sections, validate_about_file
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,9 @@ def read_setup_cfg_metadata(setup_cfg_path: Path | None = None) -> dict[str, Any
 
 
 # pylint: disable=unused-argument
-def generate_from_setup_cfg(name: str = "", source: str = "setup.cfg", output: str = "__about__.py") -> str:
+def generate_from_setup_cfg(
+    name: str = "", source: str = "setup.cfg", output: str = "__about__.py", validate: bool = True
+) -> str:
     """
     Generate the __about__.py file from the setup.cfg file.
 
@@ -43,6 +45,7 @@ def generate_from_setup_cfg(name: str = "", source: str = "setup.cfg", output: s
         name (str): Name of the project.
         source (str): Path to the setup.cfg file.
         output (str): Name of the file to write to.
+        validate (bool): Check if top level values are in about file after written
 
     Returns:
         str: Path to the file that was written.
@@ -66,7 +69,12 @@ def generate_from_setup_cfg(name: str = "", source: str = "setup.cfg", output: s
             logger.warning(result_tuple)
             raise
         about_content = merge_sections(names, project_name or "", about_content)
-        return write_to_file(dir_path, about_content, output)
+        file_path = write_to_file(dir_path, about_content, output)
+
+        if validate:
+            validate_about_file(file_path, metadata)
+
+        return file_path
     logger.debug("No [metadata] section found in setup.cfg.")
     return "No [metadata] section found in setup.cfg."
 

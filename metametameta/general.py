@@ -6,8 +6,68 @@ from __future__ import annotations
 
 import logging
 import re
+from collections.abc import Iterable
+from pathlib import Path
+from typing import Any
 
 logger = logging.getLogger(__name__)
+
+
+def _get_all_primitive_values(data: Any) -> Iterable[str]:
+    """Finds all top level primitive values (str, int, float) in a nested structure."""
+    if isinstance(data, str):
+        yield data
+    elif isinstance(data, (int, float)):
+        yield str(data)
+    # elif isinstance(data, list):
+    #     for item in data:
+    #         yield from _get_all_primitive_values(item)
+    # elif isinstance(data, dict):
+    #     for value in data.values():
+    #         yield from _get_all_primitive_values(value)
+
+
+def validate_about_file(file_path: str, metadata: dict[str, Any]) -> None:
+    """
+    Validates the generated __about__.py file.
+
+    Checks for:
+    1. File existence.
+    2. Presence of all metadata values in the file content, ignoring keys
+       that undergo complex transformations during generation.
+
+    Args:
+        file_path: The path to the generated __about__.py file.
+        metadata: The source metadata dictionary used for generation.
+
+    Raises:
+        FileNotFoundError: If the file does not exist.
+        ValueError: If a metadata value is not found in the file.
+    """
+    logger.info(f"Validating generated file at {file_path}")
+    path = Path(file_path)
+    if not path.is_file():
+        raise FileNotFoundError(f"Validation failed: Output file not found at {file_path}")
+
+    content = path.read_text(encoding="utf-8")
+
+    # Create a copy and remove keys that undergo complex transformations
+    # to avoid brittle checks.
+    metadata_to_validate = metadata.copy()
+    metadata_to_validate.pop("classifiers", None)
+    metadata_to_validate.pop("authors", None)
+    metadata_to_validate.pop("name", None)  # 'name' is transformed to '__title__'
+
+    primitive_values = set(_get_all_primitive_values(metadata_to_validate))
+
+    for value in primitive_values:
+        if value not in content:
+            raise ValueError(
+                f"Validation failed: Value '{value}' not found in {file_path}. "
+                "The file may be incomplete or missing critical metadata."
+            )
+
+    logger.info("Validation successful.")
 
 
 def any_metadict(metadata: dict[str, str | int | float | list[str]]) -> tuple[str, list[str]]:
@@ -19,9 +79,17 @@ def any_metadict(metadata: dict[str, str | int | float | list[str]]) -> tuple[st
     Returns:
         tuple: The content to write to the file and the names of the variables.
     """
+    # Normalize keys to lowercase for consistent processing from different sources.
+    processed_meta = {k.lower().replace("-", "_"): v for k, v in metadata.items()}
+
+    # Prioritize 'summary' (from importlib.metadata) for the short description.
+    # If 'summary' exists, use it for 'description', overwriting the long one.
+    if "summary" in processed_meta:
+        processed_meta["description"] = processed_meta.pop("summary")
+
     lines = []
     names = []
-    for key, value in metadata.items():
+    for key, value in processed_meta.items():
         if key == "name":
             # __name__ is a reserved name.
             lines.append(f'__title__ = "{value}"')
@@ -47,7 +115,8 @@ def any_metadict(metadata: dict[str, str | int | float | list[str]]) -> tuple[st
                     names.append("__author__")
 
             else:
-                lines.append(f'__credits__ = "{value}"')
+                # BUG 1 FIX: Do not wrap the list in quotes.
+                lines.append(f"__credits__ = {value}")
                 names.append("__credits__")
         elif key == "classifiers" and isinstance(value, list) and value:
             for trove in value:

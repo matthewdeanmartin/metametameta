@@ -1713,12 +1713,13 @@ wheels = [
 
 [[package]]
 name = "metametameta"
-version = "0.1.4"
+version = "0.1.5"
 source = { editable = "." }
 dependencies = [
     { name = "colorlog" },
     { name = "rich-argparse" },
     { name = "toml" },
+    { name = "totalhelp" },
 ]
 
 [package.dev-dependencies]
@@ -1782,6 +1783,7 @@ requires-dist = [
     { name = "colorlog", specifier = ">=6.9.0" },
     { name = "rich-argparse", specifier = ">=1.7.1" },
     { name = "toml", specifier = ">=0.10.2" },
+    { name = "totalhelp" },
 ]
 
 [package.metadata.requires-dev]
@@ -3448,6 +3450,19 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/cc/18/0bbf3884e9eaa38819ebe46a7bd25dcd56b67434402b66a58c4b8e552575/tomlkit-0.13.3.tar.gz", hash = "sha256:430cf247ee57df2b94ee3fbe588e71d362a941ebb545dec29b53961d61add2a1", size = 185207, upload-time = "2025-06-05T07:13:44.947Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/bd/75/8539d011f6be8e29f339c42e633aae3cb73bffa95dd0f9adec09b9c58e85/tomlkit-0.13.3-py3-none-any.whl", hash = "sha256:c89c649d79ee40629a9fda55f8ace8c6a1b42deb912b2a8fd8d942ddadb606b0", size = 38901, upload-time = "2025-06-05T07:13:43.546Z" },
+]
+
+[[package]]
+name = "totalhelp"
+version = "0.1.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "rich" },
+    { name = "rich-argparse" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/82/5b/c708580abcc1fb33f121fa2bf8037d83092b0fa186d0450ad296f437528a/totalhelp-0.1.1.tar.gz", hash = "sha256:de0962427d1184d9ee930ee2da8145a78361a3f709c2adb6664ada7970be05ec", size = 15992, upload-time = "2025-10-04T12:57:31.367Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fe/61/4f00f9e035041b6a66fec4f07b6e3c03e65472a37bf77dfd0d35957041c7/totalhelp-0.1.1-py3-none-any.whl", hash = "sha256:11e58377d5f7787d891aa2955146a74d30e7d40a3693e8dc8d2faab0b8da70a2", size = 17185, upload-time = "2025-10-04T12:57:29.949Z" },
 ]
 
 [[package]]

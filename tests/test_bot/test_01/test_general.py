@@ -21,7 +21,7 @@ from metametameta.general import any_metadict, safe_quote
                 "authors": ["Jane Doe", "John Smith"],
                 "classifiers": ["Development Status :: 5 - Production/Stable"],
             },
-            '__title__ = "my_package"\n__credits__ = "["Jane Doe", "John Smith"]"\n__status__ = "5 - Production/Stable"\n',
+            '__title__ = "my_package"\n__credits__ = ["Jane Doe", "John Smith"]\n__status__ = "5 - Production/Stable"\n',
             ["__title__", "__credits__", "__status__"],
         ),
         (

@@ -1,6 +1,6 @@
 [project]
 name = "metametameta"
-version = "0.1.4"
+version = "0.1.5"
 description = "Generate __about__.py with dunder meta."
 authors = [
     {name = "Matthew Martin", email = "matthewdeanmartin@gmail.com"},
@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.8"
 keywords = ["packaging", "metadata", ]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -27,6 +27,7 @@ dependencies = [
     "rich_argparse>=1.7.1",
     "toml>=0.10.2",
     "colorlog>=6.9.0",
+    "totalhelp"
 ]
 
 [project.urls]

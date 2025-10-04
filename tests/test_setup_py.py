@@ -129,7 +129,7 @@ def test_generate_from_setup_py_success(mock_read, mock_any, mock_merge, mock_wr
     mock_write.return_value = str(expected_output_path)
 
     # Run the function using the explicit, isolated source path
-    result = generate_from_setup_py(source=str(source_file), output="__about__.py")
+    result = generate_from_setup_py(source=str(source_file), output="__about__.py", validate=False)
 
     # Assertions
     mock_read.assert_called_once_with(str(source_file))

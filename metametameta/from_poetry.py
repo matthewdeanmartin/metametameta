@@ -12,7 +12,7 @@ from typing import Any
 import toml
 
 from metametameta import filesystem
-from metametameta.general import any_metadict, merge_sections
+from metametameta.general import any_metadict, merge_sections, validate_about_file
 
 logger = logging.getLogger(__name__)
 
@@ -38,13 +38,16 @@ def read_poetry_metadata(
 
 
 # pylint: disable=unused-argument
-def generate_from_poetry(name: str = "", source: str = "pyproject.toml", output: str = "__about__.py") -> str:
+def generate_from_poetry(
+    name: str = "", source: str = "pyproject.toml", output: str = "__about__.py", validate: bool = True
+) -> str:
     """
     Generate the __about__.py file from the pyproject.toml file.
     Args:
         name (str): Name of the project.
         source (str): Path to the pyproject.toml file.
         output (str): Name of the file to write to.
+        validate (bool): Check if top level values are in about file after written
 
     Returns:
         str: Path to the file that was written.
@@ -88,8 +91,12 @@ def generate_from_poetry(name: str = "", source: str = "pyproject.toml", output:
             about_content, names = result_tuple
             about_content = merge_sections(names, candidate or "", about_content)
             # Define the content to write to the __about__.py file
-            result = filesystem.write_to_file(dir_path, about_content, output)
-            written.append(result)
+            file_path = filesystem.write_to_file(dir_path, about_content, output)
+
+            if validate:
+                validate_about_file(file_path, poetry_data)
+
+            written.append(file_path)
     logger.debug("No [tool.poetry] section found in pyproject.toml.")
     return "No [tool.poetry] section found in pyproject.toml."
 
