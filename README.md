@@ -2,6 +2,15 @@
 
 Generate dunder metadata file with `__title__`, `__author__`, etc. Also tools to discover these in other packages.
 
+[![tests](https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml/badge.svg)
+](https://github.com/matthewdeanmartin/metametameta/actions/workflows/tests.yml)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/matthewdeanmartin/metametameta/main.svg)
+](https://results.pre-commit.ci/latest/github/matthewdeanmartin/metametameta/main)
+[![Downloads](https://img.shields.io/pypi/dm/metametameta)](https://pypistats.org/packages/metametameta)
+[![Python Version](https://img.shields.io/pypi/pyversions/metametameta)
+![Release](https://img.shields.io/pypi/v/metametameta)
+](https://pypi.org/project/metametameta/)
+
 ## Installation
 
 ```bash
