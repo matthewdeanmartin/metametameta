@@ -52,7 +52,7 @@ def test_generate_from_pep621(tmp_path, project_data, expected_output, expected_
     mock_merge_sections.stop()
 
 
-def test_generate_from_pep621_file_not_found(tmp_path):
+def test_generate_from_pep621_file_not_found():
     # Test case for FileNotFoundError
     with pytest.raises(FileNotFoundError):
         generate_from_pep621(source="non_existent_file.toml")

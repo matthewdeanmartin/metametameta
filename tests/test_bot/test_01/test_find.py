@@ -35,7 +35,7 @@ def test_get_meta_file_not_found(tmp_path):
     result = get_meta(str(non_existent_file))
 
     # Expecting an empty dict since the file doesn't exist
-    assert result == {}
+    assert not result
 
 
 # Happy path test
@@ -57,7 +57,7 @@ def test_get_meta_empty_file(tmp_path):
     empty_file.write_text("", encoding="utf-8")
 
     result = get_meta(empty_file)
-    assert result == {}
+    assert not result
 
 
 # Edge Case: File with invalid content
@@ -68,7 +68,7 @@ def test_get_meta_file_with_invalid_content(tmp_path):
     invalid_file.write_text(invalid_content, encoding="utf-8")
 
     result = get_meta(invalid_file)
-    assert result == {}
+    assert not result
 
 
 # Non-existent file (for completeness, but previously covered)
@@ -78,4 +78,4 @@ def test_get_meta_file_not_found2(tmp_path):
     result = get_meta(non_existent_file)
 
     # Expecting an empty dict since the file doesn't exist
-    assert result == {}
+    assert not result

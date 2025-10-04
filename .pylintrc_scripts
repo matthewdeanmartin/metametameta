@@ -151,7 +151,6 @@ disable=raw-checker-failed,
         deprecated-pragma,
         use-symbolic-message-instead,
 
-        # can't care
         fixme,
         too-many-lines,
         too-many-branches,
@@ -166,22 +165,15 @@ disable=raw-checker-failed,
         too-many-instance-attributes,
         too-many-return-statements,
         unnecessary-direct-lambda-call,
-        too-few-public-methods,
-        logging-not-lazy,
+        invalid-name,
         line-too-long,
         wrong-import-order,
-        too-many-nested-blocks,
-        too-many-public-methods,
-        # pylint is wrong
-        invalid-name,
-
-        # Docs are in the function/variable names
-        missing-class-docstring,
-        missing-module-docstring,
-        missing-function-docstring,
-        missing-function-docstring,
-        redefined-outer-name,
-        too-many-positional-arguments
+        too-few-public-methods,
+        logging-not-lazy,
+        missing-class-docstring, # too far behind to catch up
+        missing-function-docstring, # too far behind to catch up
+        missing-module-docstring, # too far behind to catch up
+        trailing-newlines
 
 
 # Enable the message, report, category or checker with the given id(s). You can

@@ -63,6 +63,7 @@ include = [
 
 [dependency-groups]
 dev = [
+    "bitrab",
     "git2md; python_version >= '3.12'",
     "mkdocstrings",
     "pyclean; python_version >= '3.12'",
@@ -177,7 +178,11 @@ use_parentheses = true
 
 [tool.ruff]
 line-length = 1000
+# Assume Python 3.10.
+target-version = "py310"
 
+
+[tool.ruff.lint]
 # Enable Pyflakes `E` and `F` codes by default.
 select = ["E", "F",
     "D", # docs
@@ -189,7 +194,7 @@ ignore = [
     "E722",
     # only track structural problems with docstrings, not whitespace, nor missing
     "D200", "D212", "D415", "D411", "D205", "D102", "D103", "D100", "D107", "D101", "D104", "D105",
-    "UP007", "UP038", # Not sure if | is well supported in lowever versions of python
+    "UP007"
 ]
 
 # Exclude a variety of commonly ignored directories.
@@ -217,11 +222,9 @@ exclude = [
 ]
 per-file-ignores = { }
 
-# Allow unused variables when underscore-prefixed.
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+## Allow unused variables when underscore-prefixed.
+#dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
-# Assume Python 3.10.
-target-version = "py311"
 
 
 [tool.ruff.lint.pydocstyle]
@@ -249,32 +252,6 @@ exclude_also = [
 [tool.cli-tools]
 make = {name = "make", version = ">=3.81", schema = "semver", tags = ["build"]}
 python = {name = "python", version = ">=3.11.1", schema = "semver", tags = ["build"]}
-java = {name = "java", version = ">=17.0.6", schema = "semver", tags = ["build"]}
-
-pipx = {name = "pipx", version = ">=1.0.0", version_switch = "--version", schema = "semver"}
-mypy = {name = "mypy", version = ">=1.0.0", schema = "semver", tags = ["build", "work"], install_command = "pipx install mypy", install_docs = "https://mypy.readthedocs.io/en/stable/getting_started.html"}
-pylint = {name = "pylint", version = ">=1.0.0", schema = "semver", tags = ["build", "work", "user"]}
-black = {name = "black", version = ">=1.0.0", schema = "semver"}
-pygount = {name = "pygount", version = ">=1.6.0", schema = "semver"}
-ruff = {name = "ruff", version = "0.*", schema = "semver"}
-vulture = {name = "vulture", version = "*", schema = "semver"}
-
-terraform = {name = "terraform", version = ">=1.2.9", schema = "semver"}
-
-# demo of files that don't exist
-doesnotexist = {name = "doesnotexist", version = ">=1.0.0", schema = "semver"}
-# Just check existence
-notepad = {name = "notepad", schema = "existence"}
-rustc = {name = "rustc", version = ">=1.67.0", schema = "semver"}
-"yes.exe" = {name = "yes.exe", version = ">=1.0.0", schema = "semver"}
-"yes" = {name = "yes", version = "~1.0.0", schema = "semver"}
-podman = {name = "podman", version = "^4.6.0", schema = "semver"}
-tesseract = {name = "tesseract", version = ">=5.1.0.20220510", schema = "semver"}
-pandoc = {name = "pandoc", version = ">=2.7.3", schema = "semver"}
-nano = {name = "nano", version = ">=7.1", schema = "semver"}
-shellcheck = {name = "shellcheck", version = ">=0.8.0", schema = "semver"}
-choco = {name = "choco", version = ">=0.10.13", schema = "semver"}
-brew = {name = "brew", version = ">=0.0.0", schema = "semver", if_os = "darwin"}
 
 
 [tool.strict-build-script]

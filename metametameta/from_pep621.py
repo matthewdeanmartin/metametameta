@@ -32,7 +32,7 @@ def read_pep621_metadata(source: str = "pyproject.toml") -> dict[str, Any]:
     # Extract the [project] section
     project_data = data.get("project", {})
     # must be dict for 3.8 support
-    return cast(dict, project_data)
+    return cast(dict, project_data)  # type: ignore[type-arg]
 
 
 # pylint: disable=unused-argument

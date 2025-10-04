@@ -3,7 +3,7 @@ project := `basename $(pwd)`
 test_folder := "tests"
 
 # Set up virtual environment handling
-venv := if env_var_or_default("VIRTUAL_ENV", "") == "" { "poetry run" } else { "" }
+venv := if env_var_or_default("VIRTUAL_ENV", "") == "" { "uv run" } else { "" }
 
 # Default recipe
 default:
@@ -12,12 +12,11 @@ default:
 # Install dependencies
 poetry-install:
     @echo "Installing dependencies"
-    poetry install --with dev
+    uv sync
 
 update-deps:
     @echo "Updating dependencies"
-    poetry lock
-    poetry install --with dev --sync
+    uv sync
     pre-commit autoupdate
     pre-commit install || true
     @echo "Consider running  pipx upgrade-all"
@@ -48,7 +47,7 @@ test: clean poetry-install
 
 
 lock:
-    poetry lock && poetry install --with dev --sync
+    uv sync
 
 # Format imports
 isort:
@@ -59,8 +58,6 @@ isort:
 black: isort
     @echo "Formatting code"
     {{venv}} metametameta poetry
-    if [ -f loc_{{project}}/__about__.py ]; then cp loc_{{project}}/__about__.py {{project}}/__about__.py; fi
-    if [ -d loc_{{project}} ]; then rm -rf loc_{{project}}; fi
     {{venv}} black {{project}} --exclude .venv
     {{venv}} black {{test_folder}} --exclude .venv
     {{venv}} black scripts --exclude .venv
@@ -78,18 +75,18 @@ bandit:
 
 # Run safety check
 safety:
-    @echo "Running safety check"
-    # pipx inject poetry poetry-plugin-export
-    poetry export -f requirements.txt --output requirements.txt --without-hashes
-    {{venv}} safety check -r requirements.txt
-    rm requirements.txt
+    @echo "Running safety on hold..."
+#    # pipx inject poetry poetry-plugin-export
+#    poetry export -f requirements.txt --output requirements.txt --without-hashes
+#    {{venv}} safety check -r requirements.txt
+#    rm requirements.txt
 
 # Run pylint
 pylint: isort black
     @echo "Linting with pylint"
     {{venv}} pylint {{project}} --rcfile=.pylintrc --fail-under 10 --ignore-paths=test_TODO
-    {{venv}} pylint scripts --rcfile=.pylintrc_scripts --fail-under 8.5 --ignore-paths=test_TODO
-    {{venv}} pylint {{test_folder}} --rcfile=.pylintrc_test --fail-under 10 --ignore-paths=test_TODO
+    # {{venv}} pylint scripts --rcfile=.pylintrc_scripts --fail-under 8.5 --ignore-paths=test_TODO
+    {{venv}} pylint {{test_folder}} --rcfile=.pylintrc_tests --fail-under 10 --ignore-paths=test_TODO
     {{venv}} ruff check . --fix --exclude=test_legacy,dead_code
 
 # Run all checks

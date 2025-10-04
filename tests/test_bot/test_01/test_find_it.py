@@ -57,7 +57,7 @@ def test_find_metadata_in_file_empty_file(tmp_path):
 
     # Expecting an empty metadata dict
     metadata = find_metadata_in_file(empty_file)
-    assert metadata == {}
+    assert not metadata
 
 
 def test_find_metadata_in_file_no_metadata(tmp_path):
@@ -67,7 +67,7 @@ def test_find_metadata_in_file_no_metadata(tmp_path):
 
     # Expecting an empty metadata dict
     metadata = find_metadata_in_file(non_metadata_file)
-    assert metadata == {}
+    assert not metadata
 
 
 def test_find_metadata_in_module_happy_path(tmp_path):
@@ -97,7 +97,7 @@ def test_find_metadata_in_module_no_python_files(tmp_path):
 
     # Expecting an empty metadata dict because there are no Python files
     results = find_metadata_in_module(tmp_path)
-    assert results == {}
+    assert not results
 
 
 def test_find_metadata_in_file_read_error(mocker, tmp_path):
@@ -119,4 +119,4 @@ def test_find_metadata_in_file_bad_format(tmp_path):
 
     # Expecting to capture the exception, since not a valid string
     metadata = find_metadata_in_file(bad_format_file)
-    assert metadata == {}  # This test assumes the function should return an empty dict rather than raise an error
+    assert not metadata  # This test assumes the function should return an empty dict rather than raise an error

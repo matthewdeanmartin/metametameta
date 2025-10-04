@@ -3,6 +3,7 @@
 """
 Autodetects the primary source of project metadata.
 """
+
 from __future__ import annotations
 
 import logging
@@ -65,8 +66,7 @@ def detect_source(project_root: Path | None = None) -> str:
 
     if len(viable_sources) > 1:
         raise ValueError(
-            f"Multiple viable metadata sources found: {', '.join(viable_sources)}. "
-            "Cannot determine which to use for sync check. Please specify one."
+            f"Multiple viable metadata sources found: {', '.join(viable_sources)}. Cannot determine which to use for sync check. Please specify one."
         )
 
     source = viable_sources[0]

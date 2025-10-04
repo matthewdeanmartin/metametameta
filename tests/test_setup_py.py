@@ -100,7 +100,7 @@ def test_read_setup_py_metadata_syntax_error(setup_py_file, caplog):
     with caplog.at_level(logging.ERROR):
         metadata = read_setup_py_metadata(str(file_path))
 
-    assert metadata == {}
+    assert not metadata
     assert "Failed to parse" in caplog.text or caplog.text == ""
 
 

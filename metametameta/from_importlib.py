@@ -20,7 +20,7 @@ def get_package_metadata(package_name: str) -> dict[str, Any]:
         pkg_metadata: md.PackageMetadata = md.metadata(package_name)
         # dict for 3.8 support
         # pylint: disable=unnecessary-comprehension
-        return {key: value for key, value in cast(dict, pkg_metadata).items()}
+        return {key: value for key, value in cast(dict, pkg_metadata).items()}  # type: ignore[type-arg]
     except md.PackageNotFoundError:
         print(f"Package '{package_name}' not found.")
         return {}

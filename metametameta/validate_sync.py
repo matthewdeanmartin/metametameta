@@ -3,6 +3,7 @@
 """
 Validation logic to check if __about__.py is in sync with source metadata.
 """
+
 from __future__ import annotations
 
 import ast
@@ -97,9 +98,7 @@ def check_sync(source_metadata: dict[str, Any], about_path: Path) -> list[str]:
                 mismatches.append(f"'{about_key}' is missing from {about_path.name}")
             elif source_value.strip() != about_value.strip():
                 mismatch_msg = (
-                    f"'{about_key}' is out of sync. "
-                    f"Source: '{source_value}', "
-                    f"{about_path.name}: '{about_value}'"
+                    f"'{about_key}' is out of sync. Source: '{source_value}', {about_path.name}: '{about_value}'"
                 )
                 mismatches.append(mismatch_msg)
                 logger.warning(mismatch_msg)

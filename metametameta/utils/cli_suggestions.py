@@ -29,6 +29,7 @@ from __future__ import annotations
 import argparse
 import sys
 from difflib import get_close_matches
+from typing import Never
 
 
 class SmartParser(argparse.ArgumentParser):
@@ -57,7 +58,7 @@ class SmartParser(argparse.ArgumentParser):
         ```
     """
 
-    def error(self, message: str):
+    def error(self, message: str) -> Never:
         """Handle parsing errors with suggestions for invalid choices.
 
         Args:

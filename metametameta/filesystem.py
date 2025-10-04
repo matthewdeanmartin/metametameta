@@ -4,6 +4,7 @@
 This module contains robust functions for writing to the filesystem, intelligently
 locating the correct Python package directory within a given project root.
 """
+
 from __future__ import annotations
 
 import logging

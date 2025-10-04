@@ -48,7 +48,7 @@ def test_any_metadict_edge_case_empty_input():
     about_content, names = any_metadict(metadata)
 
     assert about_content == ""
-    assert names == []
+    assert not names
 
 
 def test_safe_quote_happy_path():

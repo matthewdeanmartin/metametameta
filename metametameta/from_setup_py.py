@@ -45,8 +45,7 @@ class SetupKwargsVisitor(ast.NodeVisitor):
                     except ValueError:
                         # This happens if the value is not a literal (e.g., a variable)
                         logger.warning(
-                            f"Could not statically parse value for '{keyword.arg}' in setup.py. "
-                            "Only literals (strings, numbers, lists, etc.) are supported."
+                            f"Could not statically parse value for '{keyword.arg}' in setup.py. Only literals (strings, numbers, lists, etc.) are supported."
                         )
             self._found = True
 

@@ -2,18 +2,32 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.10.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
 <title>metametameta API documentation</title>
-<meta name="description" content="Generate source code metadata for Python projects from existing metadata files …" />
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
-<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<meta name="description" content="Generate source code metadata for Python projects from existing metadata files …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
-<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
 </head>
 <body>
 <main>
@@ -25,26 +39,83 @@
 <p>Generate source code metadata for Python projects from existing metadata files.</p>
 <h1 id="metametameta">metametameta</h1>
 <p>Generate dunder metadata file with <code>__title__</code>, <code>__author__</code>, etc. Also tools to discover these in other packages.</p>
+<p><a href="https://github.com/matthewdeanmartin/metametameta/actions/workflows/tests.yml"><img alt="tests" src="https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml/badge.svg">
+</a>
+<a href="https://results.pre-commit.ci/latest/github/matthewdeanmartin/metametameta/main"><img alt="pre-commit.ci status" src="https://results.pre-commit.ci/badge/github/matthewdeanmartin/metametameta/main.svg">
+</a>
+<a href="https://pypistats.org/packages/metametameta"><img alt="Downloads" src="https://img.shields.io/pypi/dm/metametameta"></a>
+<a href="https://pypi.org/project/metametameta/"><img alt="Python Version" src="https://img.shields.io/pypi/pyversions/metametameta">
+<img alt="Release" src="https://img.shields.io/pypi/v/metametameta">
+</a></p>
 <h2 id="installation">Installation</h2>
 <pre><code class="language-bash">pipx install metametameta
 </code></pre>
 <h2 id="usage">Usage</h2>
-<pre><code class="language-bash">metametameta --source pyproject.toml --target mypackage/__metadata__.py
+<p>Defaults to putting an <code>__about__.py</code> file in the module directory, assuming your package name is your main module name.</p>
+<p>Make best guess what your metadata source is. Give up if there are two possibilities.</p>
+<pre><code class="language-bash">metametameta auto 
+</code></pre>
+<p>Run on CI server to see if your about file is out of sync</p>
+<pre><code class="language-bash">metametameta sync-check
+</code></pre>
+<pre><code class="language-bash">metametameta poetry # or setup_cfg or pep621 or poetry or importlib or the experimental setup_py
+</code></pre>
+<p>Or set everything explicitly:</p>
+<pre><code class="language-bash">metametameta poetry --name &quot;something&quot; --source some.toml --output OUTPUT &quot;mod/meta/__meta__.py&quot;
+</code></pre>
+<p>Subcommand per source.</p>
+<pre><code class="language-text">Usage: metametameta [-h] [--version] [--verbose] [--quiet] {setup_cfg,pep621,poetry,importlib,setup_py,auto,sync-check} ...
+
+metametameta: Generate __about__.py from various sources.
+
+Positional Arguments:
+  {setup_cfg,pep621,poetry,importlib,setup_py,auto,sync-check}
+                        sub-command help
+    setup_cfg           Generate from setup.cfg
+    pep621              Generate from PEP 621 pyproject.toml
+    poetry              Generate from poetry pyproject.toml
+    importlib           Generate from installed package metadata
+    setup_py            Generate from setup.py using AST (experimental)
+    auto                Automatically detect the source and generate the metadata file.
+    sync-check          Check if __about__.py is in sync with the metadata source
+
+Options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  --verbose             verbose output
+  --quiet               minimal output
+</code></pre>
+<p>Subcommand help (they all have the same switches)</p>
+<pre><code class="language-text">usage: metametameta poetry [-h] [--name NAME] [--source SOURCE] [--output OUTPUT]
+
+options:
+  -h, --help       show this help message and exit
+  --name NAME      Name of the project (from file if omitted)
+  --source SOURCE  Path to pyproject.toml
+  --output OUTPUT  Output file
+</code></pre>
+<h2 id="programmatic-interface">Programmatic interface.</h2>
+<pre><code class="language-python">import metametameta as mmm
+
+mmm.generate_from_pep621()
 </code></pre>
 <h2 id="motivation">Motivation</h2>
 <p>There are many modern ways to get metadata about packages, as of
 2024, <a href="https://docs.python.org/3/library/importlib.metadata.html">importlib.metadata</a> and it's backports will get you
 lots of metadata for yours and other packages.</p>
-<p>The newest way is <a href="https://peps.python.org/pep-0621/">PEP-621</a>, see also <a href="https://packaging.python.org/en/latest/specifications/pyproject-toml/#pyproject-toml-spec">packaging.python.org</a></p>
+<p>The newest way is <a href="https://peps.python.org/pep-0621/">PEP-621</a>, see
+also <a href="https://packaging.python.org/en/latest/specifications/pyproject-toml/#pyproject-toml-spec">packaging.python.org</a></p>
 <p>The oldest way to provide metadata was to use dunder variables in your package, e.g. <code>__author__</code>, <code>__version__</code>, etc.</p>
 <p>The method was never strongly standardized, neither officially nor informally. <a href="https://web.archive.org/web/20111010053227/http://jaynes.colorado.edu/PythonGuidelines.html#module_formatting">Here is one early proponent of this
 sort of metadata</a>.</p>
 <ul>
 <li>Metadata fields can appear in any or no python file in a project.</li>
-<li>Sometimes they are at the top of a single file python module, common locations for metadata:</li>
+<li>Sometimes they are at the top of a single file python module, common locations for metadata:<ul>
 <li><code>__init__.py</code></li>
 <li><code>__meta__.py</code></li>
 <li><code>__about__.py</code></li>
+</ul>
+</li>
 <li>Some metadata elements could reasonably be in every single file.</li>
 <li>There are no particular standards for the type of <code>__author__</code>. It could be a string, space delimited string, list
 or tuple. That is true for the other metadata elements as well.</li>
@@ -53,7 +124,7 @@ representing a version.</li>
 </ul>
 <h2 id="workflow">Workflow</h2>
 <p>On each build, regenerate the <code>__about__.py</code>. Pick one source of your canonical metadata, e.g. <code>pyproject.toml</code>,
-<code>setup.py</code>, <code>setup.cfg</code>.</p>
+<code>setup.py</code> (experimental), <code>setup.cfg</code>.</p>
 <h2 id="using-metadata">Using metadata</h2>
 <p>If you have a lot of packages and you are doing analytics or something with them, you could compile all the metadata
 as declared in the source code. It could be different from the metadata that shows on the PyPI page. If you are
@@ -64,48 +135,144 @@ concept for this usage.</p>
 <p>Another marginal use case is that is a folksonomy, a taxonomy created by the people. The official metadata is
 governed by the Python Packaging Authority and the Python Software Foundation. If, say, you wanted to add a metadata
 item for <code>__mailing_address__</code> you could easily do it with source code metadata.</p>
+<h2 id="project-health-info">Project Health &amp; Info</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Health</th>
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Info</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Tests</td>
+<td style="text-align: left;"><a href="https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml"><img alt="Tests" src="https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml/badge.svg"></a></td>
+<td style="text-align: left;">License</td>
+<td style="text-align: left;"><a href="https://github.com/matthewdeanmartin/metametameta/blob/main/LICENSE.md"><img alt="License" src="https://img.shields.io/github/license/matthewdeanmartin/metametameta"></a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Coverage</td>
+<td style="text-align: left;"><a href="https://codecov.io/gh/matthewdeanmartin/metametameta"><img alt="Codecov" src="https://codecov.io/gh/matthewdeanmartin/metametameta/branch/main/graph/badge.svg"></a></td>
+<td style="text-align: left;">PyPI</td>
+<td style="text-align: left;"><a href="https://pypi.org/project/metametameta/"><img alt="PyPI" src="https://img.shields.io/pypi/v/metametameta"></a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Lint / Pre-commit</td>
+<td style="text-align: left;"><a href="https://results.pre-commit.ci/latest/github/matthewdeanmartin/metametameta/main"><img alt="pre-commit.ci status" src="https://results.pre-commit.ci/badge/github/matthewdeanmartin/metametameta/main.svg"></a></td>
+<td style="text-align: left;">Python Versions</td>
+<td style="text-align: left;"><a href="https://pypi.org/project/metametameta/"><img alt="Python Version" src="https://img.shields.io/pypi/pyversions/metametameta"></a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Quality Gate</td>
+<td style="text-align: left;"><a href="https://sonarcloud.io/summary/new_code?id=matthewdeanmartin_metametameta"><img alt="Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=matthewdeanmartin_metametameta\&amp;metric=alert_status"></a></td>
+<td style="text-align: left;">Docs</td>
+<td style="text-align: left;"><a href="https://metametameta.readthedocs.io/en/latest/"><img alt="Docs" src="https://readthedocs.org/projects/metametameta/badge/?version=latest"></a></td>
+</tr>
+<tr>
+<td style="text-align: left;">CI Build</td>
+<td style="text-align: left;"><a href="https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml"><img alt="Build" src="https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml/badge.svg"></a></td>
+<td style="text-align: left;">Downloads</td>
+<td style="text-align: left;"><a href="https://pepy.tech/project/metametameta"><img alt="Downloads" src="https://static.pepy.tech/personalized-badge/metametameta?period=total\&amp;units=international_system\&amp;left_color=grey\&amp;right_color=blue\&amp;left_text=Downloads"></a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Maintainability</td>
+<td style="text-align: left;"><a href="https://sonarcloud.io/summary/new_code?id=matthewdeanmartin_metametameta"><img alt="Maintainability Rating" src="https://sonarcloud.io/api/project_badges/measure?project=matthewdeanmartin_metametameta\&amp;metric=sqale_rating"></a></td>
+<td style="text-align: left;">Last Commit</td>
+<td style="text-align: left;"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/matthewdeanmartin/metametameta"></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Health</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Open Issues</strong></td>
+<td><img alt="GitHub issues" src="https://img.shields.io/github/issues/matthewdeanmartin/metametameta"></td>
+</tr>
+<tr>
+<td><strong>Stars</strong></td>
+<td><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/matthewdeanmartin/metametameta?style=social"></td>
+</tr>
+</tbody>
+</table>
 <h1 id="changelog">Changelog</h1>
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
-<h2 id="010-2024-01-20">[0.1.0] - 2024-01-20</h2>
+<h2 id="015-2024-10-02">[0.1.5] - 2024-10-02</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Mypy complaints when lists are empty. Added more null safety checks.</li>
+</ul>
 <h3 id="added">Added</h3>
+<ul>
+<li><code>metametameta sync-check</code> run on CI server to see if your about file is out of sync</li>
+<li><code><a title="metametameta" href="#metametameta">metametameta</a> auto</code> make best guess what your metadata source is. Give up if there are two possibilities.</li>
+</ul>
+<h2 id="014-2024-10-02">[0.1.4] - 2024-10-02</h2>
+<h3 id="fixed_1">Fixed</h3>
+<ul>
+<li>Mypy complaints when lists are empty. Added more null safety checks.</li>
+</ul>
+<h3 id="added_1">Added</h3>
+<ul>
+<li>Experimental setup.py support.</li>
+</ul>
+<h2 id="013-2024-06-28">[0.1.3] - 2024-06-28</h2>
+<h3 id="fixed_2">Fixed</h3>
+<ul>
+<li>Fix bug in pep621 command where <code>-</code> in name but src folder is <code>_</code> </li>
+</ul>
+<h2 id="012-2024-06-14">[0.1.2] - 2024-06-14</h2>
+<h3 id="fixed_3">Fixed</h3>
+<ul>
+<li>Fix bug in pep621 command.</li>
+</ul>
+<h2 id="011-2024-08-03">[0.1.1] - 2024-08-03</h2>
+<h3 id="added_2">Added</h3>
+<ul>
+<li><code>--verbose</code> option</li>
+</ul>
+<h3 id="fixed_4">Fixed</h3>
+<ul>
+<li>Less noisy by default, most prints moved to logging invocations</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Makes best efforts to find src folder even if different from package name.</li>
+</ul>
+<h2 id="010-2024-01-20">[0.1.0] - 2024-01-20</h2>
+<h3 id="added_3">Added</h3>
 <ul>
 <li>Application created.</li>
 </ul>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">&#34;&#34;&#34;
-Generate source code metadata for Python projects from existing metadata files.
-
-.. include:: ../README.md
-
-.. include:: ../CHANGELOG.md
-&#34;&#34;&#34;
-
-# All generate functions have the same signature:
-# def _(name: str, source:str, output: str) -&gt; None:
-
-__all__ = [&#34;generate_from_setup_cfg&#34;, &#34;generate_from_pep621&#34;, &#34;generate_from_poetry&#34;, &#34;generate_from_importlib&#34;]
-
-from metametameta.from_importlib import generate_from_importlib
-from metametameta.from_pep621 import generate_from_pep621
-from metametameta.from_poetry import generate_from_poetry
-from metametameta.from_setup_cfg import generate_from_setup_cfg</code></pre>
-</details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
+<dt><code class="name"><a title="metametameta.autodetect" href="autodetect.html">metametameta.autodetect</a></code></dt>
+<dd>
+<div class="desc"><p>Autodetects the primary source of project metadata.</p></div>
+</dd>
 <dt><code class="name"><a title="metametameta.filesystem" href="filesystem.html">metametameta.filesystem</a></code></dt>
 <dd>
-<div class="desc"><p>This module contains functions for working with the filesystem.</p></div>
+<div class="desc"><p>This module contains robust functions for writing to the filesystem, intelligently
+locating the correct Python package directory within a given …</p></div>
 </dd>
 <dt><code class="name"><a title="metametameta.find" href="find.html">metametameta.find</a></code></dt>
 <dd>
 <div class="desc"><p>Find metadata in a module file.</p></div>
+</dd>
+<dt><code class="name"><a title="metametameta.find_it" href="find_it.html">metametameta.find_it</a></code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
 <dt><code class="name"><a title="metametameta.from_importlib" href="from_importlib.html">metametameta.from_importlib</a></code></dt>
 <dd>
@@ -124,6 +291,11 @@ pyproject.toml file.</p></div>
 <dd>
 <div class="desc"><p>This module contains the function to generate the <strong>about</strong>.py file from the setup.cfg file.</p></div>
 </dd>
+<dt><code class="name"><a title="metametameta.from_setup_py" href="from_setup_py.html">metametameta.from_setup_py</a></code></dt>
+<dd>
+<div class="desc"><p>This module contains an experimental function to generate the <strong>about</strong>.py file
+by statically parsing a setup.py file using Python's AST module.</p></div>
+</dd>
 <dt><code class="name"><a title="metametameta.general" href="general.html">metametameta.general</a></code></dt>
 <dd>
 <div class="desc"><p>Utilities for generating source code metadata from existing metadata files.</p></div>
@@ -131,6 +303,18 @@ pyproject.toml file.</p></div>
 <dt><code class="name"><a title="metametameta.known" href="known.html">metametameta.known</a></code></dt>
 <dd>
 <div class="desc"><p>Known metadata fields, as opposed to ad hoc ones people make up.</p></div>
+</dd>
+<dt><code class="name"><a title="metametameta.logging_config" href="logging_config.html">metametameta.logging_config</a></code></dt>
+<dd>
+<div class="desc"><p>Logging configuration.</p></div>
+</dd>
+<dt><code class="name"><a title="metametameta.utils" href="utils/index.html">metametameta.utils</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="metametameta.validate_sync" href="validate_sync.html">metametameta.validate_sync</a></code></dt>
+<dd>
+<div class="desc"><p>Validation logic to check if <strong>about</strong>.py is in sync with source metadata.</p></div>
 </dd>
 </dl>
 </section>
@@ -140,15 +324,14 @@ pyproject.toml file.</p></div>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="metametameta.generate_from_importlib"><code class="name flex">
-<span>def <span class="ident">generate_from_importlib</span></span>(<span>name: str, source: str = '', output: str = '__about__.py') ‑> str</span>
+<span>def <span class="ident">generate_from_importlib</span></span>(<span>name: str, source: str = '', output: str = '__about__.py', validate: bool = False) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Write package metadata to an <strong>about</strong>.py file.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def generate_from_importlib(name: str, source: str = &#34;&#34;, output: str = &#34;__about__.py&#34;) -&gt; str:
+<pre><code class="python">def generate_from_importlib(name: str, source: str = &#34;&#34;, output: str = &#34;__about__.py&#34;, validate: bool = False) -&gt; str:
     &#34;&#34;&#34;Write package metadata to an __about__.py file.&#34;&#34;&#34;
     pkg_metadata = get_package_metadata(name)
     if pkg_metadata:
@@ -156,65 +339,163 @@ pyproject.toml file.</p></div>
 
         about_content, names = any_metadict(pkg_metadata)
 
-        about_content = general.merge_sections(names, name, about_content)
-        return write_to_file(dir_path, about_content, output)
-    else:
-        return &#34;No [project] section found in pyproject.toml.&#34;</code></pre>
+        about_content = merge_sections(names, name, about_content)
+        file_path = write_to_file(dir_path, about_content, output)
+        if validate:
+            validate_about_file(file_path, pkg_metadata)
+        return file_path
+    message = &#34;No [project] section found in pyproject.toml.&#34;
+    logger.debug(message)
+    return message</code></pre>
 </details>
+<div class="desc"><p>Write package metadata to an <strong>about</strong>.py file.</p></div>
 </dd>
 <dt id="metametameta.generate_from_pep621"><code class="name flex">
-<span>def <span class="ident">generate_from_pep621</span></span>(<span>name: str = '', source: str = 'pyproject.toml', output: str = '__about__.py') ‑> str</span>
+<span>def <span class="ident">generate_from_pep621</span></span>(<span>name: str = '',<br>source: str = 'pyproject.toml',<br>output: str = '__about__.py',<br>validate: bool = False) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Generate the <strong>about</strong>.py file from the pyproject.toml file.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
-<dd>Name of the project.</dd>
-<dt><strong><code>source</code></strong> :&ensp;<code>str</code></dt>
-<dd>Path to the pyproject.toml file.</dd>
-<dt><strong><code>output</code></strong> :&ensp;<code>str</code></dt>
-<dd>Name of the file to write to.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>str</code></dt>
-<dd>Path to the file that was written.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def generate_from_pep621(name: str = &#34;&#34;, source: str = &#34;pyproject.toml&#34;, output: str = &#34;__about__.py&#34;) -&gt; str:
+<pre><code class="python">def generate_from_pep621(name: str = &#34;&#34;, source: str = &#34;pyproject.toml&#34;, output: str = &#34;__about__.py&#34;, validate: bool = False) -&gt; str:
     &#34;&#34;&#34;
     Generate the __about__.py file from the pyproject.toml file.
 
     Args:
+        validate:
         name (str): Name of the project.
         source (str): Path to the pyproject.toml file.
         output (str): Name of the file to write to.
+        validate (bool): Validate file
+
     Returns:
         str: Path to the file that was written.
     &#34;&#34;&#34;
     project_data = read_pep621_metadata(source)
     if project_data:
         # Extract the project name and create a directory
-        project_name = project_data.get(&#34;name&#34;)
+        project_name = project_data.get(&#34;name&#34;, &#34;&#34;)
+        if not project_name:
+            raise TypeError(&#34;Project name not found in [project] section of pyproject.toml.&#34;)
         if output != &#34;__about__.py&#34; and &#34;/&#34; in output or &#34;\\&#34; in output:
             dir_path = &#34;./&#34;
         else:
             dir_path = f&#34;./{project_name}&#34;
 
-        about_content, names = general.any_metadict(project_data)
-        about_content = general.merge_sections(names, project_name, about_content)
-        return write_to_file(dir_path, about_content, output)
+        # if the dir_path does not exist check if project_name.replace(&#34;-&#34;, &#34;_&#34;) exists
+        if not Path(dir_path).exists():
+            project_name = project_name.replace(&#34;-&#34;, &#34;_&#34;)
+            dir_path = f&#34;./{project_name}&#34;
+
+        if not Path(dir_path).exists():
+            project_name = project_name.replace(&#34;_&#34;, &#34;-&#34;)
+            dir_path = f&#34;./{project_name}&#34;
+
+        result_tuple = None
+        try:
+            result_tuple = any_metadict(project_data)
+            about_content, names = result_tuple
+        except Exception:
+            print(result_tuple)
+            raise
+        about_content = merge_sections(names, project_name or &#34;&#34;, about_content)
+        file_path = write_to_file(dir_path, about_content, output)
+
+        if validate:
+            validate_about_file(file_path, project_data)
+
+        return file_path
+    logger.debug(&#34;No [project] section found in pyproject.toml.&#34;)
     return &#34;No [project] section found in pyproject.toml.&#34;</code></pre>
 </details>
+<div class="desc"><p>Generate the <strong>about</strong>.py file from the pyproject.toml file.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt>validate:</dt>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Name of the project.</dd>
+<dt><strong><code>source</code></strong> :&ensp;<code>str</code></dt>
+<dd>Path to the pyproject.toml file.</dd>
+<dt><strong><code>output</code></strong> :&ensp;<code>str</code></dt>
+<dd>Name of the file to write to.</dd>
+<dt><strong><code>validate</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Validate file</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>Path to the file that was written.</dd>
+</dl></div>
 </dd>
 <dt id="metametameta.generate_from_poetry"><code class="name flex">
-<span>def <span class="ident">generate_from_poetry</span></span>(<span>name: str = '', source: str = 'pyproject.toml', output: str = '__about__.py') ‑> str</span>
+<span>def <span class="ident">generate_from_poetry</span></span>(<span>name: str = '',<br>source: str = 'pyproject.toml',<br>output: str = '__about__.py',<br>validate: bool = True) ‑> str</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_from_poetry(name: str = &#34;&#34;, source: str = &#34;pyproject.toml&#34;, output: str = &#34;__about__.py&#34;, validate: bool = True) -&gt; str:
+    &#34;&#34;&#34;
+    Generate the __about__.py file from the pyproject.toml file.
+    Args:
+        name (str): Name of the project.
+        source (str): Path to the pyproject.toml file.
+        output (str): Name of the file to write to.
+        validate (bool): Check if top level values are in about file after written
+
+    Returns:
+        str: Path to the file that was written.
+    &#34;&#34;&#34;
+    poetry_data = read_poetry_metadata(source)
+    if poetry_data:
+        candidate_packages = []
+        packages_data_list = poetry_data.get(&#34;packages&#34;)
+        if packages_data_list:
+            for package_data in packages_data_list:
+                include_part = None
+                from_part = None  # subfolder(s)
+                _format_part = None  # can be dist, i.e not a folder
+                for key, value in package_data.items():
+                    if key == &#34;include&#34;:
+                        include_part = value
+                    elif key == &#34;from&#34;:
+                        from_part = value
+                    elif key == &#34;format&#34;:
+                        pass
+                candidate_path = &#34;&#34;
+                if include_part:
+                    candidate_path = include_part
+                if include_part and from_part:
+                    candidate_from_path = Path(candidate_path) / from_part
+                    if candidate_from_path.exists():
+                        candidate_path = candidate_from_path
+                if Path(candidate_path).exists():
+                    candidate_packages.append(candidate_path)
+
+        project_name = poetry_data.get(&#34;name&#34;)
+        if not candidate_packages:
+            candidate_packages.append(project_name)
+        written = []
+        for candidate in candidate_packages:
+            if output != &#34;__about__.py&#34; and &#34;/&#34; in output or &#34;\\&#34; in output:
+                dir_path = &#34;./&#34;
+            else:
+                dir_path = f&#34;./{candidate}&#34;
+            result_tuple = any_metadict(poetry_data)
+            about_content, names = result_tuple
+            about_content = merge_sections(names, candidate or &#34;&#34;, about_content)
+            # Define the content to write to the __about__.py file
+            file_path = filesystem.write_to_file(dir_path, about_content, output)
+
+            if validate:
+                validate_about_file(file_path, poetry_data)
+
+            written.append(file_path)
+    logger.debug(&#34;No [tool.poetry] section found in pyproject.toml.&#34;)
+    return &#34;No [tool.poetry] section found in pyproject.toml.&#34;</code></pre>
+</details>
 <div class="desc"><p>Generate the <strong>about</strong>.py file from the pyproject.toml file.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -224,64 +505,24 @@ pyproject.toml file.</p></div>
 <dd>Path to the pyproject.toml file.</dd>
 <dt><strong><code>output</code></strong> :&ensp;<code>str</code></dt>
 <dd>Name of the file to write to.</dd>
+<dt><strong><code>validate</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Check if top level values are in about file after written</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><code>str</code></dt>
 <dd>Path to the file that was written.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def generate_from_poetry(name: str = &#34;&#34;, source: str = &#34;pyproject.toml&#34;, output: str = &#34;__about__.py&#34;) -&gt; str:
-    &#34;&#34;&#34;
-    Generate the __about__.py file from the pyproject.toml file.
-    Args:
-        name (str): Name of the project.
-        source (str): Path to the pyproject.toml file.
-        output (str): Name of the file to write to.
-    Returns:
-        str: Path to the file that was written.
-    &#34;&#34;&#34;
-    poetry_data = read_poetry_metadata(source)
-    if poetry_data:
-        project_name = poetry_data.get(&#34;name&#34;)
-        if output != &#34;__about__.py&#34; and &#34;/&#34; in output or &#34;\\&#34; in output:
-            dir_path = &#34;./&#34;
-        else:
-            dir_path = f&#34;./{project_name}&#34;
-        about_content, names = general.any_metadict(poetry_data)
-        about_content = general.merge_sections(names, project_name or &#34;&#34;, about_content)
-        # Define the content to write to the __about__.py file
-        return filesystem.write_to_file(dir_path, about_content, output)
-    return &#34;No [tool.poetry] section found in pyproject.toml.&#34;</code></pre>
-</details>
 </dd>
 <dt id="metametameta.generate_from_setup_cfg"><code class="name flex">
-<span>def <span class="ident">generate_from_setup_cfg</span></span>(<span>name: str = '', source: str = 'setup.cfg', output: str = '__about__.py') ‑> str</span>
+<span>def <span class="ident">generate_from_setup_cfg</span></span>(<span>name: str = '',<br>source: str = 'setup.cfg',<br>output: str = '__about__.py',<br>validate: bool = True) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Generate the <strong>about</strong>.py file from the setup.cfg file.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
-<dd>Name of the project.</dd>
-<dt><strong><code>source</code></strong> :&ensp;<code>str</code></dt>
-<dd>Path to the setup.cfg file.</dd>
-<dt><strong><code>output</code></strong> :&ensp;<code>str</code></dt>
-<dd>Name of the file to write to.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>str</code></dt>
-<dd>Path to the file that was written.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def generate_from_setup_cfg(name: str = &#34;&#34;, source: str = &#34;setup.cfg&#34;, output: str = &#34;__about__.py&#34;) -&gt; str:
+<pre><code class="python">def generate_from_setup_cfg(name: str = &#34;&#34;, source: str = &#34;setup.cfg&#34;, output: str = &#34;__about__.py&#34;, validate: bool = True) -&gt; str:
     &#34;&#34;&#34;
     Generate the __about__.py file from the setup.cfg file.
 
@@ -289,10 +530,12 @@ pyproject.toml file.</p></div>
         name (str): Name of the project.
         source (str): Path to the setup.cfg file.
         output (str): Name of the file to write to.
+        validate (bool): Check if top level values are in about file after written
+
     Returns:
         str: Path to the file that was written.
     &#34;&#34;&#34;
-    metadata = read_setup_cfg_metadata()
+    metadata = read_setup_cfg_metadata(Path(source))
     if metadata:
         # Directory name
         project_name = metadata.get(&#34;name&#34;)
@@ -302,11 +545,74 @@ pyproject.toml file.</p></div>
             dir_path = f&#34;./{project_name}&#34;
 
         # Define the content to write to the __about__.py file
-        about_content, names = general.any_metadict(metadata)
-        about_content = general.merge_sections(names, project_name, about_content)
-        return write_to_file(dir_path, about_content, output)
+        result_tuple = None
+        try:
+            result_tuple = any_metadict(metadata)
+            about_content, names = result_tuple
+        except Exception:
+            logger.warning(&#34;Can&#39;t parse metadata&#34;)
+            logger.warning(result_tuple)
+            raise
+        about_content = merge_sections(names, project_name or &#34;&#34;, about_content)
+        file_path = write_to_file(dir_path, about_content, output)
+
+        if validate:
+            validate_about_file(file_path, metadata)
+
+        return file_path
+    logger.debug(&#34;No [metadata] section found in setup.cfg.&#34;)
     return &#34;No [metadata] section found in setup.cfg.&#34;</code></pre>
 </details>
+<div class="desc"><p>Generate the <strong>about</strong>.py file from the setup.cfg file.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Name of the project.</dd>
+<dt><strong><code>source</code></strong> :&ensp;<code>str</code></dt>
+<dd>Path to the setup.cfg file.</dd>
+<dt><strong><code>output</code></strong> :&ensp;<code>str</code></dt>
+<dd>Name of the file to write to.</dd>
+<dt><strong><code>validate</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Check if top level values are in about file after written</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>Path to the file that was written.</dd>
+</dl></div>
+</dd>
+<dt id="metametameta.generate_from_setup_py"><code class="name flex">
+<span>def <span class="ident">generate_from_setup_py</span></span>(<span>name: str = '',<br>source: str = 'setup.py',<br>output: str = '__about__.py',<br>validate: bool = False) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_from_setup_py(name: str = &#34;&#34;, source: str = &#34;setup.py&#34;, output: str = &#34;__about__.py&#34;, validate: bool = False) -&gt; str:
+    &#34;&#34;&#34;
+    Generate the __about__.py file from a setup.py file.
+    &#34;&#34;&#34;
+    metadata = read_setup_py_metadata(source)
+    if not metadata:
+        message = &#34;No setup() call with static metadata found in setup.py.&#34;
+        logger.debug(message)
+        return message
+
+    # Use the name from the metadata, but allow CLI to override it if provided
+    project_name = name or metadata.get(&#34;name&#34;, &#34;&#34;)
+    if not project_name:
+        raise ValueError(&#34;Project &#39;name&#39; not found in setup.py and not provided via arguments.&#34;)
+
+    about_content, names = any_metadict(metadata)
+    about_content = merge_sections(names, project_name, about_content)
+
+    file_path = write_to_file(project_name, about_content, output)
+    if validate:
+        validate_about_file(file_path, metadata)
+    return file_path</code></pre>
+</details>
+<div class="desc"><p>Generate the <strong>about</strong>.py file from a setup.py file.</p></div>
 </dd>
 </dl>
 </section>
@@ -314,20 +620,45 @@ pyproject.toml file.</p></div>
 </section>
 </article>
 <nav id="sidebar">
-<h1>Index</h1>
 <div class="toc">
 <ul>
 <li><a href="#metametameta">metametameta</a><ul>
 <li><a href="#installation">Installation</a></li>
 <li><a href="#usage">Usage</a></li>
+<li><a href="#programmatic-interface">Programmatic interface.</a></li>
 <li><a href="#motivation">Motivation</a></li>
 <li><a href="#workflow">Workflow</a></li>
 <li><a href="#using-metadata">Using metadata</a></li>
+<li><a href="#project-health-info">Project Health &amp; Info</a></li>
 </ul>
 </li>
 <li><a href="#changelog">Changelog</a><ul>
-<li><a href="#010-2024-01-20">[0.1.0] - 2024-01-20</a><ul>
+<li><a href="#015-2024-10-02">[0.1.5] - 2024-10-02</a><ul>
+<li><a href="#fixed">Fixed</a></li>
 <li><a href="#added">Added</a></li>
+</ul>
+</li>
+<li><a href="#014-2024-10-02">[0.1.4] - 2024-10-02</a><ul>
+<li><a href="#fixed_1">Fixed</a></li>
+<li><a href="#added_1">Added</a></li>
+</ul>
+</li>
+<li><a href="#013-2024-06-28">[0.1.3] - 2024-06-28</a><ul>
+<li><a href="#fixed_2">Fixed</a></li>
+</ul>
+</li>
+<li><a href="#012-2024-06-14">[0.1.2] - 2024-06-14</a><ul>
+<li><a href="#fixed_3">Fixed</a></li>
+</ul>
+</li>
+<li><a href="#011-2024-08-03">[0.1.1] - 2024-08-03</a><ul>
+<li><a href="#added_2">Added</a></li>
+<li><a href="#fixed_4">Fixed</a></li>
+<li><a href="#changed">Changed</a></li>
+</ul>
+</li>
+<li><a href="#010-2024-01-20">[0.1.0] - 2024-01-20</a><ul>
+<li><a href="#added_3">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -337,14 +668,20 @@ pyproject.toml file.</p></div>
 <ul id="index">
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
+<li><code><a title="metametameta.autodetect" href="autodetect.html">metametameta.autodetect</a></code></li>
 <li><code><a title="metametameta.filesystem" href="filesystem.html">metametameta.filesystem</a></code></li>
 <li><code><a title="metametameta.find" href="find.html">metametameta.find</a></code></li>
+<li><code><a title="metametameta.find_it" href="find_it.html">metametameta.find_it</a></code></li>
 <li><code><a title="metametameta.from_importlib" href="from_importlib.html">metametameta.from_importlib</a></code></li>
 <li><code><a title="metametameta.from_pep621" href="from_pep621.html">metametameta.from_pep621</a></code></li>
 <li><code><a title="metametameta.from_poetry" href="from_poetry.html">metametameta.from_poetry</a></code></li>
 <li><code><a title="metametameta.from_setup_cfg" href="from_setup_cfg.html">metametameta.from_setup_cfg</a></code></li>
+<li><code><a title="metametameta.from_setup_py" href="from_setup_py.html">metametameta.from_setup_py</a></code></li>
 <li><code><a title="metametameta.general" href="general.html">metametameta.general</a></code></li>
 <li><code><a title="metametameta.known" href="known.html">metametameta.known</a></code></li>
+<li><code><a title="metametameta.logging_config" href="logging_config.html">metametameta.logging_config</a></code></li>
+<li><code><a title="metametameta.utils" href="utils/index.html">metametameta.utils</a></code></li>
+<li><code><a title="metametameta.validate_sync" href="validate_sync.html">metametameta.validate_sync</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
@@ -353,13 +690,14 @@ pyproject.toml file.</p></div>
 <li><code><a title="metametameta.generate_from_pep621" href="#metametameta.generate_from_pep621">generate_from_pep621</a></code></li>
 <li><code><a title="metametameta.generate_from_poetry" href="#metametameta.generate_from_poetry">generate_from_poetry</a></code></li>
 <li><code><a title="metametameta.generate_from_setup_cfg" href="#metametameta.generate_from_setup_cfg">generate_from_setup_cfg</a></code></li>
+<li><code><a title="metametameta.generate_from_setup_py" href="#metametameta.generate_from_setup_py">generate_from_setup_py</a></code></li>
 </ul>
 </li>
 </ul>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
 </footer>
 </body>
 </html>
