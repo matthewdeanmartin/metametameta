@@ -42,7 +42,6 @@ test: clean uv.lock install_plugins
 isort:
 	@echo "Formatting imports"
 	$(VENV) isort .
-	@touch .build_history/isort
 
 black: isort
 	@echo "Formatting code"
@@ -55,13 +54,13 @@ black: isort
 pre-commit: isort black
 	@echo "Pre-commit checks"
 	$(VENV) pre-commit run --all-files
-	@touch .build_history/pre-commit
+
 
 
 bandit:
 	@echo "Security checks"
 	$(VENV)  bandit metametameta -r --quiet
-	@touch .build_history/bandit
+
 
 pylint: isort black
 	@echo "Linting with pylint"
@@ -121,10 +120,3 @@ check_self:
 #audit:
 #	# $(VENV) python -m metametameta audit
 #	$(VENV) tool_audit single metametameta --version=">=2.0.0"
-
-install_plugins:
-	echo "N/A"
-
-.PHONY: issues
-issues:
-	echo "N/A"
