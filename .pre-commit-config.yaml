@@ -12,16 +12,22 @@ repos:
       # each hook takes about 1s to run. These are expensive-ish checks
       - id: check-added-large-files
         args: ['--maxkb=800']
+      - id: check-ast
       - id: check-yaml
       - id: check-builtin-literals
       - id: fix-byte-order-marker
       - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-illegal-windows-names
+      - id: check-docstring-first
       - id: check-merge-conflict
       - id: check-symlinks
       - id: check-toml
       - id: debug-statements
       - id: detect-private-key
       - id: forbid-new-submodules
+      - id: check-vcs-permalinks
+      - id: mixed-line-ending
 #  - repo: https://github.com/asottile/pyupgrade
 #    rev: v3.20.0
 #    hooks:
