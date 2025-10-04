@@ -1,4 +1,9 @@
 ---
+ci:
+  autoupdate_schedule: monthly
+  autofix_commit_msg: |
+    [pre-commit.ci] Apply automatic pre-commit fixes
+  skip: []
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
