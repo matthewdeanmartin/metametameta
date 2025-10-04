@@ -79,7 +79,8 @@ There are many modern ways to get metadata about packages, as of
 2024, [importlib.metadata](https://docs.python.org/3/library/importlib.metadata.html) and it's backports will get you
 lots of metadata for yours and other packages.
 
-The newest way is [PEP-621](https://peps.python.org/pep-0621/), see also [packaging.python.org](https://packaging.python.org/en/latest/specifications/pyproject-toml/#pyproject-toml-spec)
+The newest way is [PEP-621](https://peps.python.org/pep-0621/), see
+also [packaging.python.org](https://packaging.python.org/en/latest/specifications/pyproject-toml/#pyproject-toml-spec)
 
 The oldest way to provide metadata was to use dunder variables in your package, e.g. `__author__`, `__version__`, etc.
 
@@ -88,9 +89,9 @@ sort of metadata](https://web.archive.org/web/20111010053227/http://jaynes.color
 
 - Metadata fields can appear in any or no python file in a project.
 - Sometimes they are at the top of a single file python module, common locations for metadata:
-  - `__init__.py`
-  - `__meta__.py`
-  - `__about__.py`
+    - `__init__.py`
+    - `__meta__.py`
+    - `__about__.py`
 - Some metadata elements could reasonably be in every single file.
 - There are no particular standards for the type of `__author__`. It could be a string, space delimited string, list
   or tuple. That is true for the other metadata elements as well.
@@ -115,3 +116,31 @@ concept for this usage.
 Another marginal use case is that is a folksonomy, a taxonomy created by the people. The official metadata is
 governed by the Python Packaging Authority and the Python Software Foundation. If, say, you wanted to add a metadata
 item for `__mailing_address__` you could easily do it with source code metadata.
+
+## Project Health
+
+---
+
+### 📊 Project Health & Info
+
+| Metric            | Health                                                                                                                                                                                                              | Metric          | Info                                                                                                                                                                                                              |
+|:------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Tests             | [![Tests](https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml/badge.svg)](https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml)                                  | License         | [![License](https://img.shields.io/github/license/matthewdeanmartin/metametameta)](https://github.com/matthewdeanmartin/metametameta/blob/main/LICENSE.md)                                                        |
+| Coverage          | [![Codecov](https://codecov.io/gh/matthewdeanmartin/metametameta/branch/main/graph/badge.svg)](https://codecov.io/gh/matthewdeanmartin/metametameta)                                                                | PyPI            | [![PyPI](https://img.shields.io/pypi/v/metametameta)](https://pypi.org/project/metametameta/)                                                                                                                     |
+| Lint / Pre-commit | [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/matthewdeanmartin/metametameta/main.svg)](https://results.pre-commit.ci/latest/github/matthewdeanmartin/metametameta/main)                      | Python Versions | [![Python Version](https://img.shields.io/pypi/pyversions/metametameta)](https://pypi.org/project/metametameta/)                                                                                                  |
+| Quality Gate      | [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=matthewdeanmartin_metametameta\&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=matthewdeanmartin_metametameta)    | Docs            | [![Docs](https://readthedocs.org/projects/metametameta/badge/?version=latest)](https://metametameta.readthedocs.io/en/latest/)                                                                                    |
+| CI Build          | [![Build](https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml/badge.svg)](https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml)                                  | Downloads       | [![Downloads](https://static.pepy.tech/personalized-badge/metametameta?period=total\&units=international_system\&left_color=grey\&right_color=blue\&left_text=Downloads)](https://pepy.tech/project/metametameta) |
+| Maintainability   | [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=matthewdeanmartin_metametameta\&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=matthewdeanmartin_metametameta) | Last Commit     | ![Last Commit](https://img.shields.io/github/last-commit/matthewdeanmartin/metametameta)                                                                                                                          |
+
+| Category          | Health                                                                                                                                              
+|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Typing / Mypy** | [![Checked with mypy](https://img.shields.io/badge/mypy-checked-blue.svg)](https://mypy-lang.org/)                                                  |
+| **Code Style**    | [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)                                    |
+| **Security**      | [![Bandit](https://img.shields.io/badge/security-bandit-green.svg)](https://bandit.readthedocs.io/)                                                 |
+| **Open Issues**   | ![GitHub issues](https://img.shields.io/github/issues/matthewdeanmartin/metametameta)                                                               |
+| **Stars**         | ![GitHub Repo stars](https://img.shields.io/github/stars/matthewdeanmartin/metametameta?style=social)                                               |
+
+---
+
+Would you like me to rewrite the Markdown so the table collapses elegantly on narrow screens (GitHub-mobile-friendly
+two-column layout)?
