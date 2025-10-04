@@ -1,3 +1,4 @@
+#!/bin/bash
 set -euo pipefail
 export PIP_DISABLE_PIP_VERSION_CHECK="1"
 export UV_LINK_MODE="copy"
