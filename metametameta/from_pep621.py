@@ -35,6 +35,7 @@ def read_pep621_metadata(source: str = "pyproject.toml") -> dict[str, Any]:
     return cast(dict, project_data)
 
 
+# pylint: disable=unused-argument
 def generate_from_pep621(name: str = "", source: str = "pyproject.toml", output: str = "__about__.py") -> str:
     """
     Generate the __about__.py file from the pyproject.toml file.

@@ -1,6 +1,6 @@
 # .github/workflows/publish-to-pypi.yml
 
-name: Publish troml_dev_status to PyPI
+name: Publish metametameta to PyPI
 
 on:
   workflow_dispatch:
@@ -30,7 +30,7 @@ jobs:
         run: |
           pipx install uv && pipx install "coderoller" && \
           pipx install isort && pipx install black && pipx install bandit && \
-          pipx install pylint && pipx install pre-commit && pipx install poetry && pipx install hatch
+          pipx install pylint && pipx install pre-commit && pipx install uv && pipx install hatch
 
       - name: Install Dependencies
         run: uv sync
@@ -59,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/p/troml-dev-status
+      url: https://pypi.org/p/metametameta
     permissions:
       id-token: write
     needs: build

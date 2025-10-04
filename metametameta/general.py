@@ -128,7 +128,6 @@ def safe_quote(value: int | float | str) -> str:
         if '"""' in value:
             value = value.replace('"""', r"\"\"\"")
         return f'"""{value}"""'
-    else:
-        # Otherwise, simple double quotes are fine. We don't need to escape
-        # single quotes because we are using double quotes.
-        return f'"{value}"'
+    # Otherwise, simple double quotes are fine. We don't need to escape
+    # single quotes because we are using double quotes.
+    return f'"{value}"'

@@ -18,13 +18,15 @@ def get_package_metadata(package_name: str) -> dict[str, Any]:
     """Get package metadata using importlib.metadata."""
     try:
         pkg_metadata: md.PackageMetadata = md.metadata(package_name)
-        # dict for 3.8 suport
+        # dict for 3.8 support
+        # pylint: disable=unnecessary-comprehension
         return {key: value for key, value in cast(dict, pkg_metadata).items()}
     except md.PackageNotFoundError:
         print(f"Package '{package_name}' not found.")
         return {}
 
 
+# pylint: disable=unused-argument
 def generate_from_importlib(name: str, source: str = "", output: str = "__about__.py") -> str:
     """Write package metadata to an __about__.py file."""
     pkg_metadata = get_package_metadata(name)
@@ -35,10 +37,9 @@ def generate_from_importlib(name: str, source: str = "", output: str = "__about_
 
         about_content = merge_sections(names, name, about_content)
         return write_to_file(dir_path, about_content, output)
-    else:
-        message = "No [project] section found in pyproject.toml."
-        logger.debug(message)
-        return message
+    message = "No [project] section found in pyproject.toml."
+    logger.debug(message)
+    return message
 
 
 if __name__ == "__main__":

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
 # usage: metametameta [-h] {setup_cfg,pep621,poetry,importlib} ...
 #
 #metametameta: Generate __about__.py from various sources.

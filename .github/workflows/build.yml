@@ -1,34 +1,33 @@
 name: Build and Test
 
-on: [ push ]
+on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4.1.7
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@v5.1.1
-        with:
-          python-version: '3.11'
-          # cache: 'pipenv' # caching pipenv dependencies
-      - name: Install poetry and pipx
-        run: |
-          pip install poetry && pip install pipx
+    - uses: actions/checkout@v5.0.0
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@v6.0.0
+      with:
+        python-version: '3.13'
+    - name: Install uv and pipx
+      run: |
+        pip install uv && pip install pipx
 
-      - name: Install global dependencies
-        run: |
-          pipx install isort && pipx install black && pipx install bandit && \
-          pipx install pylint && pipx install pre-commit && pipx install poetry
+    - name: Install global dependencies
+      run: |
+        pipx install isort && pipx install black && pipx install bandit && \
+        pipx install pylint && pipx install pre-commit && pipx install uv
 
-      - name: Install Dependencies
-        run: poetry install --with dev
+    - name: Install Dependencies
+      run: uv sync
 
-      - name: Run Makefile
-        run: make check
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+    - name: Run Makefile
+      run: make check
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v5.5.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}

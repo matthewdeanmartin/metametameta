@@ -11,6 +11,8 @@ import sys
 from collections.abc import Sequence
 from typing import Any
 
+from rich_argparse import RichHelpFormatter
+
 from metametameta import __about__, logging_config
 from metametameta.from_importlib import generate_from_importlib
 from metametameta.from_pep621 import generate_from_pep621
@@ -95,14 +97,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     Returns:
         int: The exit code.
     """
-    try:
-        import argparse
-
-        from rich_argparse import RichHelpFormatter
-
-        formatter_class: Any = RichHelpFormatter
-    except:
-        formatter_class = argparse.RawTextHelpFormatter
+    formatter_class: Any = RichHelpFormatter
 
     parser = SmartParser(
         prog=__about__.__title__,

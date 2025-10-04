@@ -1,13 +1,21 @@
-"""Metadata for source_todo."""
+"""Metadata for metametameta."""
 
 __all__ = [
     "__title__",
     "__version__",
     "__description__",
-    "__requires_python__"
+    "__credits__",
+    "__readme__",
+    "__requires_python__",
+    "__keywords__",
+    "__status__"
 ]
 
-__title__ = "source_todo"
-__version__ = "0.1.0"
-__description__ = "TODOs in source code as a first class construct"
-__requires_python__ = ">=3.9"
+__title__ = "metametameta"
+__version__ = "0.1.4"
+__description__ = "Generate __about__.py with dunder meta."
+__credits__ = "[{'name': 'Matthew Martin', 'email': 'matthewdeanmartin@gmail.com'}]"
+__readme__ = "README.md"
+__requires_python__ = ">=3.8"
+__keywords__ = ['packaging', 'metadata']
+__status__ = "4 - Beta"

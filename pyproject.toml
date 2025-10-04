@@ -1,8 +1,13 @@
-[tool.poetry]
+[project]
 name = "metametameta"
 version = "0.1.4"
 description = "Generate __about__.py with dunder meta."
-authors = ["Matthew Martin <matthewdeanmartin@gmail.com>"]
+authors = [
+    {name = "Matthew Martin", email = "matthewdeanmartin@gmail.com"},
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.8"
 keywords = ["packaging", "metadata", ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -18,78 +23,95 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
 ]
-include = [
-    "metametameta/**/*.py",
-    "metametameta/**/*.md",
-    "metametameta/**/*.txt",
-    "metametameta/**/*.html",
-    "metametameta/**/*.jinja",
-    "metametameta/py.typed",
+dependencies = [
+    "rich_argparse>=1.7.1",
+    "toml>=0.10.2",
+    "colorlog>=6.9.0",
 ]
-exclude = [
-]
-license = "MIT"
-readme = "README.md"
-repository = "https://github.com/matthewdeanmartin/metametameta"
-homepage = "https://github.com/matthewdeanmartin/metametameta"
-documentation = "https://matthewdeanmartin.github.io/metametameta/metametameta/index.html"
 
-[tool.poetry.urls]
+[project.urls]
 "Bug Tracker" = "https://github.com/matthewdeanmartin/metametameta/issues"
 "Change Log" = "https://github.com/matthewdeanmartin/metametameta/blob/main/CHANGELOG.md"
 
-[tool.poetry.scripts]
+[project.scripts]
 metametameta = 'metametameta.__main__:main'
 mmm = 'metametameta.__main__:main'
 
-[tool.poetry.dependencies]
-python = ">=3.8,<4.0"
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-# packaging = ">=23.2"
-rich_argparse= "*"
+[tool.hatch.build.targets.sdist]
+include = [
+    "metametameta/**/*.py",
+    "metametameta/py.typed",
+    "/README.md", "LICENSE",
+]
 
-# Config
-toml = ">=0.10.2"
-colorlog = ">=6.9.0"
-# metadata, don't need it!
-# importlib-metadata = { version = ">=7.0.1", python = "<3.8" }
+exclude = [
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["metametameta"]
+include = [
+    "metametameta/**/*.py",
+    "metametameta/py.typed",
+    "/README.md", "LICENSE",
+]
 
 
-[tool.poetry.dev-dependencies]
-# formatting
-black = { version = ">=25.1.0", python = ">=3.9" }
+[dependency-groups]
+dev = [
+    "mkdocstrings",
+    "pyclean; python_version >= '3.12'",
+    "strip-docs>=1.0; python_version >= '3.12'",
+    "gha-update; python_version >= '3.12'",
+    "mkdocstrings[python]",
+    "mkdocs; python_version >= '3.12'",
+    "mdformat",
+    "detect-test-pollution",
+    # plugin finder
+    "packaging; python_version >= '3.8'",
+    "requests; python_version >= '3.8'",
+    "tabulate[widechars]; python_version >= '3.8'",
+    "tqdm; python_version >= '3.8'",
+    "requests-cache; python_version >= '3.8'",
+    "platformdirs; python_version >= '3.8'",
 
-# dep tools
-deptry = { version = "*", python = ">=3.9" }
+    # mpy
+    "mypy; python_version >= '3.8'",
+    "types-toml; python_version >= '3.8'",
 
-# testing tools
-pytest = { version = ">=7.4.3", python = ">=3.9" }
-pytest-cov = { version = ">=4.1.0", python = ">=3.9" }
-pytest-xdist = { version = ">=3.5.0", python = ">=3.9" }
-pytest-randomly = { version = ">=3.15.0", python = ">=3.9" }
-pytest-sugar = { version = ">=0.9.7", python = ">=3.9" }
-pytest-mock = { version = "*", python = ">=3.9" }
-pytest-unused-fixtures = { version = "*", python = ">=3.9" }
-hypothesis = { version = ">=6.96.0", python = ">=3.9" }
-tox = { version = "*", python = ">=3.9" }
+    # reports
+    "jinja2; python_version >= '3.8'",
+    "bug-trail-core>=3.1.0; python_version >= '3.9'",
+    # build
+    "vermin; python_version >= '3.8'",
+    "metametameta>=0.1.3; python_version >= '3.9'",
+    "hatchling; python_version >= '3.8'",
+    "ruff>=0.12.0; python_version >= '3.8'",
+    "pylint; python_version >= '3.8'",
 
-# tools
-pylint = { version = ">=3.0.2", python = ">=3.9" }
-ruff = { version = ">=0.1.9", python = ">=3.9" }
-pre-commit = { version = ">=3.5.0", python = ">=3.9" }
+    # testing tools
+    "pytest; python_version >= '3.8'",
+    "pytest-cov; python_version >= '3.8'",
+    "pytest-xdist>=3.5.0; python_version >= '3.8'",
+    "pytest-randomly>=3.15.0; python_version >= '3.8'",
+    "pytest-sugar>=0.9.7; python_version >= '3.8'",
+    "pytest-mock; python_version >= '3.8'",
+    "pytest-unused-fixtures; python_version >= '3.10'",
+    "hypothesis[cli]; python_version >= '3.8'",
+    "detect-test-pollution",
+    "pytest-timeout>=2.4.0",
 
-# types
-mypy = { version = ">=1.16.0", python = ">=3.9" }
-types-toml = { version = "*", python = ">=3.9" }
-
-# docs
-interrogate = { version = ">=1.5.0", python = ">=3.9" }
-pydoctest = { version = ">=0.1.22", python = ">=3.9" }
-pdoc3 = { version = ">=0.10.0", python = ">=3.9" }
-mdformat = { version = ">=0.7.17", python = ">=3.9" }
-linkcheckmd = { version = ">=1.4.0", python = ">=3.9" }
-codespell = { version = ">=2.2.6", python = ">=3.9" }
-pyenchant = { version = ">=3.2.2", python = ">=3.9" }
+    # docs
+    "interrogate>=1.5.0; python_version >= '3.8'",
+    "pydoctest==0.2.1; python_version >= '3.8'",
+    "pdoc3>=0.5.0; python_version >= '3.8'",
+    "mdformat>=0.5.0; python_version >= '3.8'",
+    "linkcheckmd>=1.4.0; python_version >= '3.8'",
+    "codespell>=2.2.6; python_version >= '3.8'",
+    "pyenchant>=3.2.2; python_version >= '3.8'",
 
 # more testing (optional)
 # pytest-snapshot = { version = ">=0.9.0", python = ">=3.9" }
@@ -100,6 +122,8 @@ pyenchant = { version = ">=3.2.2", python = ">=3.9" }
 # contract (optional)
 # griffe = { version = ">=0.38.1", python = ">=3.9" }
 
+
+]
 
 [tool.black]
 line-length = 120
@@ -124,9 +148,6 @@ exclude = '''
                      # the root of the project
 )
 '''
-[build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
@@ -141,6 +162,7 @@ norecursedirs = ["vendor", "scripts"]
 #markers =
 #	slow: marks tests as slow (deselect with '-m "not slow"')
 #	fast: marks tests as fast (deselect with '-m "not fast"')
+
 
 [tool.isort]
 default_section = "THIRDPARTY"
@@ -203,31 +225,6 @@ target-version = "py311"
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
-[tool.scriv]
-version = "literal: pyproject.toml: tool.poetry.version"
-format = "md"
-main_branches = "master, main, develop, dev"
-
-[mypy]
-warn_return_any = true
-warn_unused_configs = true
-strict = true
-disallow_untyped_calls = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-check_untyped_defs = true
-strict_optional = true
-warn_redundant_casts = true
-warn_no_return = true
-
-mypy_path = [".", "$MYPY_CONFIG_FILE_DIR/typings", "typings"]
-files = ["metametameta", "typings"]
-
-[mypy.pygount]
-ignore_missing_imports = true
-
-[mypy.astor]
-ignore_missing_imports = true
 
 
 [tool.coverage.report]
@@ -245,6 +242,7 @@ exclude_also = [
     # Don't complain about abstract methods, they aren't run:
     "@(abc\\.)?abstractmethod",
 ]
+
 
 [tool.cli-tools]
 make = {name = "make", version = ">=3.81", schema = "semver", tags = ["build"]}
@@ -275,7 +273,6 @@ nano = {name = "nano", version = ">=7.1", schema = "semver"}
 shellcheck = {name = "shellcheck", version = ">=0.8.0", schema = "semver"}
 choco = {name = "choco", version = ">=0.10.13", schema = "semver"}
 brew = {name = "brew", version = ">=0.0.0", schema = "semver", if_os = "darwin"}
-poetry = {name = "poetry", version = "Poetry (version 1.5.1)", schema = "snapshot"}
 
 
 [tool.strict-build-script]

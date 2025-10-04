@@ -11,6 +11,7 @@ repos:
     hooks:
       # each hook takes about 1s to run. These are expensive-ish checks
       - id: check-added-large-files
+        args: ['--maxkb=800']
       - id: check-yaml
       - id: check-builtin-literals
       - id: fix-byte-order-marker
