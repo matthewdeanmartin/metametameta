@@ -30,7 +30,8 @@ jobs:
       run: |
         pipx install uv && pipx install "coderoller" && \
         pipx install isort && pipx install black && pipx install bandit && \
-        pipx install pylint && pipx install pre-commit && pipx install uv && pipx install hatch
+        pipx install pylint && pipx install pre-commit && pipx install uv && pipx install hatch && \
+        pipx install cli_tool_audit
 
     - name: Install Dependencies
       run: uv sync
