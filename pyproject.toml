@@ -62,6 +62,7 @@ include = [
 
 [dependency-groups]
 dev = [
+    "git2md; python_version >= '3.12'",
     "mkdocstrings",
     "pyclean; python_version >= '3.12'",
     "strip-docs>=1.0; python_version >= '3.12'",
