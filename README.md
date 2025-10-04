@@ -117,11 +117,7 @@ Another marginal use case is that is a folksonomy, a taxonomy created by the peo
 governed by the Python Packaging Authority and the Python Software Foundation. If, say, you wanted to add a metadata
 item for `__mailing_address__` you could easily do it with source code metadata.
 
-## Project Health
-
----
-
-### 📊 Project Health & Info
+## Project Health & Info
 
 | Metric            | Health                                                                                                                                                                                                              | Metric          | Info                                                                                                                                                                                                              |
 |:------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -134,13 +130,5 @@ item for `__mailing_address__` you could easily do it with source code metadata.
 
 | Category          | Health                                                                                                                                              
 |-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Typing / Mypy** | [![Checked with mypy](https://img.shields.io/badge/mypy-checked-blue.svg)](https://mypy-lang.org/)                                                  |
-| **Code Style**    | [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)                                    |
-| **Security**      | [![Bandit](https://img.shields.io/badge/security-bandit-green.svg)](https://bandit.readthedocs.io/)                                                 |
 | **Open Issues**   | ![GitHub issues](https://img.shields.io/github/issues/matthewdeanmartin/metametameta)                                                               |
 | **Stars**         | ![GitHub Repo stars](https://img.shields.io/github/stars/matthewdeanmartin/metametameta?style=social)                                               |
-
----
-
-Would you like me to rewrite the Markdown so the table collapses elegantly on narrow screens (GitHub-mobile-friendly
-two-column layout)?
