@@ -165,3 +165,6 @@ tool-audit-freeze:
 
 tool-audit:
     cli_tool_audit audit
+
+publish: test
+    rm -rf dist && hatch build
