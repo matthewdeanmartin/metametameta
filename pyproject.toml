@@ -1,6 +1,6 @@
 [project]
 name = "metametameta"
-version = "0.1.5"
+version = "0.1.6"
 description = "Generate __about__.py with dunder meta."
 authors = [
     {name = "Matthew Martin", email = "matthewdeanmartin@gmail.com"},
