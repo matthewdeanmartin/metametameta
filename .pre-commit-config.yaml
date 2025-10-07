@@ -43,7 +43,7 @@ repos:
   #        rev: v0.10.1
   #        hooks:
   #            -   id: validate-pyproject
-  - repo: https://github.com/myint/autoflake
+  - repo: https://github.com/PyCQA/autoflake
     rev: v2.3.1
     hooks:
       - id: autoflake
@@ -67,7 +67,7 @@ repos:
   #                name: isort
   #                args:
   #                    - --profile black
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
+  - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.13.3
     hooks:
       - id: ruff
