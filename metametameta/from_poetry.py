@@ -22,11 +22,12 @@ def read_poetry_metadata(
 ) -> Any:
     """
     Read the pyproject.toml file and extract the [tool.poetry] section.
+
     Args:
-        source (str): Path to the pyproject.toml file.
+        source: Path to the pyproject.toml file.
 
     Returns:
-        dict: The [tool.poetry] section of the pyproject.toml file.
+        The [tool.poetry] section of the pyproject.toml file.
     """
     # Read the pyproject.toml file
     with open(source, encoding="utf-8") as file:
@@ -38,19 +39,18 @@ def read_poetry_metadata(
 
 
 # pylint: disable=unused-argument
-def generate_from_poetry(
-    name: str = "", source: str = "pyproject.toml", output: str = "__about__.py", validate: bool = True
-) -> str:
+def generate_from_poetry(name: str = "", source: str = "pyproject.toml", output: str = "__about__.py", validate: bool = True) -> str:
     """
     Generate the __about__.py file from the pyproject.toml file.
+
     Args:
-        name (str): Name of the project.
-        source (str): Path to the pyproject.toml file.
-        output (str): Name of the file to write to.
-        validate (bool): Check if top level values are in about file after written
+        name: Name of the project.
+        source: Path to the pyproject.toml file.
+        output: Name of the file to write to.
+        validate: Check if top level values are in about file after written.
 
     Returns:
-        str: Path to the file that was written.
+        Path to the file that was written.
     """
     poetry_data = read_poetry_metadata(source)
     if poetry_data:

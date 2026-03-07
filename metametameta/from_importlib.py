@@ -15,7 +15,15 @@ logger = logging.getLogger(__name__)
 
 
 def get_package_metadata(package_name: str) -> dict[str, Any]:
-    """Get package metadata using importlib.metadata."""
+    """
+    Get package metadata using importlib.metadata.
+
+    Args:
+        package_name: The name of the package to get metadata for.
+
+    Returns:
+        Dictionary containing the package metadata.
+    """
     try:
         pkg_metadata: md.PackageMetadata = md.metadata(package_name)
         # dict for 3.8 support
@@ -28,7 +36,18 @@ def get_package_metadata(package_name: str) -> dict[str, Any]:
 
 # pylint: disable=unused-argument
 def generate_from_importlib(name: str, source: str = "", output: str = "__about__.py", validate: bool = False) -> str:
-    """Write package metadata to an __about__.py file."""
+    """
+    Write package metadata to an __about__.py file.
+
+    Args:
+        name: Name of the package to get metadata from.
+        source: Ignored (present for API compatibility).
+        output: Name of the file to write to.
+        validate: Validate file after writing.
+
+    Returns:
+        Path to the file that was written, or a message if no metadata was found.
+    """
     pkg_metadata = get_package_metadata(name)
     if pkg_metadata:
         dir_path = "./"

@@ -18,8 +18,12 @@ logger = logging.getLogger(__name__)
 def read_setup_cfg_metadata(setup_cfg_path: Path | None = None) -> dict[str, Any]:
     """
     Read the setup.cfg file and extract the [metadata] section.
+
+    Args:
+        setup_cfg_path: Path to the setup.cfg file. Defaults to "setup.cfg".
+
     Returns:
-        dict: The [metadata] section of the setup.cfg file.
+        The [metadata] section of the setup.cfg file.
     """
     # Path to the setup.cfg file
     if setup_cfg_path is None:
@@ -35,20 +39,18 @@ def read_setup_cfg_metadata(setup_cfg_path: Path | None = None) -> dict[str, Any
 
 
 # pylint: disable=unused-argument
-def generate_from_setup_cfg(
-    name: str = "", source: str = "setup.cfg", output: str = "__about__.py", validate: bool = True
-) -> str:
+def generate_from_setup_cfg(name: str = "", source: str = "setup.cfg", output: str = "__about__.py", validate: bool = True) -> str:
     """
     Generate the __about__.py file from the setup.cfg file.
 
     Args:
-        name (str): Name of the project.
-        source (str): Path to the setup.cfg file.
-        output (str): Name of the file to write to.
-        validate (bool): Check if top level values are in about file after written
+        name: Name of the project.
+        source: Path to the setup.cfg file.
+        output: Name of the file to write to.
+        validate: Check if top level values are in about file after written.
 
     Returns:
-        str: Path to the file that was written.
+        Path to the file that was written.
     """
     metadata = read_setup_cfg_metadata(Path(source))
     if metadata:

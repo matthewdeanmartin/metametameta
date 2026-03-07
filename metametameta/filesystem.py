@@ -17,7 +17,19 @@ logger = logging.getLogger(__name__)
 
 
 def _find_existing_package_dir(base_path: Path, package_name: str) -> Path | None:
-    """Searches for an existing package directory using common layouts."""
+    """
+    Search for an existing package directory using common layouts.
+
+    Checks for directories matching the package name with hyphens replaced
+    by underscores, the original name, and src-layout variants.
+
+    Args:
+        base_path: The root directory to search in.
+        package_name: The name of the package to find.
+
+    Returns:
+        The Path to the first existing package directory found, or None.
+    """
     package_name_underscore = package_name.replace("-", "_")
 
     # Define a clear, prioritized list of candidate directories to check.

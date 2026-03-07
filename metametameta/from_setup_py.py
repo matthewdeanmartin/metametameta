@@ -24,7 +24,12 @@ class SetupKwargsVisitor(ast.NodeVisitor):
         self._found = False
 
     def visit_Call(self, node: ast.Call) -> None:
-        """Visit a Call node in the AST."""
+        """
+        Visit a Call node in the AST.
+
+        Looks for setup() function calls and extracts keyword arguments.
+        Only captures the first valid setup() call found.
+        """
         # Only capture the first valid setup() call we find.
         if self._found:
             return
@@ -44,9 +49,7 @@ class SetupKwargsVisitor(ast.NodeVisitor):
                         self.kwargs[keyword.arg] = ast.literal_eval(keyword.value)
                     except ValueError:
                         # This happens if the value is not a literal (e.g., a variable)
-                        logger.warning(
-                            f"Could not statically parse value for '{keyword.arg}' in setup.py. Only literals (strings, numbers, lists, etc.) are supported."
-                        )
+                        logger.warning(f"Could not statically parse value for '{keyword.arg}' in setup.py. Only literals (strings, numbers, lists, etc.) are supported.")
             self._found = True
 
         # Continue traversing to find the call if it's nested
@@ -55,8 +58,15 @@ class SetupKwargsVisitor(ast.NodeVisitor):
 
 def read_setup_py_metadata(source: str = "setup.py") -> dict[str, Any]:
     """
-    Reads a setup.py file and extracts metadata from the setup() call using AST.
-    This method does not execute the file.
+    Read a setup.py file and extract metadata from the setup() call using AST.
+
+    This method does not execute the file, it only parses it statically.
+
+    Args:
+        source: Path to the setup.py file.
+
+    Returns:
+        Dictionary containing the metadata found in the setup() call.
     """
     source_path = Path(source)
     if not source_path.exists():
@@ -74,11 +84,18 @@ def read_setup_py_metadata(source: str = "setup.py") -> dict[str, Any]:
         return {}
 
 
-def generate_from_setup_py(
-    name: str = "", source: str = "setup.py", output: str = "__about__.py", validate: bool = False
-) -> str:
+def generate_from_setup_py(name: str = "", source: str = "setup.py", output: str = "__about__.py", validate: bool = False) -> str:
     """
     Generate the __about__.py file from a setup.py file.
+
+    Args:
+        name: Name of the project (optional, will be read from setup.py if not provided).
+        source: Path to the setup.py file.
+        output: Name of the file to write to.
+        validate: Validate file after writing.
+
+    Returns:
+        Path to the file that was written, or a message if no metadata was found.
     """
     metadata = read_setup_py_metadata(source)
     if not metadata:

@@ -62,21 +62,20 @@ def validate_about_file(file_path: str, metadata: dict[str, Any]) -> None:
 
     for value in primitive_values:
         if value not in content:
-            raise ValueError(
-                f"Validation failed: Value '{value}' not found in {file_path}. The file may be incomplete or missing critical metadata."
-            )
+            raise ValueError(f"Validation failed: Value '{value}' not found in {file_path}. The file may be incomplete or missing critical metadata.")
 
     logger.info("Validation successful.")
 
 
 def any_metadict(metadata: dict[str, str | int | float | list[str]]) -> tuple[str, list[str]]:
     """
-    Generate a __about__.py file from a metadata dictionary.
+    Generate __about__.py content from a metadata dictionary.
+
     Args:
-        metadata (dict): Metadata dictionary.
+        metadata: Dictionary containing project metadata.
 
     Returns:
-        tuple: The content to write to the file and the names of the variables.
+        A tuple containing the file content and list of variable names.
     """
     # Normalize keys to lowercase for consistent processing from different sources.
     processed_meta = {k.lower().replace("-", "_"): v for k, v in metadata.items()}
@@ -149,12 +148,12 @@ def merge_sections(names: list[str] | None, project_name: str, about_content: st
     Merge the sections of the __about__.py file.
 
     Args:
-        names (list): Names of the variables.
-        project_name (str): Name of the project.
-        about_content (str): Content of the __about__.py file.
+        names: Names of the variables to include in __all__.
+        project_name: Name of the project for the docstring.
+        about_content: Content of the __about__.py file.
 
     Returns:
-        str: Content of the __about__.py file.
+        The complete __about__.py file content.
     """
     if names is None:
         names = []

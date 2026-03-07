@@ -19,11 +19,12 @@ logger = logging.getLogger(__name__)
 def read_pep621_metadata(source: str = "pyproject.toml") -> dict[str, Any]:
     """
     Read the pyproject.toml file and extract the [project] section.
+
     Args:
-        source (str): Path to the pyproject.toml file.
+        source: Path to the pyproject.toml file.
 
     Returns:
-        dict: The [project] section of the pyproject.toml file.
+        The [project] section of the pyproject.toml file.
     """
     # Read the pyproject.toml file
     with open(source, encoding="utf-8") as file:
@@ -36,21 +37,18 @@ def read_pep621_metadata(source: str = "pyproject.toml") -> dict[str, Any]:
 
 
 # pylint: disable=unused-argument
-def generate_from_pep621(
-    name: str = "", source: str = "pyproject.toml", output: str = "__about__.py", validate: bool = False
-) -> str:
+def generate_from_pep621(name: str = "", source: str = "pyproject.toml", output: str = "__about__.py", validate: bool = False) -> str:
     """
     Generate the __about__.py file from the pyproject.toml file.
 
     Args:
-        validate:
-        name (str): Name of the project.
-        source (str): Path to the pyproject.toml file.
-        output (str): Name of the file to write to.
-        validate (bool): Validate file
+        name: Name of the project.
+        source: Path to the pyproject.toml file.
+        output: Name of the file to write to.
+        validate: Validate file after writing.
 
     Returns:
-        str: Path to the file that was written.
+        Path to the file that was written.
     """
     project_data = read_pep621_metadata(source)
     if project_data:

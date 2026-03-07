@@ -13,7 +13,15 @@ logger = logging.getLogger(__name__)
 
 def find_metadata_in_file(file_path: Path) -> dict[str, Any]:
     """
-    Find metadata in a given Python file.
+    Find metadata variables in a given Python file.
+
+    Searches for variables matching the pattern __key__ = "value".
+
+    Args:
+        file_path: Path to the Python file to search.
+
+    Returns:
+        Dictionary of metadata key-value pairs found in the file.
     """
     metadata = {}
     with open(file_path, encoding="utf-8") as file:
@@ -29,6 +37,15 @@ def find_metadata_in_file(file_path: Path) -> dict[str, Any]:
 def find_metadata_in_module(module_path: Path) -> dict[str, dict[str, Any]]:
     """
     Traverse a module/package directory and find metadata in all submodules.
+
+    Looks for Python files containing "about" in their name that also
+    contain version metadata.
+
+    Args:
+        module_path: Path to the module or package directory to search.
+
+    Returns:
+        Dictionary mapping module names to their metadata dictionaries.
     """
     metadata_results = {}
     for root, _dirs, files in os.walk(module_path):
