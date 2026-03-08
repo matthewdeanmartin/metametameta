@@ -17,10 +17,14 @@ __all__ = [
     "generate_from_poetry",
     "generate_from_importlib",
     "generate_from_setup_py",
+    "generate_from_requirements_txt",
+    "generate_from_conda_meta",
 ]
 
+from metametameta.from_conda_meta import generate_from_conda_meta
 from metametameta.from_importlib import generate_from_importlib
 from metametameta.from_pep621 import generate_from_pep621
 from metametameta.from_poetry import generate_from_poetry
+from metametameta.from_requirements_txt import generate_from_requirements_txt
 from metametameta.from_setup_cfg import generate_from_setup_cfg
 from metametameta.from_setup_py import generate_from_setup_py

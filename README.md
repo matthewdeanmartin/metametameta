@@ -32,7 +32,7 @@ metametameta sync-check
 ```
 
 ```bash
-metametameta poetry # or setup_cfg or pep621 or poetry or importlib or the experimental setup_py
+metametameta poetry # or setup_cfg, pep621, importlib, setup_py, requirements_txt, or conda_meta
 ```
 
 Or set everything explicitly:
@@ -44,18 +44,20 @@ metametameta poetry --name "something" --source some.toml --output OUTPUT "mod/m
 Subcommand per source.
 
 ```text
-Usage: metametameta [-h] [--version] [--verbose] [--quiet] {setup_cfg,pep621,poetry,importlib,setup_py,auto,sync-check} ...
+Usage: metametameta [-h] [--version] [--verbose] [--quiet] {setup_cfg,pep621,poetry,importlib,setup_py,requirements_txt,conda_meta,auto,sync-check} ...
 
 metametameta: Generate __about__.py from various sources.
 
 Positional Arguments:
-  {setup_cfg,pep621,poetry,importlib,setup_py,auto,sync-check}
+  {setup_cfg,pep621,poetry,importlib,setup_py,requirements_txt,conda_meta,auto,sync-check}
                         sub-command help
     setup_cfg           Generate from setup.cfg
     pep621              Generate from PEP 621 pyproject.toml
     poetry              Generate from poetry pyproject.toml
     importlib           Generate from installed package metadata
     setup_py            Generate from setup.py using AST (experimental)
+    requirements_txt    Generate from requirements.txt
+    conda_meta          Generate from conda/meta.yaml
     auto                Automatically detect the source and generate the metadata file.
     sync-check          Check if __about__.py is in sync with the metadata source
 
@@ -76,6 +78,13 @@ options:
   --name NAME      Name of the project (from file if omitted)
   --source SOURCE  Path to pyproject.toml
   --output OUTPUT  Output file
+```
+
+Minimal file-based fallbacks from the roadmap are supported too:
+
+```bash
+metametameta requirements_txt --name my_package
+metametameta conda_meta --source conda/meta.yaml
 ```
 
 ## Programmatic interface.

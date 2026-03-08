@@ -104,6 +104,7 @@ def write_to_package_dir(
 
     try:
         target_dir.mkdir(parents=True, exist_ok=True)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(about_content, encoding="utf-8")
         logger.info(f"Successfully wrote metadata to {output_path}")
         return str(output_path)

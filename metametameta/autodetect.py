@@ -35,7 +35,8 @@ def detect_source(project_root: Path | None = None) -> str:
         project_root = Path.cwd()
 
     logger.debug(f"Autodetecting metadata source in {project_root}")
-    viable_sources = []
+    primary_sources = []
+    fallback_sources = []
 
     # Check pyproject.toml for PEP 621 or Poetry (highest priority)
     pyproject_path = project_root / "pyproject.toml"
@@ -44,25 +45,47 @@ def detect_source(project_root: Path | None = None) -> str:
             data = toml.load(pyproject_path)
             if "project" in data:
                 logger.debug("Found [project] section in pyproject.toml (PEP 621)")
-                viable_sources.append("pep621")
+                primary_sources.append("pep621")
             if data.get("tool", {}).get("poetry"):
                 logger.debug("Found [tool.poetry] section in pyproject.toml")
-                viable_sources.append("poetry")
+                primary_sources.append("poetry")
         except toml.TomlDecodeError:
             logger.warning("Could not parse pyproject.toml, skipping.")
 
     # Check for setup.cfg
     if (project_root / "setup.cfg").is_file():
         logger.debug("Found setup.cfg")
-        viable_sources.append("setup_cfg")
+        primary_sources.append("setup_cfg")
 
     # Check for setup.py (lowest priority)
     if (project_root / "setup.py").is_file():
         logger.debug("Found setup.py")
-        viable_sources.append("setup_py")
+        primary_sources.append("setup_py")
+
+    requirements_path = project_root / "requirements.txt"
+    if requirements_path.is_file():
+        requirements_lines = [
+            line.strip()
+            for line in requirements_path.read_text(encoding="utf-8").splitlines()
+            if line.strip() and not line.strip().startswith("#")
+        ]
+        if requirements_lines:
+            logger.debug("Found populated requirements.txt")
+            fallback_sources.append("requirements_txt")
+
+    conda_meta_path = project_root / "conda" / "meta.yaml"
+    if conda_meta_path.is_file():
+        conda_text = conda_meta_path.read_text(encoding="utf-8")
+        if "package:" in conda_text or "about:" in conda_text:
+            logger.debug("Found conda/meta.yaml")
+            fallback_sources.append("conda_meta")
+
+    viable_sources = primary_sources or fallback_sources
 
     if not viable_sources:
-        raise FileNotFoundError("Could not find a viable metadata source (pyproject.toml, setup.cfg, or setup.py).")
+        raise FileNotFoundError(
+            "Could not find a viable metadata source (pyproject.toml, setup.cfg, setup.py, requirements.txt, or conda/meta.yaml)."
+        )
 
     if len(viable_sources) > 1:
         raise ValueError(

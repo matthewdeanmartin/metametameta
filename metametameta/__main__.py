@@ -18,9 +18,11 @@ from rich_argparse import RichHelpFormatter
 from metametameta import __about__, logging_config
 from metametameta.autodetect import detect_source
 from metametameta.filesystem import _find_existing_package_dir
+from metametameta.from_conda_meta import generate_from_conda_meta, read_conda_meta_metadata
 from metametameta.from_importlib import generate_from_importlib
 from metametameta.from_pep621 import generate_from_pep621, read_pep621_metadata
 from metametameta.from_poetry import generate_from_poetry, read_poetry_metadata
+from metametameta.from_requirements_txt import generate_from_requirements_txt, read_requirements_txt_metadata
 from metametameta.from_setup_cfg import generate_from_setup_cfg, read_setup_cfg_metadata
 from metametameta.from_setup_py import generate_from_setup_py, read_setup_py_metadata
 from metametameta.utils.cli_suggestions import SmartParser
@@ -94,7 +96,24 @@ def handle_setup_py(args: argparse.Namespace) -> None:
     generate_from_setup_py(name=args.name, source=args.source, output=args.output)
 
 
-# In metametameta/__main__.py
+def handle_requirements_txt(args: argparse.Namespace) -> None:
+    """
+    Handle the requirements_txt subcommand.
+    Args:
+        args (argparse.Namespace): The arguments.
+    """
+    print("Generating metadata source from requirements.txt")
+    generate_from_requirements_txt(name=args.name, source=args.source, output=args.output, validate=args.validate)
+
+
+def handle_conda_meta(args: argparse.Namespace) -> None:
+    """
+    Handle the conda_meta subcommand.
+    Args:
+        args (argparse.Namespace): The arguments.
+    """
+    print("Generating metadata source from conda/meta.yaml")
+    generate_from_conda_meta(name=args.name, source=args.source, output=args.output, validate=args.validate)
 
 
 def handle_auto(args: argparse.Namespace) -> None:
@@ -110,6 +129,8 @@ def handle_auto(args: argparse.Namespace) -> None:
             "poetry": generate_from_poetry,
             "setup_cfg": generate_from_setup_cfg,
             "setup_py": generate_from_setup_py,
+            "requirements_txt": generate_from_requirements_txt,
+            "conda_meta": generate_from_conda_meta,
         }
 
         generator_func = generators[source_type]
@@ -140,6 +161,8 @@ def handle_sync_check(args: argparse.Namespace) -> None:
             "poetry": read_poetry_metadata,
             "setup_cfg": read_setup_cfg_metadata,
             "setup_py": read_setup_py_metadata,
+            "requirements_txt": read_requirements_txt_metadata,
+            "conda_meta": read_conda_meta_metadata,
         }
 
         # Read the source metadata
@@ -233,15 +256,25 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser_importlib.set_defaults(func=handle_importlib)
 
     # Subparser: setup_py
-    parser_setup_py = subparsers.add_parser(
-        "setup_py", help="Generate from setup.py using AST (experimental)", parents=[gen_parser]
-    )
+    parser_setup_py = subparsers.add_parser("setup_py", help="Generate from setup.py using AST (experimental)", parents=[gen_parser])
     parser_setup_py.add_argument("--name", type=str, default="", help="Name of the project (from file if omitted)")
     parser_setup_py.add_argument("--source", type=str, default="setup.py", help="Path to setup.py")
     parser_setup_py.add_argument("--output", type=str, default="__about__.py", help="Output file")
     parser_setup_py.set_defaults(func=handle_setup_py)
 
-    # In metametameta/__main__.py, inside the main() function
+    parser_requirements = subparsers.add_parser(
+        "requirements_txt", help="Generate from requirements.txt", parents=[gen_parser]
+    )
+    parser_requirements.add_argument("--name", type=str, default="", help="Name of the project (from file if omitted)")
+    parser_requirements.add_argument("--source", type=str, default="requirements.txt", help="Path to requirements.txt")
+    parser_requirements.add_argument("--output", type=str, default="__about__.py", help="Output file")
+    parser_requirements.set_defaults(func=handle_requirements_txt)
+
+    parser_conda_meta = subparsers.add_parser("conda_meta", help="Generate from conda/meta.yaml", parents=[gen_parser])
+    parser_conda_meta.add_argument("--name", type=str, default="", help="Name of the project (from file if omitted)")
+    parser_conda_meta.add_argument("--source", type=str, default="conda/meta.yaml", help="Path to conda/meta.yaml")
+    parser_conda_meta.add_argument("--output", type=str, default="__about__.py", help="Output file")
+    parser_conda_meta.set_defaults(func=handle_conda_meta)
 
     # Subparser: auto (New command)
     parser_auto = subparsers.add_parser(

@@ -20,11 +20,28 @@ KEY_MAP = {
     "description": "__description__",
     "license": "__license__",
     "homepage": "__homepage__",
+    "dependencies": "__dependencies__",
     "summary": "__description__",  # importlib.metadata uses 'summary'
 }
 
 
-def read_about_file_ast(file_path: Path) -> dict[str, str]:
+def _is_supported_sync_value(value: Any) -> bool:
+    """Return True for metadata values that can be compared for sync."""
+    if isinstance(value, str):
+        return True
+    return isinstance(value, list) and all(isinstance(item, str) for item in value)
+
+
+def _normalize_sync_value(value: Any) -> Any:
+    """Normalize supported metadata values for comparison."""
+    if isinstance(value, str):
+        return value.strip()
+    if isinstance(value, list):
+        return [item.strip() if isinstance(item, str) else item for item in value]
+    return value
+
+
+def read_about_file_ast(file_path: Path) -> dict[str, Any]:
     """
     Safely reads an __about__.py file using AST to extract metadata.
 
@@ -53,8 +70,7 @@ def read_about_file_ast(file_path: Path) -> dict[str, str]:
                 if isinstance(target, ast.Name) and target.id.startswith("__"):
                     try:
                         value = ast.literal_eval(node.value)
-                        # We only care about simple string values for sync checking
-                        if isinstance(value, str):
+                        if _is_supported_sync_value(value):
                             metadata[target.id] = value
                     except ValueError:
                         # Ignore values that aren't simple literals (e.g., function calls)
@@ -89,14 +105,13 @@ def check_sync(source_metadata: dict[str, Any], about_path: Path) -> list[str]:
             source_value = normalized_source.get(source_key)
             about_value = about_metadata.get(about_key)
 
-            # We only compare simple string values
-            if not isinstance(source_value, str):
+            if not _is_supported_sync_value(source_value):
                 logger.debug(f"Skipping sync check for non-string source key '{source_key}'")
                 continue
 
             if about_value is None:
                 mismatches.append(f"'{about_key}' is missing from {about_path.name}")
-            elif source_value.strip() != about_value.strip():
+            elif _normalize_sync_value(source_value) != _normalize_sync_value(about_value):
                 mismatch_msg = (
                     f"'{about_key}' is out of sync. Source: '{source_value}', {about_path.name}: '{about_value}'"
                 )

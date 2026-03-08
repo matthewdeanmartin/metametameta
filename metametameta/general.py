@@ -19,12 +19,9 @@ def _get_all_primitive_values(data: Any) -> Iterable[str]:
         yield data
     elif isinstance(data, (int, float)):
         yield str(data)
-    # elif isinstance(data, list):
-    #     for item in data:
-    #         yield from _get_all_primitive_values(item)
-    # elif isinstance(data, dict):
-    #     for value in data.values():
-    #         yield from _get_all_primitive_values(value)
+    elif isinstance(data, (list, tuple, set)):
+        for item in data:
+            yield from _get_all_primitive_values(item)
 
 
 def validate_about_file(file_path: str, metadata: dict[str, Any]) -> None:
@@ -125,6 +122,9 @@ def any_metadict(metadata: dict[str, str | int | float | list[str]]) -> tuple[st
         elif key == "keywords" and isinstance(value, list) and value:
             lines.append(f"__keywords__ = {value}")
             names.append("__keywords__")
+        elif key == "dependencies" and isinstance(value, list) and value:
+            lines.append(f"__dependencies__ = {value}")
+            names.append("__dependencies__")
 
         # elif key in meta:
         #     content.append(f'__{key}__ = "{value}"')
