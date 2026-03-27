@@ -2008,7 +2008,7 @@ requires-dist = [
     { name = "colorlog", specifier = ">=6.9.0" },
     { name = "rich-argparse", specifier = ">=1.7.1" },
     { name = "toml", specifier = ">=0.10.2" },
-    { name = "totalhelp" },
+    { name = "totalhelp", specifier = ">=0.1.1" },
 ]
 
 [package.metadata.requires-dev]
