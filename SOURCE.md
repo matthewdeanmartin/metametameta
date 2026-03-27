@@ -4,9 +4,11 @@
 ├── filesystem.py
 ├── find.py
 ├── find_it.py
+├── from_conda_meta.py
 ├── from_importlib.py
 ├── from_pep621.py
 ├── from_poetry.py
+├── from_requirements_txt.py
 ├── from_setup_cfg.py
 ├── from_setup_py.py
 ├── general.py
@@ -59,7 +61,8 @@ def detect_source(project_root: Path | None = None) -> str:
         project_root = Path.cwd()
 
     logger.debug(f"Autodetecting metadata source in {project_root}")
-    viable_sources = []
+    primary_sources = []
+    fallback_sources = []
 
     # Check pyproject.toml for PEP 621 or Poetry (highest priority)
     pyproject_path = project_root / "pyproject.toml"
@@ -68,25 +71,47 @@ def detect_source(project_root: Path | None = None) -> str:
             data = toml.load(pyproject_path)
             if "project" in data:
                 logger.debug("Found [project] section in pyproject.toml (PEP 621)")
-                viable_sources.append("pep621")
+                primary_sources.append("pep621")
             if data.get("tool", {}).get("poetry"):
                 logger.debug("Found [tool.poetry] section in pyproject.toml")
-                viable_sources.append("poetry")
+                primary_sources.append("poetry")
         except toml.TomlDecodeError:
             logger.warning("Could not parse pyproject.toml, skipping.")
 
     # Check for setup.cfg
     if (project_root / "setup.cfg").is_file():
         logger.debug("Found setup.cfg")
-        viable_sources.append("setup_cfg")
+        primary_sources.append("setup_cfg")
 
     # Check for setup.py (lowest priority)
     if (project_root / "setup.py").is_file():
         logger.debug("Found setup.py")
-        viable_sources.append("setup_py")
+        primary_sources.append("setup_py")
+
+    requirements_path = project_root / "requirements.txt"
+    if requirements_path.is_file():
+        requirements_lines = [
+            line.strip()
+            for line in requirements_path.read_text(encoding="utf-8").splitlines()
+            if line.strip() and not line.strip().startswith("#")
+        ]
+        if requirements_lines:
+            logger.debug("Found populated requirements.txt")
+            fallback_sources.append("requirements_txt")
+
+    conda_meta_path = project_root / "conda" / "meta.yaml"
+    if conda_meta_path.is_file():
+        conda_text = conda_meta_path.read_text(encoding="utf-8")
+        if "package:" in conda_text or "about:" in conda_text:
+            logger.debug("Found conda/meta.yaml")
+            fallback_sources.append("conda_meta")
+
+    viable_sources = primary_sources or fallback_sources
 
     if not viable_sources:
-        raise FileNotFoundError("Could not find a viable metadata source (pyproject.toml, setup.cfg, or setup.py).")
+        raise FileNotFoundError(
+            "Could not find a viable metadata source (pyproject.toml, setup.cfg, setup.py, requirements.txt, or conda/meta.yaml)."
+        )
 
     if len(viable_sources) > 1:
         raise ValueError(
@@ -118,7 +143,19 @@ logger = logging.getLogger(__name__)
 
 
 def _find_existing_package_dir(base_path: Path, package_name: str) -> Path | None:
-    """Searches for an existing package directory using common layouts."""
+    """
+    Search for an existing package directory using common layouts.
+
+    Checks for directories matching the package name with hyphens replaced
+    by underscores, the original name, and src-layout variants.
+
+    Args:
+        base_path: The root directory to search in.
+        package_name: The name of the package to find.
+
+    Returns:
+        The Path to the first existing package directory found, or None.
+    """
     package_name_underscore = package_name.replace("-", "_")
 
     # Define a clear, prioritized list of candidate directories to check.
@@ -193,6 +230,7 @@ def write_to_package_dir(
 
     try:
         target_dir.mkdir(parents=True, exist_ok=True)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(about_content, encoding="utf-8")
         logger.info(f"Successfully wrote metadata to {output_path}")
         return str(output_path)
@@ -240,18 +278,45 @@ logger = logging.getLogger(__name__)
 
 
 def get_module_file(module: Any) -> str:
-    """Get the file associated with a module."""
+    """
+    Get the file path associated with a module.
+
+    Args:
+        module: The module object to get the file path for.
+
+    Returns:
+        The absolute path to the module's source file.
+    """
     return inspect.getfile(module)
 
 
 def is_package(module: Any) -> bool:
-    """Check if a module is a package."""
+    """
+    Check if a module is a package (i.e., an __init__.py file).
+
+    Args:
+        module: The module object to check.
+
+    Returns:
+        True if the module is a package, False otherwise.
+    """
     module_file = get_module_file(module)
     return os.path.basename(module_file) == "__init__.py"
 
 
 def get_meta(module_file: Any) -> dict[str, str]:
-    """Extract metadata from the module file."""
+    """
+    Extract metadata variables from a module file.
+
+    Searches for variables matching the pattern __key__ = "value" and
+    returns them as a dictionary.
+
+    Args:
+        module_file: Path to the module file or the module object.
+
+    Returns:
+        Dictionary of metadata key-value pairs found in the file.
+    """
     metadata = {}
     if module_file and os.path.isfile(module_file):
         with open(module_file, encoding="utf-8") as file:
@@ -293,7 +358,15 @@ logger = logging.getLogger(__name__)
 
 def find_metadata_in_file(file_path: Path) -> dict[str, Any]:
     """
-    Find metadata in a given Python file.
+    Find metadata variables in a given Python file.
+
+    Searches for variables matching the pattern __key__ = "value".
+
+    Args:
+        file_path: Path to the Python file to search.
+
+    Returns:
+        Dictionary of metadata key-value pairs found in the file.
     """
     metadata = {}
     with open(file_path, encoding="utf-8") as file:
@@ -309,6 +382,15 @@ def find_metadata_in_file(file_path: Path) -> dict[str, Any]:
 def find_metadata_in_module(module_path: Path) -> dict[str, dict[str, Any]]:
     """
     Traverse a module/package directory and find metadata in all submodules.
+
+    Looks for Python files containing "about" in their name that also
+    contain version metadata.
+
+    Args:
+        module_path: Path to the module or package directory to search.
+
+    Returns:
+        Dictionary mapping module names to their metadata dictionaries.
     """
     metadata_results = {}
     for root, _dirs, files in os.walk(module_path):
@@ -344,6 +426,148 @@ def main(argv: list[str] | None = None) -> None:
 if __name__ == "__main__":
     main(["metametameta"])
 ```
+## File: from_conda_meta.py
+```python
+"""
+Generate metadata from a conda recipe meta.yaml file.
+"""
+
+from __future__ import annotations
+
+import logging
+from pathlib import Path
+from typing import Any
+
+from metametameta.filesystem import write_to_file
+from metametameta.general import any_metadict, merge_sections, validate_about_file
+
+logger = logging.getLogger(__name__)
+
+
+def _strip_matching_quotes(value: str) -> str:
+    """Strip matching single or double quotes from a string."""
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
+        return value[1:-1]
+    return value
+
+
+def _strip_comment(value: str) -> str:
+    """Strip YAML-style comments from a line."""
+    if " #" in value:
+        return value.split(" #", maxsplit=1)[0].rstrip()
+    return value.rstrip()
+
+
+def _infer_project_name(source_path: Path) -> str:
+    """Infer a project name from the recipe location."""
+    parent = source_path.resolve().parent
+    if parent.name == "conda" and parent.parent.name:
+        return parent.parent.name
+    return parent.name
+
+
+def read_conda_meta_metadata(source: str = "conda/meta.yaml", name: str = "") -> dict[str, Any]:
+    """
+    Read metadata from a conda recipe.
+
+    Args:
+        source: Path to the conda meta.yaml file.
+        name: Optional explicit project name override.
+
+    Returns:
+        A metadata dictionary with the supported fields extracted.
+    """
+    source_path = Path(source)
+    parsed: dict[str, Any] = {"package": {}, "about": {}, "requirements": {"run": []}}
+    current_section = ""
+    current_subsection = ""
+
+    for raw_line in source_path.read_text(encoding="utf-8").splitlines():
+        without_comment = _strip_comment(raw_line)
+        stripped = without_comment.strip()
+        if not stripped or stripped.startswith("{%"):
+            continue
+
+        indent = len(without_comment) - len(without_comment.lstrip(" "))
+
+        if stripped.endswith(":") and not stripped.startswith("- "):
+            section_name = stripped[:-1].strip()
+            if indent == 0:
+                current_section = section_name
+                current_subsection = ""
+            else:
+                current_subsection = section_name
+            continue
+
+        if stripped.startswith("- "):
+            item = _strip_matching_quotes(stripped[2:].strip())
+            if current_section == "requirements" and current_subsection:
+                parsed["requirements"].setdefault(current_subsection, []).append(item)
+            continue
+
+        if ":" not in stripped:
+            continue
+
+        key, value = stripped.split(":", maxsplit=1)
+        cleaned_value = _strip_matching_quotes(value.strip())
+        if current_section in {"package", "about"}:
+            parsed[current_section][key.strip()] = cleaned_value
+
+    package_data = parsed.get("package", {})
+    about_data = parsed.get("about", {})
+    run_dependencies = parsed.get("requirements", {}).get("run", [])
+
+    project_name = name or package_data.get("name") or _infer_project_name(source_path)
+
+    metadata: dict[str, Any] = {"name": project_name}
+    if package_data.get("version"):
+        metadata["version"] = package_data["version"]
+    if about_data.get("summary"):
+        metadata["summary"] = about_data["summary"]
+    elif about_data.get("description"):
+        metadata["description"] = about_data["description"]
+    if about_data.get("license"):
+        metadata["license"] = about_data["license"]
+    if about_data.get("home"):
+        metadata["homepage"] = about_data["home"]
+    if run_dependencies:
+        metadata["dependencies"] = run_dependencies
+
+    return metadata
+
+
+def generate_from_conda_meta(
+    name: str = "", source: str = "conda/meta.yaml", output: str = "__about__.py", validate: bool = False
+) -> str:
+    """
+    Generate the metadata file from conda/meta.yaml.
+
+    Args:
+        name: Explicit project name override.
+        source: Path to the conda recipe.
+        output: Name of the file to write to.
+        validate: Validate file after writing.
+
+    Returns:
+        Path to the file that was written.
+    """
+    metadata = read_conda_meta_metadata(source=source, name=name)
+    project_name = metadata.get("name", "")
+    if not project_name:
+        raise ValueError("Project name could not be determined from conda/meta.yaml.")
+
+    if output != "__about__.py" and ("/" in output or "\\" in output):
+        dir_path = "./"
+    else:
+        dir_path = f"./{project_name}"
+
+    about_content, names = any_metadict(metadata)
+    about_content = merge_sections(names, project_name, about_content)
+    file_path = write_to_file(dir_path, about_content, output)
+    if validate:
+        validate_about_file(file_path, metadata)
+    return file_path
+```
 ## File: from_importlib.py
 ```python
 """
@@ -363,7 +587,15 @@ logger = logging.getLogger(__name__)
 
 
 def get_package_metadata(package_name: str) -> dict[str, Any]:
-    """Get package metadata using importlib.metadata."""
+    """
+    Get package metadata using importlib.metadata.
+
+    Args:
+        package_name: The name of the package to get metadata for.
+
+    Returns:
+        Dictionary containing the package metadata.
+    """
     try:
         pkg_metadata: md.PackageMetadata = md.metadata(package_name)
         # dict for 3.8 support
@@ -376,7 +608,18 @@ def get_package_metadata(package_name: str) -> dict[str, Any]:
 
 # pylint: disable=unused-argument
 def generate_from_importlib(name: str, source: str = "", output: str = "__about__.py", validate: bool = False) -> str:
-    """Write package metadata to an __about__.py file."""
+    """
+    Write package metadata to an __about__.py file.
+
+    Args:
+        name: Name of the package to get metadata from.
+        source: Ignored (present for API compatibility).
+        output: Name of the file to write to.
+        validate: Validate file after writing.
+
+    Returns:
+        Path to the file that was written, or a message if no metadata was found.
+    """
     pkg_metadata = get_package_metadata(name)
     if pkg_metadata:
         dir_path = "./"
@@ -419,11 +662,12 @@ logger = logging.getLogger(__name__)
 def read_pep621_metadata(source: str = "pyproject.toml") -> dict[str, Any]:
     """
     Read the pyproject.toml file and extract the [project] section.
+
     Args:
-        source (str): Path to the pyproject.toml file.
+        source: Path to the pyproject.toml file.
 
     Returns:
-        dict: The [project] section of the pyproject.toml file.
+        The [project] section of the pyproject.toml file.
     """
     # Read the pyproject.toml file
     with open(source, encoding="utf-8") as file:
@@ -443,14 +687,13 @@ def generate_from_pep621(
     Generate the __about__.py file from the pyproject.toml file.
 
     Args:
-        validate:
-        name (str): Name of the project.
-        source (str): Path to the pyproject.toml file.
-        output (str): Name of the file to write to.
-        validate (bool): Validate file
+        name: Name of the project.
+        source: Path to the pyproject.toml file.
+        output: Name of the file to write to.
+        validate: Validate file after writing.
 
     Returns:
-        str: Path to the file that was written.
+        Path to the file that was written.
     """
     project_data = read_pep621_metadata(source)
     if project_data:
@@ -519,11 +762,12 @@ def read_poetry_metadata(
 ) -> Any:
     """
     Read the pyproject.toml file and extract the [tool.poetry] section.
+
     Args:
-        source (str): Path to the pyproject.toml file.
+        source: Path to the pyproject.toml file.
 
     Returns:
-        dict: The [tool.poetry] section of the pyproject.toml file.
+        The [tool.poetry] section of the pyproject.toml file.
     """
     # Read the pyproject.toml file
     with open(source, encoding="utf-8") as file:
@@ -540,14 +784,15 @@ def generate_from_poetry(
 ) -> str:
     """
     Generate the __about__.py file from the pyproject.toml file.
+
     Args:
-        name (str): Name of the project.
-        source (str): Path to the pyproject.toml file.
-        output (str): Name of the file to write to.
-        validate (bool): Check if top level values are in about file after written
+        name: Name of the project.
+        source: Path to the pyproject.toml file.
+        output: Name of the file to write to.
+        validate: Check if top level values are in about file after written.
 
     Returns:
-        str: Path to the file that was written.
+        Path to the file that was written.
     """
     poetry_data = read_poetry_metadata(source)
     if poetry_data:
@@ -601,6 +846,136 @@ def generate_from_poetry(
 if __name__ == "__main__":
     generate_from_poetry()
 ```
+## File: from_requirements_txt.py
+```python
+"""
+Generate metadata from a requirements.txt file.
+"""
+
+from __future__ import annotations
+
+import logging
+from pathlib import Path
+from typing import Any
+
+from metametameta.filesystem import write_to_file
+from metametameta.general import any_metadict, merge_sections, validate_about_file
+
+logger = logging.getLogger(__name__)
+
+_SKIPPED_PREFIXES = (
+    "-r",
+    "--requirement",
+    "-c",
+    "--constraint",
+    "-i",
+    "--index-url",
+    "--extra-index-url",
+    "-f",
+    "--find-links",
+    "--trusted-host",
+)
+
+
+def _strip_matching_quotes(value: str) -> str:
+    """Strip matching single or double quotes from a string."""
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
+        return value[1:-1]
+    return value
+
+
+def _strip_inline_comment(line: str) -> str:
+    """Strip trailing comments while preserving URL fragments like #egg."""
+    if " #" in line:
+        return line.split(" #", maxsplit=1)[0].rstrip()
+    return line.rstrip()
+
+
+def _parse_requirement_line(line: str) -> str | None:
+    """Parse a single requirements.txt line into a dependency string."""
+    stripped = line.strip()
+    if not stripped or stripped.startswith("#"):
+        return None
+
+    if stripped.startswith(_SKIPPED_PREFIXES):
+        return None
+
+    if stripped.startswith(("-e ", "--editable ")):
+        parts = stripped.split(maxsplit=1)
+        stripped = parts[1].strip() if len(parts) == 2 else ""
+
+    stripped = _strip_inline_comment(stripped)
+    if not stripped:
+        return None
+
+    if "#egg=" in stripped:
+        return _strip_matching_quotes(stripped.split("#egg=", maxsplit=1)[1].strip())
+
+    return _strip_matching_quotes(stripped)
+
+
+def _infer_project_name(source_path: Path) -> str:
+    """Infer a project name from the requirements file location."""
+    return source_path.resolve().parent.name
+
+
+def read_requirements_txt_metadata(source: str = "requirements.txt", name: str = "") -> dict[str, Any]:
+    """
+    Read dependency metadata from a requirements.txt file.
+
+    Args:
+        source: Path to the requirements file.
+        name: Optional explicit project name override.
+
+    Returns:
+        Minimal metadata containing the project name and dependencies.
+    """
+    source_path = Path(source)
+    requirements = []
+    for line in source_path.read_text(encoding="utf-8").splitlines():
+        parsed = _parse_requirement_line(line)
+        if parsed:
+            requirements.append(parsed)
+
+    project_name = name or _infer_project_name(source_path)
+    metadata: dict[str, Any] = {"name": project_name}
+    if requirements:
+        metadata["dependencies"] = requirements
+    return metadata
+
+
+def generate_from_requirements_txt(
+    name: str = "", source: str = "requirements.txt", output: str = "__about__.py", validate: bool = False
+) -> str:
+    """
+    Generate the metadata file from requirements.txt.
+
+    Args:
+        name: Explicit project name override.
+        source: Path to the requirements.txt file.
+        output: Name of the file to write to.
+        validate: Validate file after writing.
+
+    Returns:
+        Path to the file that was written.
+    """
+    metadata = read_requirements_txt_metadata(source=source, name=name)
+    project_name = metadata.get("name", "")
+    if not project_name:
+        raise ValueError("Project name could not be determined from requirements.txt.")
+
+    if output != "__about__.py" and ("/" in output or "\\" in output):
+        dir_path = "./"
+    else:
+        dir_path = f"./{project_name}"
+
+    about_content, names = any_metadict(metadata)
+    about_content = merge_sections(names, project_name, about_content)
+    file_path = write_to_file(dir_path, about_content, output)
+    if validate:
+        validate_about_file(file_path, metadata)
+    return file_path
+```
 ## File: from_setup_cfg.py
 ```python
 """
@@ -623,8 +998,12 @@ logger = logging.getLogger(__name__)
 def read_setup_cfg_metadata(setup_cfg_path: Path | None = None) -> dict[str, Any]:
     """
     Read the setup.cfg file and extract the [metadata] section.
+
+    Args:
+        setup_cfg_path: Path to the setup.cfg file. Defaults to "setup.cfg".
+
     Returns:
-        dict: The [metadata] section of the setup.cfg file.
+        The [metadata] section of the setup.cfg file.
     """
     # Path to the setup.cfg file
     if setup_cfg_path is None:
@@ -647,13 +1026,13 @@ def generate_from_setup_cfg(
     Generate the __about__.py file from the setup.cfg file.
 
     Args:
-        name (str): Name of the project.
-        source (str): Path to the setup.cfg file.
-        output (str): Name of the file to write to.
-        validate (bool): Check if top level values are in about file after written
+        name: Name of the project.
+        source: Path to the setup.cfg file.
+        output: Name of the file to write to.
+        validate: Check if top level values are in about file after written.
 
     Returns:
-        str: Path to the file that was written.
+        Path to the file that was written.
     """
     metadata = read_setup_cfg_metadata(Path(source))
     if metadata:
@@ -715,7 +1094,12 @@ class SetupKwargsVisitor(ast.NodeVisitor):
         self._found = False
 
     def visit_Call(self, node: ast.Call) -> None:
-        """Visit a Call node in the AST."""
+        """
+        Visit a Call node in the AST.
+
+        Looks for setup() function calls and extracts keyword arguments.
+        Only captures the first valid setup() call found.
+        """
         # Only capture the first valid setup() call we find.
         if self._found:
             return
@@ -746,8 +1130,15 @@ class SetupKwargsVisitor(ast.NodeVisitor):
 
 def read_setup_py_metadata(source: str = "setup.py") -> dict[str, Any]:
     """
-    Reads a setup.py file and extracts metadata from the setup() call using AST.
-    This method does not execute the file.
+    Read a setup.py file and extract metadata from the setup() call using AST.
+
+    This method does not execute the file, it only parses it statically.
+
+    Args:
+        source: Path to the setup.py file.
+
+    Returns:
+        Dictionary containing the metadata found in the setup() call.
     """
     source_path = Path(source)
     if not source_path.exists():
@@ -770,6 +1161,15 @@ def generate_from_setup_py(
 ) -> str:
     """
     Generate the __about__.py file from a setup.py file.
+
+    Args:
+        name: Name of the project (optional, will be read from setup.py if not provided).
+        source: Path to the setup.py file.
+        output: Name of the file to write to.
+        validate: Validate file after writing.
+
+    Returns:
+        Path to the file that was written, or a message if no metadata was found.
     """
     metadata = read_setup_py_metadata(source)
     if not metadata:
@@ -813,12 +1213,9 @@ def _get_all_primitive_values(data: Any) -> Iterable[str]:
         yield data
     elif isinstance(data, (int, float)):
         yield str(data)
-    # elif isinstance(data, list):
-    #     for item in data:
-    #         yield from _get_all_primitive_values(item)
-    # elif isinstance(data, dict):
-    #     for value in data.values():
-    #         yield from _get_all_primitive_values(value)
+    elif isinstance(data, (list, tuple, set)):
+        for item in data:
+            yield from _get_all_primitive_values(item)
 
 
 def validate_about_file(file_path: str, metadata: dict[str, Any]) -> None:
@@ -865,12 +1262,13 @@ def validate_about_file(file_path: str, metadata: dict[str, Any]) -> None:
 
 def any_metadict(metadata: dict[str, str | int | float | list[str]]) -> tuple[str, list[str]]:
     """
-    Generate a __about__.py file from a metadata dictionary.
+    Generate __about__.py content from a metadata dictionary.
+
     Args:
-        metadata (dict): Metadata dictionary.
+        metadata: Dictionary containing project metadata.
 
     Returns:
-        tuple: The content to write to the file and the names of the variables.
+        A tuple containing the file content and list of variable names.
     """
     # Normalize keys to lowercase for consistent processing from different sources.
     processed_meta = {k.lower().replace("-", "_"): v for k, v in metadata.items()}
@@ -920,6 +1318,9 @@ def any_metadict(metadata: dict[str, str | int | float | list[str]]) -> tuple[st
         elif key == "keywords" and isinstance(value, list) and value:
             lines.append(f"__keywords__ = {value}")
             names.append("__keywords__")
+        elif key == "dependencies" and isinstance(value, list) and value:
+            lines.append(f"__dependencies__ = {value}")
+            names.append("__dependencies__")
 
         # elif key in meta:
         #     content.append(f'__{key}__ = "{value}"')
@@ -943,12 +1344,12 @@ def merge_sections(names: list[str] | None, project_name: str, about_content: st
     Merge the sections of the __about__.py file.
 
     Args:
-        names (list): Names of the variables.
-        project_name (str): Name of the project.
-        about_content (str): Content of the __about__.py file.
+        names: Names of the variables to include in __all__.
+        project_name: Name of the project for the docstring.
+        about_content: Content of the __about__.py file.
 
     Returns:
-        str: Content of the __about__.py file.
+        The complete __about__.py file content.
     """
     if names is None:
         names = []
@@ -1090,11 +1491,28 @@ KEY_MAP = {
     "description": "__description__",
     "license": "__license__",
     "homepage": "__homepage__",
+    "dependencies": "__dependencies__",
     "summary": "__description__",  # importlib.metadata uses 'summary'
 }
 
 
-def read_about_file_ast(file_path: Path) -> dict[str, str]:
+def _is_supported_sync_value(value: Any) -> bool:
+    """Return True for metadata values that can be compared for sync."""
+    if isinstance(value, str):
+        return True
+    return isinstance(value, list) and all(isinstance(item, str) for item in value)
+
+
+def _normalize_sync_value(value: Any) -> Any:
+    """Normalize supported metadata values for comparison."""
+    if isinstance(value, str):
+        return value.strip()
+    if isinstance(value, list):
+        return [item.strip() if isinstance(item, str) else item for item in value]
+    return value
+
+
+def read_about_file_ast(file_path: Path) -> dict[str, Any]:
     """
     Safely reads an __about__.py file using AST to extract metadata.
 
@@ -1123,8 +1541,7 @@ def read_about_file_ast(file_path: Path) -> dict[str, str]:
                 if isinstance(target, ast.Name) and target.id.startswith("__"):
                     try:
                         value = ast.literal_eval(node.value)
-                        # We only care about simple string values for sync checking
-                        if isinstance(value, str):
+                        if _is_supported_sync_value(value):
                             metadata[target.id] = value
                     except ValueError:
                         # Ignore values that aren't simple literals (e.g., function calls)
@@ -1159,14 +1576,13 @@ def check_sync(source_metadata: dict[str, Any], about_path: Path) -> list[str]:
             source_value = normalized_source.get(source_key)
             about_value = about_metadata.get(about_key)
 
-            # We only compare simple string values
-            if not isinstance(source_value, str):
+            if not _is_supported_sync_value(source_value):
                 logger.debug(f"Skipping sync check for non-string source key '{source_key}'")
                 continue
 
             if about_value is None:
                 mismatches.append(f"'{about_key}' is missing from {about_path.name}")
-            elif source_value.strip() != about_value.strip():
+            elif _normalize_sync_value(source_value) != _normalize_sync_value(about_value):
                 mismatch_msg = (
                     f"'{about_key}' is out of sync. Source: '{source_value}', {about_path.name}: '{about_value}'"
                 )
@@ -1188,16 +1604,18 @@ __all__ = [
     "__requires_python__",
     "__keywords__",
     "__status__",
+    "__dependencies__",
 ]
 
 __title__ = "metametameta"
-__version__ = "0.1.5"
+__version__ = "0.1.7"
 __description__ = "Generate __about__.py with dunder meta."
 __credits__ = [{"name": "Matthew Martin", "email": "matthewdeanmartin@gmail.com"}]
 __readme__ = "README.md"
 __requires_python__ = ">=3.8"
 __keywords__ = ["packaging", "metadata"]
 __status__ = "5 - Production/Stable"
+__dependencies__ = ["rich_argparse>=1.7.1", "toml>=0.10.2", "colorlog>=6.9.0", "totalhelp"]
 ```
 ## File: __main__.py
 ```python
@@ -1221,9 +1639,11 @@ from rich_argparse import RichHelpFormatter
 from metametameta import __about__, logging_config
 from metametameta.autodetect import detect_source
 from metametameta.filesystem import _find_existing_package_dir
+from metametameta.from_conda_meta import generate_from_conda_meta, read_conda_meta_metadata
 from metametameta.from_importlib import generate_from_importlib
 from metametameta.from_pep621 import generate_from_pep621, read_pep621_metadata
 from metametameta.from_poetry import generate_from_poetry, read_poetry_metadata
+from metametameta.from_requirements_txt import generate_from_requirements_txt, read_requirements_txt_metadata
 from metametameta.from_setup_cfg import generate_from_setup_cfg, read_setup_cfg_metadata
 from metametameta.from_setup_py import generate_from_setup_py, read_setup_py_metadata
 from metametameta.utils.cli_suggestions import SmartParser
@@ -1297,7 +1717,24 @@ def handle_setup_py(args: argparse.Namespace) -> None:
     generate_from_setup_py(name=args.name, source=args.source, output=args.output)
 
 
-# In metametameta/__main__.py
+def handle_requirements_txt(args: argparse.Namespace) -> None:
+    """
+    Handle the requirements_txt subcommand.
+    Args:
+        args (argparse.Namespace): The arguments.
+    """
+    print("Generating metadata source from requirements.txt")
+    generate_from_requirements_txt(name=args.name, source=args.source, output=args.output, validate=args.validate)
+
+
+def handle_conda_meta(args: argparse.Namespace) -> None:
+    """
+    Handle the conda_meta subcommand.
+    Args:
+        args (argparse.Namespace): The arguments.
+    """
+    print("Generating metadata source from conda/meta.yaml")
+    generate_from_conda_meta(name=args.name, source=args.source, output=args.output, validate=args.validate)
 
 
 def handle_auto(args: argparse.Namespace) -> None:
@@ -1313,6 +1750,8 @@ def handle_auto(args: argparse.Namespace) -> None:
             "poetry": generate_from_poetry,
             "setup_cfg": generate_from_setup_cfg,
             "setup_py": generate_from_setup_py,
+            "requirements_txt": generate_from_requirements_txt,
+            "conda_meta": generate_from_conda_meta,
         }
 
         generator_func = generators[source_type]
@@ -1343,6 +1782,8 @@ def handle_sync_check(args: argparse.Namespace) -> None:
             "poetry": read_poetry_metadata,
             "setup_cfg": read_setup_cfg_metadata,
             "setup_py": read_setup_py_metadata,
+            "requirements_txt": read_requirements_txt_metadata,
+            "conda_meta": read_conda_meta_metadata,
         }
 
         # Read the source metadata
@@ -1444,7 +1885,19 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser_setup_py.add_argument("--output", type=str, default="__about__.py", help="Output file")
     parser_setup_py.set_defaults(func=handle_setup_py)
 
-    # In metametameta/__main__.py, inside the main() function
+    parser_requirements = subparsers.add_parser(
+        "requirements_txt", help="Generate from requirements.txt", parents=[gen_parser]
+    )
+    parser_requirements.add_argument("--name", type=str, default="", help="Name of the project (from file if omitted)")
+    parser_requirements.add_argument("--source", type=str, default="requirements.txt", help="Path to requirements.txt")
+    parser_requirements.add_argument("--output", type=str, default="__about__.py", help="Output file")
+    parser_requirements.set_defaults(func=handle_requirements_txt)
+
+    parser_conda_meta = subparsers.add_parser("conda_meta", help="Generate from conda/meta.yaml", parents=[gen_parser])
+    parser_conda_meta.add_argument("--name", type=str, default="", help="Name of the project (from file if omitted)")
+    parser_conda_meta.add_argument("--source", type=str, default="conda/meta.yaml", help="Path to conda/meta.yaml")
+    parser_conda_meta.add_argument("--output", type=str, default="__about__.py", help="Output file")
+    parser_conda_meta.set_defaults(func=handle_conda_meta)
 
     # Subparser: auto (New command)
     parser_auto = subparsers.add_parser(

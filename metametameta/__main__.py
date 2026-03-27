@@ -256,7 +256,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser_importlib.set_defaults(func=handle_importlib)
 
     # Subparser: setup_py
-    parser_setup_py = subparsers.add_parser("setup_py", help="Generate from setup.py using AST (experimental)", parents=[gen_parser])
+    parser_setup_py = subparsers.add_parser(
+        "setup_py", help="Generate from setup.py using AST (experimental)", parents=[gen_parser]
+    )
     parser_setup_py.add_argument("--name", type=str, default="", help="Name of the project (from file if omitted)")
     parser_setup_py.add_argument("--source", type=str, default="setup.py", help="Path to setup.py")
     parser_setup_py.add_argument("--output", type=str, default="__about__.py", help="Output file")

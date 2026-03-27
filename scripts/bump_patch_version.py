@@ -7,7 +7,6 @@ from pathlib import Path
 
 from packaging.version import Version
 
-
 PROJECT_VERSION_PATTERN = re.compile(r'(?ms)(^\[project\]\s.*?^version = ")([^"]+)(")')
 
 
@@ -26,7 +25,7 @@ def update_project_version(pyproject_path: Path) -> str:
     current_version = match.group(2)
     new_version = bump_patch(current_version)
     updated = PROJECT_VERSION_PATTERN.sub(
-        lambda match_obj: f'{match_obj.group(1)}{new_version}{match_obj.group(3)}',
+        lambda match_obj: f"{match_obj.group(1)}{new_version}{match_obj.group(3)}",
         content,
         count=1,
     )

@@ -59,7 +59,9 @@ def validate_about_file(file_path: str, metadata: dict[str, Any]) -> None:
 
     for value in primitive_values:
         if value not in content:
-            raise ValueError(f"Validation failed: Value '{value}' not found in {file_path}. The file may be incomplete or missing critical metadata.")
+            raise ValueError(
+                f"Validation failed: Value '{value}' not found in {file_path}. The file may be incomplete or missing critical metadata."
+            )
 
     logger.info("Validation successful.")
 

@@ -39,7 +39,9 @@ def read_setup_cfg_metadata(setup_cfg_path: Path | None = None) -> dict[str, Any
 
 
 # pylint: disable=unused-argument
-def generate_from_setup_cfg(name: str = "", source: str = "setup.cfg", output: str = "__about__.py", validate: bool = True) -> str:
+def generate_from_setup_cfg(
+    name: str = "", source: str = "setup.cfg", output: str = "__about__.py", validate: bool = True
+) -> str:
     """
     Generate the __about__.py file from the setup.cfg file.
 

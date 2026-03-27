@@ -39,7 +39,9 @@ def read_poetry_metadata(
 
 
 # pylint: disable=unused-argument
-def generate_from_poetry(name: str = "", source: str = "pyproject.toml", output: str = "__about__.py", validate: bool = True) -> str:
+def generate_from_poetry(
+    name: str = "", source: str = "pyproject.toml", output: str = "__about__.py", validate: bool = True
+) -> str:
     """
     Generate the __about__.py file from the pyproject.toml file.
 

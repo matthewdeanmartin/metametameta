@@ -49,7 +49,9 @@ class SetupKwargsVisitor(ast.NodeVisitor):
                         self.kwargs[keyword.arg] = ast.literal_eval(keyword.value)
                     except ValueError:
                         # This happens if the value is not a literal (e.g., a variable)
-                        logger.warning(f"Could not statically parse value for '{keyword.arg}' in setup.py. Only literals (strings, numbers, lists, etc.) are supported.")
+                        logger.warning(
+                            f"Could not statically parse value for '{keyword.arg}' in setup.py. Only literals (strings, numbers, lists, etc.) are supported."
+                        )
             self._found = True
 
         # Continue traversing to find the call if it's nested
@@ -84,7 +86,9 @@ def read_setup_py_metadata(source: str = "setup.py") -> dict[str, Any]:
         return {}
 
 
-def generate_from_setup_py(name: str = "", source: str = "setup.py", output: str = "__about__.py", validate: bool = False) -> str:
+def generate_from_setup_py(
+    name: str = "", source: str = "setup.py", output: str = "__about__.py", validate: bool = False
+) -> str:
     """
     Generate the __about__.py file from a setup.py file.
 
