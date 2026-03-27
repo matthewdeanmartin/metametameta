@@ -27,7 +27,7 @@ dependencies = [
     "rich_argparse>=1.7.1",
     "toml>=0.10.2",
     "colorlog>=6.9.0",
-    "totalhelp"
+    "totalhelp>0.1.1"
 ]
 
 [project.urls]
