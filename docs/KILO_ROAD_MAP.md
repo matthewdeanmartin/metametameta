@@ -6,7 +6,7 @@
 
 metametameta generates `__about__.py` files with dunder metadata (`__version__`, `__author__`, etc.) from various Python packaging sources (PEP 621, Poetry, setup.cfg, setup.py, importlib.metadata).
 
----
+______________________________________________________________________
 
 ## 🚀 Phase 1: Enhanced Source Support
 
@@ -29,7 +29,7 @@ metametameta generates `__about__.py` files with dunder metadata (`__version__`,
 | Medium | **requirements.txt** | Generate minimal `__about__.py` from requirements files |
 | Low | **conda/meta.yaml** | Extract metadata from Conda recipes |
 
----
+______________________________________________________________________
 
 ## 🔧 Phase 2: CLI Enhancements
 
@@ -41,6 +41,7 @@ mmminit --force  # Re-run setup wizard
 ```
 
 A guided flow that:
+
 - Detects existing packaging setup
 - Asks user preferences (output location, variables to include)
 - Generates appropriate configuration file
@@ -65,6 +66,7 @@ mmm generate --template custom      # User-defined template
 ```
 
 Custom templates for different use cases:
+
 - PyPI-ready metadata
 - Internal package metadata
 - Minimal for performance
@@ -80,7 +82,7 @@ mmm preview        # Preview generated file without writing
 
 Preview changes before writing, useful for CI validation.
 
----
+______________________________________________________________________
 
 ## 🔒 Phase 3: CI/CD Integration
 
@@ -119,7 +121,7 @@ mmm install-hook   # Install git pre-commit hook
 mmm uninstall-hook # Remove git hook
 ```
 
----
+______________________________________________________________________
 
 ## 📊 Phase 4: Metadata Intelligence
 
@@ -145,6 +147,7 @@ __ci_url__ = "{{CI_BUILD_URL}}"
 ```
 
 Support placeholder values that get filled during build/CI:
+
 - Git commit SHA
 - Build timestamp
 - CI/CD URLs
@@ -162,7 +165,7 @@ mmm validate --report    # Generate validation report
 - Check for deprecated fields
 - Warn about missing recommended fields
 
----
+______________________________________________________________________
 
 ## 🛠 Phase 5: Developer Experience
 
@@ -218,7 +221,7 @@ result = mmm.generate(
 )
 ```
 
----
+______________________________________________________________________
 
 ## 🌐 Phase 6: Ecosystem Expansion
 
@@ -249,11 +252,12 @@ mmm badge            # Generate badges (version, license, etc.)
 ```
 
 Generate:
+
 - Package badges for README
 - Metadata summary tables
 - API documentation snippets
 
----
+______________________________________________________________________
 
 ## 📈 Phase 7: Analytics & Insights
 
@@ -275,7 +279,7 @@ mmm audit                # Audit dependencies
 - Export to JSON/CSV for external tools
 - Dashboard for monorepo management
 
----
+______________________________________________________________________
 
 ## 🔮 Future Speculations
 
@@ -297,7 +301,7 @@ mmm audit                # Audit dependencies
 - ENS domain integration
 - Web3 package discovery
 
----
+______________________________________________________________________
 
 ## 📋 Feature Priority Matrix
 
@@ -317,35 +321,40 @@ mmm audit                # Audit dependencies
 | Plugin system | High | Medium | P3 |
 | AI assistance | High | Low | P3 |
 
----
+______________________________________________________________________
 
 ## 🗺 Release Roadmap
 
 ### v0.2 - Configuration & Templates
+
 - `.metametameta.toml` configuration
 - Template system
 - Diff/preview mode
 
 ### v0.3 - CI/CD Integration
+
 - Official GitHub Action
 - Pre-commit hook
 - Configuration file support
 
 ### v0.4 - Watch & Interactive
+
 - Watch mode
 - Interactive wizard
 - Extended field support
 
 ### v0.5 - Ecosystem
+
 - PDM/Hatch support
 - Multi-language converters
 - Package index integration
 
 ### v1.0 - Stable
+
 - Plugin system
 - GraphQL API
 - Full documentation
 
----
+______________________________________________________________________
 
 *This roadmap is a living document. Priorities may shift based on community feedback and usage patterns.*

@@ -22,11 +22,13 @@ pipx install metametameta
 Defaults to putting an `__about__.py` file in the module directory, assuming your package name is your main module name.
 
 Make best guess what your metadata source is. Give up if there are two possibilities.
+
 ```bash
 metametameta auto 
 ```
 
 Run on CI server to see if your about file is out of sync
+
 ```bash
 metametameta sync-check
 ```
@@ -119,9 +121,9 @@ sort of metadata](https://web.archive.org/web/20111010053227/http://jaynes.color
 
 - Metadata fields can appear in any or no python file in a project.
 - Sometimes they are at the top of a single file python module, common locations for metadata:
-    - `__init__.py`
-    - `__meta__.py`
-    - `__about__.py`
+  - `__init__.py`
+  - `__meta__.py`
+  - `__about__.py`
 - Some metadata elements could reasonably be in every single file.
 - There are no particular standards for the type of `__author__`. It could be a string, space delimited string, list
   or tuple. That is true for the other metadata elements as well.
@@ -149,16 +151,16 @@ item for `__mailing_address__` you could easily do it with source code metadata.
 
 ## Project Health & Info
 
-| Metric            | Health                                                                                                                                                                                                              | Metric          | Info                                                                                                                                                                                                              |
+| Metric | Health | Metric | Info |
 |:------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Tests             | [![Tests](https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml/badge.svg)](https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml)                                  | License         | [![License](https://img.shields.io/github/license/matthewdeanmartin/metametameta)](https://github.com/matthewdeanmartin/metametameta/blob/main/LICENSE.md)                                                        |
-| Coverage          | [![Codecov](https://codecov.io/gh/matthewdeanmartin/metametameta/branch/main/graph/badge.svg)](https://codecov.io/gh/matthewdeanmartin/metametameta)                                                                | PyPI            | [![PyPI](https://img.shields.io/pypi/v/metametameta)](https://pypi.org/project/metametameta/)                                                                                                                     |
-| Lint / Pre-commit | [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/matthewdeanmartin/metametameta/main.svg)](https://results.pre-commit.ci/latest/github/matthewdeanmartin/metametameta/main)                      | Python Versions | [![Python Version](https://img.shields.io/pypi/pyversions/metametameta)](https://pypi.org/project/metametameta/)                                                                                                  |
-| Quality Gate      | [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=matthewdeanmartin_metametameta\&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=matthewdeanmartin_metametameta)    | Docs            | [![Docs](https://readthedocs.org/projects/metametameta/badge/?version=latest)](https://metametameta.readthedocs.io/en/latest/)                                                                                    |
-| CI Build          | [![Build](https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml/badge.svg)](https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml)                                  | Downloads       | [![Downloads](https://static.pepy.tech/personalized-badge/metametameta?period=total\&units=international_system\&left_color=grey\&right_color=blue\&left_text=Downloads)](https://pepy.tech/project/metametameta) |
-| Maintainability   | [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=matthewdeanmartin_metametameta\&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=matthewdeanmartin_metametameta) | Last Commit     | ![Last Commit](https://img.shields.io/github/last-commit/matthewdeanmartin/metametameta)                                                                                                                          |
+| Tests | [![Tests](https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml/badge.svg)](https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml) | License | [![License](https://img.shields.io/github/license/matthewdeanmartin/metametameta)](https://github.com/matthewdeanmartin/metametameta/blob/main/LICENSE) |
+| Coverage | [![Codecov](https://codecov.io/gh/matthewdeanmartin/metametameta/branch/main/graph/badge.svg)](https://codecov.io/gh/matthewdeanmartin/metametameta) | PyPI | [![PyPI](https://img.shields.io/pypi/v/metametameta)](https://pypi.org/project/metametameta/) |
+| Lint / Pre-commit | [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/matthewdeanmartin/metametameta/main.svg)](https://results.pre-commit.ci/latest/github/matthewdeanmartin/metametameta/main) | Python Versions | [![Python Version](https://img.shields.io/pypi/pyversions/metametameta)](https://pypi.org/project/metametameta/) |
+| Quality Gate | [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=matthewdeanmartin_metametameta&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=matthewdeanmartin_metametameta) | Docs | [![Docs](https://readthedocs.org/projects/metametameta/badge/?version=latest)](https://metametameta.readthedocs.io/en/latest/) |
+| CI Build | [![Build](https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml/badge.svg)](https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml) | Downloads | [![Downloads](https://static.pepy.tech/personalized-badge/metametameta?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Downloads)](https://pepy.tech/project/metametameta) |
+| Maintainability | [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=matthewdeanmartin_metametameta&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=matthewdeanmartin_metametameta) | Last Commit | ![Last Commit](https://img.shields.io/github/last-commit/matthewdeanmartin/metametameta) |
 
-| Category          | Health                                                                                                                                              
+| Category | Health |
 |-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Open Issues**   | ![GitHub issues](https://img.shields.io/github/issues/matthewdeanmartin/metametameta)                                                               |
-| **Stars**         | ![GitHub Repo stars](https://img.shields.io/github/stars/matthewdeanmartin/metametameta?style=social)                                               |
+| **Open Issues** | ![GitHub issues](https://img.shields.io/github/issues/matthewdeanmartin/metametameta) |
+| **Stars** | ![GitHub Repo stars](https://img.shields.io/github/stars/matthewdeanmartin/metametameta?style=social) |

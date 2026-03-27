@@ -5,6 +5,7 @@ Use this before publishing `metametameta` to PyPI.
 ## 1. Sync code, metadata, README, and docs
 
 - Treat `pyproject.toml` as the canonical package metadata source.
+
 - Regenerate or verify `metametameta/__about__.py` before release work:
 
   ```bash
@@ -13,6 +14,7 @@ Use this before publishing `metametameta` to PyPI.
   ```
 
 - Review `README.md`, `docs/usage.md`, `docs/installation.md`, and `docs/CONTRIBUTING.md` together so examples, supported commands, and packaging guidance agree.
+
 - Confirm the CLI help still matches the docs:
 
   ```bash

@@ -16,7 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `metametameta sync-check` run on CI server to see if your about file is out of sync
 - `metametameta auto` make best guess what your metadata source is. Give up if there are two possibilities.
 
-
 ## [0.1.4] - 2024-10-02
 
 ### Fixed
@@ -31,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fix bug in pep621 command where `-` in name but src folder is `_` 
+- Fix bug in pep621 command where `-` in name but src folder is `_`
 
 ## [0.1.2] - 2024-06-14
 
@@ -53,10 +52,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Makes best efforts to find src folder even if different from package name.
 
-
 ## [0.1.0] - 2024-01-20
 
 ### Added
 
 - Application created.
-

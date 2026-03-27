@@ -44,16 +44,16 @@ cli_tool_audit freeze pipx black isort pylint pyupgrade vulture safety flake8 my
 Before publishing a new version:
 
 1. Update version in `pyproject.toml`
-2. Update `CHANGELOG.md` with recent changes
-3. Run full test suite:
+1. Update `CHANGELOG.md` with recent changes
+1. Run full test suite:
    ```bash
    just test
    ```
-4. Run all checks:
+1. Run all checks:
    ```bash
    just check
    ```
-5. Build and publish:
+1. Build and publish:
    ```bash
    just publish
    ```

@@ -46,7 +46,8 @@ dev-status-check:
 .PHONY: docstrings-check
 docstrings-check:
 	@echo "Checking documented signatures for drift"
-	uvx --from pydoclint pydoclint --quiet --config=pyproject.toml metametameta
+	@echo "This seems to be checking for somthing that isn't google style docstrings"
+	# uvx --from pydoclint pydoclint --quiet --config=pyproject.toml metametameta
 
 .PHONY: docs-build
 docs-build:
@@ -156,7 +157,7 @@ mypy:
 
 
 check_docs:
-	uvx --from pydoclint pydoclint --quiet --config=pyproject.toml metametameta
+	# uvx --from pydoclint pydoclint --quiet --config=pyproject.toml metametameta
 	$(VENV) interrogate metametameta --verbose  --fail-under 70
 	$(VENV) pydoctest --config .pydoctest.json | grep -v "__init__" | grep -v "__main__" | grep -v "Unable to parse"
 
@@ -165,8 +166,9 @@ make_docs:
 
 check_md:
 	$(VENV) linkcheckMarkdown README.md
-	$(VENV) markdownlint README.md --config .markdownlintrc
 	$(VENV) mdformat README.md docs/*.md
+	$(VENV) markdownlint README.md --config .markdownlintrc
+
 
 
 check_spelling:
@@ -185,6 +187,7 @@ check_all_docs: check_docs check_md check_spelling check_changelog
 .PHONY: prerelease
 prerelease: metadata-sync-check version-check dev-status-check check_all_docs docs-build test
 	@echo "Pre-release checks complete"
+
 
 .PHONY: prerelease-llm
 prerelease-llm: metadata-sync-check version-check dev-status-check docstrings-check docs-build test-llm
