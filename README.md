@@ -95,6 +95,14 @@ import metametameta as mmm
 mmm.generate_from_pep621()
 ```
 
+## Development
+
+Docs are built with MkDocs and published through Read the Docs.
+
+- Contributor guide: [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md)
+- Pre-release checklist: [`docs/PRERELEASE.md`](docs/PRERELEASE.md)
+- Local docs build: `uv run mkdocs build --strict --clean`
+
 ## Motivation
 
 There are many modern ways to get metadata about packages, as of

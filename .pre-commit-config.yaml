@@ -43,17 +43,17 @@ repos:
   #        rev: v0.10.1
   #        hooks:
   #            -   id: validate-pyproject
-  - repo: https://github.com/PyCQA/autoflake
-    rev: v2.3.3
-    hooks:
-      - id: autoflake
-        args:
-          - --in-place
-          - --recursive
-          - --expand-star-imports
-          - --remove-all-unused-imports
-          - --remove-duplicate-keys
-          - --remove-unused-variables
+#  - repo: https://github.com/PyCQA/autoflake
+#    rev: v2.3.3
+#    hooks:
+#      - id: autoflake
+#        args:
+#          - --in-place
+#          - --recursive
+#          - --expand-star-imports
+#          - --remove-all-unused-imports
+#          - --remove-duplicate-keys
+#          - --remove-unused-variables
   # black is conflicting with something else
   #  - repo: https://github.com/psf/black
   #    rev: 23.12.1

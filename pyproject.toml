@@ -1,6 +1,6 @@
 [project]
 name = "metametameta"
-version = "0.1.6"
+version = "0.1.7"
 description = "Generate __about__.py with dunder meta."
 authors = [
     {name = "Matthew Martin", email = "matthewdeanmartin@gmail.com"},
@@ -229,6 +229,16 @@ per-file-ignores = { }
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+
+[tool.pydoclint]
+style = "google"
+check-return-types = false
+check-yield-types = false
+check-class-attributes = false
+check-style-mismatch = false
+skip-checking-short-docstrings = true
+require-return-section-when-returning-nothing = false
 
 
 

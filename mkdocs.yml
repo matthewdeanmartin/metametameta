@@ -23,7 +23,11 @@ nav:
   - "Home": index.md
   - "Installation": installation.md
   - "Usage": usage.md
-  - "Contributing": contributing.md
+  - "Contributing": CONTRIBUTING.md
+  - "Pre-release": PRERELEASE.md
+  - "Maintenance": MAINTENANCE.md
+  - "Roadmap": KILO_ROAD_MAP.md
+  - "TODO": TODO.md
   - "Changelog": CHANGELOG.md
 
 validation:

@@ -14,6 +14,50 @@ uv.lock: pyproject.toml
 	@echo "Installing dependencies"
 	@uv sync --all-extras
 
+.PHONY: metadata-sync-check
+metadata-sync-check:
+	@echo "Checking generated metadata is in sync"
+	$(VENV) metametameta sync-check
+
+.PHONY: version-check
+version-check:
+	@echo "Checking version sources and PyPI ordering"
+	$(VENV) metametameta sync-check
+	$(VENV) python scripts/prerelease_version_check.py
+
+.PHONY: bump-patch
+bump-patch:
+	@echo "Bumping patch version and refreshing generated metadata"
+	$(VENV) python scripts/bump_patch_version.py
+	$(VENV) metametameta pep621 --source pyproject.toml --output metametameta/__about__.py
+	$(VENV) metametameta sync-check
+	$(VENV) python scripts/prerelease_version_check.py
+
+.PHONY: publish-gha
+publish-gha:
+	@echo "Dispatching GitHub Actions publish workflow"
+	gh workflow run publish_to_pypi.yml --ref main
+
+.PHONY: dev-status-check
+dev-status-check:
+	@echo "Verifying Development Status classifier"
+	uvx --from troml-dev-status troml-dev-status verify .
+
+.PHONY: docstrings-check
+docstrings-check:
+	@echo "Checking documented signatures for drift"
+	uvx --from pydoclint pydoclint --quiet --config=pyproject.toml metametameta
+
+.PHONY: docs-build
+docs-build:
+	@echo "Building MkDocs site"
+	$(VENV) mkdocs build --strict --clean
+
+.PHONY: docs-serve
+docs-serve:
+	@echo "Serving MkDocs site"
+	$(VENV) mkdocs serve
+
 .PHONY: gha-pin
 gha-pin:
 	@echo "Pinning GitHub Actions to current SHAs"
@@ -50,6 +94,14 @@ test: clean uv.lock
 	$(VENV) pytest tests -vv -n 2 --cov=metametameta --cov-report=html --cov-fail-under 65 --cov-branch --cov-report=xml --junitxml=junit.xml -o junit_family=legacy --timeout=5 --session-timeout=600
 	$(VENV) bash ./scripts/basic_checks.sh
 #	$(VENV) bash basic_test_with_logging.sh
+
+.PHONY: test-llm
+test-llm: clean uv.lock
+	@echo "Running quiet unit tests"
+	$(VENV) pytest tests -q -x --maxfail=1 --disable-warnings --timeout=5 --session-timeout=600
+
+.PHONY: tests-llm
+tests-llm: test-llm
 
 
 isort:
@@ -101,11 +153,12 @@ mypy:
 
 
 check_docs:
+	uvx --from pydoclint pydoclint --quiet --config=pyproject.toml metametameta
 	$(VENV) interrogate metametameta --verbose  --fail-under 70
 	$(VENV) pydoctest --config .pydoctest.json | grep -v "__init__" | grep -v "__main__" | grep -v "Unable to parse"
 
 make_docs:
-	pdoc metametameta --html -o docs --force
+	$(VENV) mkdocs build --strict --clean
 
 check_md:
 	$(VENV) linkcheckMarkdown README.md
@@ -125,6 +178,14 @@ check_changelog:
 	$(VENV) changelogmanager validate
 
 check_all_docs: check_docs check_md check_spelling check_changelog
+
+.PHONY: prerelease
+prerelease: metadata-sync-check version-check dev-status-check check_all_docs docs-build test
+	@echo "Pre-release checks complete"
+
+.PHONY: prerelease-llm
+prerelease-llm: metadata-sync-check version-check dev-status-check docstrings-check docs-build test-llm
+	@echo "Quiet pre-release checks complete"
 
 check_self:
 	# Can it verify itself?

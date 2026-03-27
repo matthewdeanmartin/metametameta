@@ -12,11 +12,47 @@ default:
 # Install dependencies
 poetry-install:
     @echo "Installing dependencies"
-    uv sync
+    uv sync --all-extras
+
+metadata-sync-check:
+    @echo "Checking generated metadata is in sync"
+    {{venv}} metametameta sync-check
+
+version-check:
+    @echo "Checking version sources and PyPI ordering"
+    {{venv}} metametameta sync-check
+    {{venv}} python scripts/prerelease_version_check.py
+
+bump-patch:
+    @echo "Bumping patch version and refreshing generated metadata"
+    {{venv}} python scripts/bump_patch_version.py
+    {{venv}} metametameta pep621 --source pyproject.toml --output metametameta/__about__.py
+    {{venv}} metametameta sync-check
+    {{venv}} python scripts/prerelease_version_check.py
+
+publish-gha:
+    @echo "Dispatching GitHub Actions publish workflow"
+    gh workflow run publish_to_pypi.yml --ref main
+
+dev-status-check:
+    @echo "Verifying Development Status classifier"
+    uvx --from troml-dev-status troml-dev-status verify .
+
+docstrings-check:
+    @echo "Checking documented signatures for drift"
+    uvx --from pydoclint pydoclint --quiet --config=pyproject.toml {{project}}
+
+docs-build:
+    @echo "Building MkDocs site"
+    {{venv}} mkdocs build --strict --clean
+
+docs-serve:
+    @echo "Serving MkDocs site"
+    {{venv}} mkdocs serve
 
 update-deps:
     @echo "Updating dependencies"
-    uv sync
+    uv sync --all-extras
     pre-commit autoupdate
     pre-commit install || true
     @echo "Consider running  pipx upgrade-all"
@@ -58,9 +94,14 @@ test: clean poetry-install
     # Run the command
     subprocess.run(command, shell=True, check=True)
 
+test-llm: clean poetry-install
+    {{venv}} pytest {{test_folder}} -q -x --maxfail=1 --disable-warnings --timeout=5 --session-timeout=600
+
+tests-llm: test-llm
+
 
 lock:
-    uv sync
+    uv sync --all-extras
 
 # Format imports
 isort:
@@ -118,12 +159,13 @@ docker:
 
 # Check documentation
 check-docs:
+    uvx --from pydoclint pydoclint --quiet --config=pyproject.toml {{project}}
     {{venv}} interrogate {{project}} --verbose
     {{venv}} pydoctest --config .pydoctest.json | grep -v "__init__" | grep -v "__main__" | grep -v "Unable to parse"
 
 # Generate documentation
 make-docs:
-    pdoc {{project}} --html -o docs --force
+    {{venv}} mkdocs build --strict --clean
 
 # Check Markdown files
 check-md:
@@ -142,6 +184,12 @@ check-changelog:
 
 # Run all checks
 check-all: check-docs check-md spell check-changelog
+
+prerelease: metadata-sync-check version-check dev-status-check check-all docs-build test
+    @echo "Pre-release checks complete"
+
+prerelease-llm: metadata-sync-check version-check dev-status-check docstrings-check docs-build test-llm
+    @echo "Quiet pre-release checks complete"
 
 
 mr: lock safety spell
