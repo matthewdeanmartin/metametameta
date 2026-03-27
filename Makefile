@@ -167,7 +167,8 @@ make_docs:
 check_md:
 	$(VENV) linkcheckMarkdown README.md
 	$(VENV) mdformat README.md docs/*.md
-	$(VENV) markdownlint README.md --config .markdownlintrc
+	# This isn't avail on github actions atm
+	# $(VENV) markdownlint README.md --config .markdownlintrc
 
 
 
