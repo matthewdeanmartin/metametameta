@@ -142,9 +142,12 @@ check: mypy test pylint bandit pre-commit
 #publish_test:
 #	rm -rf dist && poetry version minor && poetry build && twine upload -r testpypi dist/*
 
-.PHONY: publish
-publish: test
+.PHONY: build-dist
+build-dist:
 	rm -rf dist && hatch build
+
+.PHONY: publish
+publish: prerelease build-dist
 
 .PHONY: mypy
 mypy:

@@ -1,5 +1,3 @@
-# .github/workflows/publish-to-pypi.yml
-
 name: Publish metametameta to PyPI
 
 on:
@@ -13,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: extractions/setup-just@f8a3cce218d9f83db3a2ecd90e41ac3de6cdfd9b # v3.1.0
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         persist-credentials: false
@@ -22,30 +19,20 @@ jobs:
       with:
         python-version: '3.14'
 
-    - name: Install uv and pipx
+    - name: Install uv
       run: |
-        pip install uv && pip install pipx
-
-    - name: Install global dependencies
-      run: |
-        pipx install uv && pipx install "coderoller" && \
-        pipx install isort && pipx install black && pipx install bandit && \
-        pipx install pylint && pipx install pre-commit && pipx install uv && pipx install hatch && \
-        pipx install cli_tool_audit
+        pip install uv
 
     - name: Install Dependencies
-      run: uv sync
+      run: uv sync --all-extras
 
-    - name: Run just check
-      run: chmod +x scripts/*.sh && uv run just check
+    - name: Run release checks and build package
+      run: chmod +x scripts/*.sh && uv run make publish
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 # v6.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-
-    - name: Run just publish
-      run: uv run just publish
 
     - name: Upload Package
       uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0

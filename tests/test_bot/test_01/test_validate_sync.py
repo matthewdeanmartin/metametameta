@@ -27,7 +27,7 @@ def test_check_sync_accepts_matching_dependency_lists(tmp_path):
 
     mismatches = check_sync({"name": "demo-app", "dependencies": ["click>=8", "rich"]}, about_path)
 
-    assert mismatches == []
+    assert not mismatches
 
 
 def test_check_sync_reports_mismatched_dependency_lists(tmp_path):

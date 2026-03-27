@@ -18,7 +18,7 @@ def assert_paths_point_to_same_real_file(x: str, y: str) -> None:
     absolute_path = Path(x).resolve()
     relative_path = Path(y).resolve()
 
-    if not absolute_path.name == relative_path.name:
+    if absolute_path.name != relative_path.name:
         raise AssertionError(f"File names do not match: {absolute_path.name} != {relative_path.name}")
 
     relative_parts = list(Path(y).parts)
