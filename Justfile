@@ -36,7 +36,7 @@ publish-gha:
 
 dev-status-check:
     @echo "Verifying Development Status classifier"
-    uvx --from troml-dev-status troml-dev-status verify .
+    uvx --from troml-dev-status troml-dev-status validate .
 
 docstrings-check:
     @echo "Checking documented signatures for drift"

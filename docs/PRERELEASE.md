@@ -46,7 +46,7 @@ Use this before publishing `metametameta` to PyPI.
 This project already ships a `Development Status` classifier, so verify it instead of guessing:
 
 ```bash
-uvx --from troml-dev-status troml-dev-status verify .
+uvx --from troml-dev-status troml-dev-status validate .
 ```
 
 ## 4. Run doc checks that match this repo

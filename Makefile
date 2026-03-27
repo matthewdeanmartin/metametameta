@@ -41,7 +41,7 @@ publish-gha:
 .PHONY: dev-status-check
 dev-status-check:
 	@echo "Verifying Development Status classifier"
-	uvx --from troml-dev-status troml-dev-status verify .
+	uvx --from troml-dev-status troml-dev-status validate .
 
 .PHONY: docstrings-check
 docstrings-check:
