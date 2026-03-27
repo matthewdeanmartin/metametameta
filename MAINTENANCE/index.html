@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Matthew Dean Martin <matthewdeanmartin@gmail.com>" /><link rel="canonical" href="https://metametameta.readthedocs.io/MAINTENANCE/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Maintenance - metametameta</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Maintenance";
+        var mkdocs_page_input_path = "MAINTENANCE.md";
+        var mkdocs_page_url = "/MAINTENANCE/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> metametameta
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../usage/">Usage</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING/">Contributing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../PRERELEASE/">Pre-release</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Maintenance</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#dailyper-commit-tasks">Daily/Per-Commit Tasks</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#weekly-tasks">Weekly Tasks</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#monthly-tasks">Monthly Tasks</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pre-release-tasks">Pre-Release Tasks</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#quarterly-tasks">Quarterly Tasks</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#security-maintenance">Security Maintenance</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#documentation-maintenance">Documentation Maintenance</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#available-just-commands">Available Just Commands</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../KILO_ROAD_MAP/">Roadmap</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../TODO/">TODO</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../CHANGELOG/">Changelog</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">metametameta</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Maintenance</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/matthewdeanmartin/metametameta/edit/main/docs/MAINTENANCE.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="maintenance">Maintenance<a class="headerlink" href="#maintenance" title="Permanent link">&para;</a></h1>
+<p>This document outlines the periodic maintenance tasks required to keep the project healthy, secure, and up-to-date.</p>
+<h2 id="dailyper-commit-tasks">Daily/Per-Commit Tasks<a class="headerlink" href="#dailyper-commit-tasks" title="Permanent link">&para;</a></h2>
+<p>These tasks run automatically via pre-commit hooks and CI:</p>
+<ul>
+<li><strong>Pre-commit hooks</strong>: Automatic code quality fixes via <code>pre-commit ci</code></li>
+<li><strong>CI build</strong>: Runs on every push via <code>.github/workflows/build.yml</code></li>
+</ul>
+<h2 id="weekly-tasks">Weekly Tasks<a class="headerlink" href="#weekly-tasks" title="Permanent link">&para;</a></h2>
+<p>Run these tasks regularly to maintain code quality:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Update dependencies</span>
+just<span class="w"> </span>update-deps
+
+<span class="c1"># Run full test suite</span>
+just<span class="w"> </span><span class="nb">test</span>
+
+<span class="c1"># Run all quality checks</span>
+just<span class="w"> </span>check
+</code></pre></div>
+
+<h2 id="monthly-tasks">Monthly Tasks<a class="headerlink" href="#monthly-tasks" title="Permanent link">&para;</a></h2>
+<p>Perform these tasks monthly to keep dependencies and tools current:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Update pre-commit hooks to latest versions</span>
+pre-commit<span class="w"> </span>autoupdate
+
+<span class="c1"># Install/update global tools via pipx</span>
+pipx<span class="w"> </span>install<span class="w"> </span>black<span class="w"> </span>isort<span class="w"> </span>pylint<span class="w"> </span>pyupgrade<span class="w"> </span>vulture<span class="w"> </span>safety<span class="w"> </span>flake8<span class="w"> </span>mypy<span class="w"> </span>bandit<span class="w"> </span>codespell
+
+<span class="c1"># Freeze tool versions for audit trail</span>
+cli_tool_audit<span class="w"> </span>freeze<span class="w"> </span>pipx<span class="w"> </span>black<span class="w"> </span>isort<span class="w"> </span>pylint<span class="w"> </span>pyupgrade<span class="w"> </span>vulture<span class="w"> </span>safety<span class="w"> </span>flake8<span class="w"> </span>mypy<span class="w"> </span>bandit
+</code></pre></div>
+
+<h2 id="pre-release-tasks">Pre-Release Tasks<a class="headerlink" href="#pre-release-tasks" title="Permanent link">&para;</a></h2>
+<p>Before publishing a new version:</p>
+<ol>
+<li>Update version in <code>pyproject.toml</code></li>
+<li>Update <code>CHANGELOG.md</code> with recent changes</li>
+<li>Run full test suite:
+   <code>bash
+   just test</code></li>
+<li>Run all checks:
+   <code>bash
+   just check</code></li>
+<li>Build and publish:
+   <code>bash
+   just publish</code></li>
+</ol>
+<h2 id="quarterly-tasks">Quarterly Tasks<a class="headerlink" href="#quarterly-tasks" title="Permanent link">&para;</a></h2>
+<p>Review and update project configuration:</p>
+<ul>
+<li>Review <code>pyproject.toml</code> dependencies for outdated packages</li>
+<li>Check <code>.github/workflows/</code> for needed updates</li>
+<li>Verify Python version support in <code>pyproject.toml</code></li>
+<li>Run <code>deptry</code> to check for unused dependencies:
+  <code>bash
+  deptry metametameta -kf metametameta</code></li>
+</ul>
+<h2 id="security-maintenance">Security Maintenance<a class="headerlink" href="#security-maintenance" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Run security checks:
+  <code>bash
+  just bandit</code></li>
+<li>Check for known vulnerabilities in dependencies (when <code>safety</code> is configured)</li>
+<li>Review and update <code>SECURITY.md</code> if needed</li>
+</ul>
+<h2 id="documentation-maintenance">Documentation Maintenance<a class="headerlink" href="#documentation-maintenance" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Check documentation:
+  <code>bash
+  just check-docs
+  just check-md
+  just spell</code></li>
+<li>Generate documentation:
+  <code>bash
+  just make-docs</code></li>
+<li>Verify all doc links work</li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<p>If checks fail:</p>
+<ul>
+<li><strong>Lint errors</strong>: Run <code>ruff check --fix .</code> to auto-fix most issues</li>
+<li><strong>Type errors</strong>: Review <code>mypy</code> output and add type annotations as needed</li>
+<li><strong>Test failures</strong>: Check test output and fix failing tests before releasing</li>
+<li><strong>Pre-commit failures</strong>: Run <code>pre-commit run --all-files</code> locally to see issues</li>
+</ul>
+<h2 id="available-just-commands">Available Just Commands<a class="headerlink" href="#available-just-commands" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>just test</code></td>
+<td>Run test suite with coverage</td>
+</tr>
+<tr>
+<td><code>just check</code></td>
+<td>Run mypy, tests, pylint, bandit, pre-commit</td>
+</tr>
+<tr>
+<td><code>just pre-commit</code></td>
+<td>Run pre-commit hooks on all files</td>
+</tr>
+<tr>
+<td><code>just mypy</code></td>
+<td>Run type checking</td>
+</tr>
+<tr>
+<td><code>just bandit</code></td>
+<td>Run security checks</td>
+</tr>
+<tr>
+<td><code>just pylint</code></td>
+<td>Run linting with pylint and ruff</td>
+</tr>
+<tr>
+<td><code>just lock</code></td>
+<td>Sync uv lock file</td>
+</tr>
+<tr>
+<td><code>just update-deps</code></td>
+<td>Update dependencies and pre-commit</td>
+</tr>
+<tr>
+<td><code>just publish</code></td>
+<td>Build and publish to PyPI</td>
+</tr>
+<tr>
+<td><code>just check-docs</code></td>
+<td>Check docstring coverage</td>
+</tr>
+<tr>
+<td><code>just check-md</code></td>
+<td>Check Markdown formatting</td>
+</tr>
+<tr>
+<td><code>just spell</code></td>
+<td>Run spell checking</td>
+</tr>
+<tr>
+<td><code>just tool-audit</code></td>
+<td>Audit installed CLI tools</td>
+</tr>
+<tr>
+<td><code>just clean</code></td>
+<td>Remove compiled files</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../PRERELEASE/" class="btn btn-neutral float-left" title="Pre-release"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../KILO_ROAD_MAP/" class="btn btn-neutral float-right" title="Roadmap">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/matthewdeanmartin/metametameta" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../PRERELEASE/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../KILO_ROAD_MAP/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

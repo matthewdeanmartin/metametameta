@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Matthew Dean Martin <matthewdeanmartin@gmail.com>" /><link rel="canonical" href="https://metametameta.readthedocs.io/KILO_ROAD_MAP/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Roadmap - metametameta</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Roadmap";
+        var mkdocs_page_input_path = "KILO_ROAD_MAP.md";
+        var mkdocs_page_url = "/KILO_ROAD_MAP/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> metametameta
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../usage/">Usage</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING/">Contributing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../PRERELEASE/">Pre-release</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../MAINTENANCE/">Maintenance</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Roadmap</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#project-overview">Project Overview</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#phase-1-enhanced-source-support">🚀 Phase 1: Enhanced Source Support</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#11-additional-package-managers">1.1 Additional Package Managers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#12-alternative-metadata-files">1.2 Alternative Metadata Files</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#phase-2-cli-enhancements">🔧 Phase 2: CLI Enhancements</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#21-interactive-mode">2.1 Interactive Mode</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#22-watch-mode">2.2 Watch Mode</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#23-template-system">2.3 Template System</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#24-diff-preview">2.4 Diff &amp; Preview</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#phase-3-cicd-integration">🔒 Phase 3: CI/CD Integration</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#31-github-actions">3.1 GitHub Actions</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#32-pre-commit-hook">3.2 Pre-commit Hook</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#33-git-hook-integration">3.3 Git Hook Integration</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#phase-4-metadata-intelligence">📊 Phase 4: Metadata Intelligence</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#41-extended-field-support">4.1 Extended Field Support</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#42-dynamic-metadata">4.2 Dynamic Metadata</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#43-metadata-validation">4.3 Metadata Validation</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#phase-5-developer-experience">🛠 Phase 5: Developer Experience</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#51-ide-integration">5.1 IDE Integration</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#52-plugin-system">5.2 Plugin System</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#53-configuration-file">5.3 Configuration File</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#54-graphql-api">5.4 GraphQL API</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#phase-6-ecosystem-expansion">🌐 Phase 6: Ecosystem Expansion</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#61-multi-language-support">6.1 Multi-Language Support</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#62-package-index-integration">6.2 Package Index Integration</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#63-documentation-generation">6.3 Documentation Generation</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#phase-7-analytics-insights">📈 Phase 7: Analytics &amp; Insights</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#71-package-analysis">7.1 Package Analysis</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#72-reporting">7.2 Reporting</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#future-speculations">🔮 Future Speculations</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#ai-assisted-metadata">AI-Assisted Metadata</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#blockchain-verification">Blockchain Verification</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#decentralized-registry">Decentralized Registry</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#feature-priority-matrix">📋 Feature Priority Matrix</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#release-roadmap">🗺 Release Roadmap</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#v02-configuration-templates">v0.2 - Configuration &amp; Templates</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#v03-cicd-integration">v0.3 - CI/CD Integration</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#v04-watch-interactive">v0.4 - Watch &amp; Interactive</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#v05-ecosystem">v0.5 - Ecosystem</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#v10-stable">v1.0 - Stable</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../TODO/">TODO</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../CHANGELOG/">Changelog</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">metametameta</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Roadmap</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/matthewdeanmartin/metametameta/edit/main/docs/KILO_ROAD_MAP.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="kilo-roadmap-for-metametameta">Kilo Roadmap for metametameta<a class="headerlink" href="#kilo-roadmap-for-metametameta" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>A vision for the future of automated Python package metadata generation</p>
+</blockquote>
+<h2 id="project-overview">Project Overview<a class="headerlink" href="#project-overview" title="Permanent link">&para;</a></h2>
+<p>metametameta generates <code>__about__.py</code> files with dunder metadata (<code>__version__</code>, <code>__author__</code>, etc.) from various Python packaging sources (PEP 621, Poetry, setup.cfg, setup.py, importlib.metadata).</p>
+<hr />
+<h2 id="phase-1-enhanced-source-support">🚀 Phase 1: Enhanced Source Support<a class="headerlink" href="#phase-1-enhanced-source-support" title="Permanent link">&para;</a></h2>
+<h3 id="11-additional-package-managers">1.1 Additional Package Managers<a class="headerlink" href="#11-additional-package-managers" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>High</td>
+<td><strong>PDM Support</strong></td>
+<td>Generate from <code>pyproject.toml</code> using <code>[tool.pdm]</code> section</td>
+</tr>
+<tr>
+<td>High</td>
+<td><strong>Hatch Support</strong></td>
+<td>Support <code>[tool.hatch.metadata]</code> configuration</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td><strong>Flit Support</strong></td>
+<td>Parse <code>pyproject.toml</code> with <code>[tool.flit]</code> section</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td><strong>Poetry 2.0</strong></td>
+<td>Handle new Poetry <code>package</code> configuration format</td>
+</tr>
+<tr>
+<td>Low</td>
+<td><strong>Meson Python</strong></td>
+<td>Extract metadata from Meson build configurations</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-alternative-metadata-files">1.2 Alternative Metadata Files<a class="headerlink" href="#12-alternative-metadata-files" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>High</td>
+<td><strong>setup.py parse improvements</strong></td>
+<td>Support more complex setup.py patterns (dynamic versions, conditionals)</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td><strong>pdm.lock parsing</strong></td>
+<td>Extract version from <code>pdm.lock</code> for locked versions</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td><strong>requirements.txt</strong></td>
+<td>Generate minimal <code>__about__.py</code> from requirements files</td>
+</tr>
+<tr>
+<td>Low</td>
+<td><strong>conda/meta.yaml</strong></td>
+<td>Extract metadata from Conda recipes</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="phase-2-cli-enhancements">🔧 Phase 2: CLI Enhancements<a class="headerlink" href="#phase-2-cli-enhancements" title="Permanent link">&para;</a></h2>
+<h3 id="21-interactive-mode">2.1 Interactive Mode<a class="headerlink" href="#21-interactive-mode" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code>mmminit<span class="w">          </span><span class="c1"># Interactive wizard to set up metadata generation</span>
+mmminit<span class="w"> </span>--force<span class="w">  </span><span class="c1"># Re-run setup wizard</span>
+</code></pre></div>
+
+<p>A guided flow that:
+- Detects existing packaging setup
+- Asks user preferences (output location, variables to include)
+- Generates appropriate configuration file
+- Optionally adds to CI/CD</p>
+<h3 id="22-watch-mode">2.2 Watch Mode<a class="headerlink" href="#22-watch-mode" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code>mmmw<span class="w">  </span><span class="c1"># Watch mode - auto-regenerate on file changes</span>
+mmmw<span class="w"> </span>--debounce<span class="w"> </span><span class="m">1</span>.0<span class="w">  </span><span class="c1"># Debounce by 1 second</span>
+</code></pre></div>
+
+<p>Uses file system watchers to detect changes to source files and automatically regenerate <code>__about__.py</code>.</p>
+<h3 id="23-template-system">2.3 Template System<a class="headerlink" href="#23-template-system" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code>mmm<span class="w"> </span>generate<span class="w"> </span>--template<span class="w"> </span>minimal<span class="w">    </span><span class="c1"># Just version</span>
+mmm<span class="w"> </span>generate<span class="w"> </span>--template<span class="w"> </span>standard<span class="w">    </span><span class="c1"># Standard metadata</span>
+mmm<span class="w"> </span>generate<span class="w"> </span>--template<span class="w"> </span>full<span class="w">        </span><span class="c1"># All available fields</span>
+mmm<span class="w"> </span>generate<span class="w"> </span>--template<span class="w"> </span>custom<span class="w">      </span><span class="c1"># User-defined template</span>
+</code></pre></div>
+
+<p>Custom templates for different use cases:
+- PyPI-ready metadata
+- Internal package metadata
+- Minimal for performance
+- Extended with non-standard fields</p>
+<h3 id="24-diff-preview">2.4 Diff &amp; Preview<a class="headerlink" href="#24-diff-preview" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code>mmm<span class="w"> </span>diff<span class="w">           </span><span class="c1"># Show what would change without writing</span>
+mmm<span class="w"> </span>diff<span class="w"> </span>--color<span class="w">   </span><span class="c1"># Colored diff output</span>
+mmm<span class="w"> </span>preview<span class="w">        </span><span class="c1"># Preview generated file without writing</span>
+</code></pre></div>
+
+<p>Preview changes before writing, useful for CI validation.</p>
+<hr />
+<h2 id="phase-3-cicd-integration">🔒 Phase 3: CI/CD Integration<a class="headerlink" href="#phase-3-cicd-integration" title="Permanent link">&para;</a></h2>
+<h3 id="31-github-actions">3.1 GitHub Actions<a class="headerlink" href="#31-github-actions" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># .github/workflows/update-about.yml</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">matthewdeanmartin/metametameta-action@v1</span>
+<span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pep621</span>
+<span class="w">    </span><span class="nt">validate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">comment-on-pr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+
+<ul>
+<li><strong>Official GitHub Action</strong> for easy CI integration</li>
+<li>Auto-create PR with <code>__about__.py</code> updates</li>
+<li>Fail CI if metadata is out of sync</li>
+</ul>
+<h3 id="32-pre-commit-hook">3.2 Pre-commit Hook<a class="headerlink" href="#32-pre-commit-hook" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># .pre-commit-hooks.yaml</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">update-about</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update __about__.py</span>
+<span class="w">  </span><span class="nt">entry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mmm auto --validate</span>
+<span class="w">  </span><span class="nt">pass_filenames</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">always_run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+
+<p>Auto-update metadata on commit.</p>
+<h3 id="33-git-hook-integration">3.3 Git Hook Integration<a class="headerlink" href="#33-git-hook-integration" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code>mmm<span class="w"> </span>install-hook<span class="w">   </span><span class="c1"># Install git pre-commit hook</span>
+mmm<span class="w"> </span>uninstall-hook<span class="w"> </span><span class="c1"># Remove git hook</span>
+</code></pre></div>
+
+<hr />
+<h2 id="phase-4-metadata-intelligence">📊 Phase 4: Metadata Intelligence<a class="headerlink" href="#phase-4-metadata-intelligence" title="Permanent link">&para;</a></h2>
+<h3 id="41-extended-field-support">4.1 Extended Field Support<a class="headerlink" href="#41-extended-field-support" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Source</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>__changelog__</code></td>
+<td>CHANGELOG.md</td>
+<td>Link to changelog file</td>
+</tr>
+<tr>
+<td><code>__docker_image__</code></td>
+<td>pyproject.toml</td>
+<td>Container image name</td>
+</tr>
+<tr>
+<td><code>__code_quality__</code></td>
+<td>SonarQube</td>
+<td>Code quality metrics</td>
+</tr>
+<tr>
+<td><code>__ci_status__</code></td>
+<td>GitHub Actions</td>
+<td>Latest CI status badge</td>
+</tr>
+<tr>
+<td><code>__test_coverage__</code></td>
+<td>Codecov</td>
+<td>Coverage percentage</td>
+</tr>
+<tr>
+<td><code>__pypi_downloads__</code></td>
+<td>PyPI</td>
+<td>Download count</td>
+</tr>
+<tr>
+<td><code>__dependents__</code></td>
+<td>libraries.io</td>
+<td>Number of dependents</td>
+</tr>
+</tbody>
+</table>
+<h3 id="42-dynamic-metadata">4.2 Dynamic Metadata<a class="headerlink" href="#42-dynamic-metadata" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># __about__.py with dynamic values</span>
+<span class="n">__commit_hash__</span> <span class="o">=</span> <span class="s2">&quot;{{COMMIT_HASH}}&quot;</span>
+<span class="n">__build_date__</span> <span class="o">=</span> <span class="s2">&quot;{{BUILD_DATE}}&quot;</span>
+<span class="n">__ci_url__</span> <span class="o">=</span> <span class="s2">&quot;{{CI_BUILD_URL}}&quot;</span>
+</code></pre></div>
+
+<p>Support placeholder values that get filled during build/CI:
+- Git commit SHA
+- Build timestamp
+- CI/CD URLs
+- Version from tags</p>
+<h3 id="43-metadata-validation">4.3 Metadata Validation<a class="headerlink" href="#43-metadata-validation" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code>mmm<span class="w"> </span>validate<span class="w">              </span><span class="c1"># Validate __about__.py matches source</span>
+mmm<span class="w"> </span>validate<span class="w"> </span>--strict<span class="w">     </span><span class="c1"># Strict mode: fail on any mismatch</span>
+mmm<span class="w"> </span>validate<span class="w"> </span>--report<span class="w">    </span><span class="c1"># Generate validation report</span>
+</code></pre></div>
+
+<ul>
+<li>Validate consistency between <code>__about__.py</code> and source</li>
+<li>Check for deprecated fields</li>
+<li>Warn about missing recommended fields</li>
+</ul>
+<hr />
+<h2 id="phase-5-developer-experience">🛠 Phase 5: Developer Experience<a class="headerlink" href="#phase-5-developer-experience" title="Permanent link">&para;</a></h2>
+<h3 id="51-ide-integration">5.1 IDE Integration<a class="headerlink" href="#51-ide-integration" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>VS Code extension</strong> with metadata snippets</li>
+<li><strong>PyCharm plugin</strong> for visual metadata editing</li>
+<li><strong>Emacsminor mode</strong> for elisp-less editing</li>
+</ul>
+<h3 id="52-plugin-system">5.2 Plugin System<a class="headerlink" href="#52-plugin-system" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># mmm_plugins.py</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">transform_metadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add custom transformations.&quot;&quot;&quot;</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;__custom_field__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">compute_value</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">metadata</span>
+</code></pre></div>
+
+<ul>
+<li>Custom transformation hooks</li>
+<li>Additional field processors</li>
+<li>Output format plugins (JSON, TOML, YAML)</li>
+</ul>
+<h3 id="53-configuration-file">5.3 Configuration File<a class="headerlink" href="#53-configuration-file" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># .metametameta.toml</span>
+<span class="k">[tool.metametameta]</span>
+<span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;pep621&quot;</span>
+<span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mypackage/__about__.py&quot;</span>
+<span class="n">validate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+
+<span class="k">[tool.metametameta.fields]</span>
+<span class="n">include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;author&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;description&quot;</span><span class="p">]</span>
+<span class="n">exclude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;classifiers&quot;</span><span class="p">]</span>
+
+<span class="k">[tool.metametameta.template]</span>
+<span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;templates/about.py.j2&quot;</span>
+</code></pre></div>
+
+<h3 id="54-graphql-api">5.4 GraphQL API<a class="headerlink" href="#54-graphql-api" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">metametameta</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mmm</span>
+
+<span class="c1"># Programmatic with more options</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">mmm</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+    <span class="n">source</span><span class="o">=</span><span class="s2">&quot;pep621&quot;</span><span class="p">,</span>
+    <span class="n">output</span><span class="o">=</span><span class="s2">&quot;__about__.py&quot;</span><span class="p">,</span>
+    <span class="n">template</span><span class="o">=</span><span class="s2">&quot;custom&quot;</span><span class="p">,</span>
+    <span class="n">transform</span><span class="o">=</span><span class="n">my_transform</span><span class="p">,</span>
+    <span class="n">dry_run</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<hr />
+<h2 id="phase-6-ecosystem-expansion">🌐 Phase 6: Ecosystem Expansion<a class="headerlink" href="#phase-6-ecosystem-expansion" title="Permanent link">&para;</a></h2>
+<h3 id="61-multi-language-support">6.1 Multi-Language Support<a class="headerlink" href="#61-multi-language-support" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Ruby gemspec</strong> → Python <code>__about__.py</code> converter</li>
+<li><strong>NPM package.json</strong> → Python metadata converter</li>
+<li><strong>Cargo.toml</strong> → Python metadata converter</li>
+<li><strong>Go go.mod</strong> → Python metadata converter</li>
+</ul>
+<h3 id="62-package-index-integration">6.2 Package Index Integration<a class="headerlink" href="#62-package-index-integration" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code>mmm<span class="w"> </span>sync<span class="w">              </span><span class="c1"># Sync with PyPI</span>
+mmm<span class="w"> </span>sync<span class="w"> </span>--local<span class="w">     </span><span class="c1"># Update from local package</span>
+mmm<span class="w"> </span>diff<span class="w"> </span>pypi<span class="w">        </span><span class="c1"># Compare local vs PyPI metadata</span>
+</code></pre></div>
+
+<ul>
+<li>Fetch metadata from PyPI/API</li>
+<li>Compare local vs published metadata</li>
+<li>Bulk update multiple packages</li>
+</ul>
+<h3 id="63-documentation-generation">6.3 Documentation Generation<a class="headerlink" href="#63-documentation-generation" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code>mmm<span class="w"> </span>docs<span class="w">             </span><span class="c1"># Generate API reference from __about__.py</span>
+mmm<span class="w"> </span>badge<span class="w">            </span><span class="c1"># Generate badges (version, license, etc.)</span>
+</code></pre></div>
+
+<p>Generate:
+- Package badges for README
+- Metadata summary tables
+- API documentation snippets</p>
+<hr />
+<h2 id="phase-7-analytics-insights">📈 Phase 7: Analytics &amp; Insights<a class="headerlink" href="#phase-7-analytics-insights" title="Permanent link">&para;</a></h2>
+<h3 id="71-package-analysis">7.1 Package Analysis<a class="headerlink" href="#71-package-analysis" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code>mmm<span class="w"> </span>analyze<span class="w">              </span><span class="c1"># Analyze this package</span>
+mmm<span class="w"> </span>analyze<span class="w"> </span>--compare<span class="w">    </span><span class="c1"># Compare two packages</span>
+mmm<span class="w"> </span>audit<span class="w">                </span><span class="c1"># Audit dependencies</span>
+</code></pre></div>
+
+<ul>
+<li>Package health scores</li>
+<li>Metadata completeness analysis</li>
+<li>Dependency chain visualization</li>
+</ul>
+<h3 id="72-reporting">7.2 Reporting<a class="headerlink" href="#72-reporting" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Generate <code>METADATA.md</code> with package stats</li>
+<li>Export to JSON/CSV for external tools</li>
+<li>Dashboard for monorepo management</li>
+</ul>
+<hr />
+<h2 id="future-speculations">🔮 Future Speculations<a class="headerlink" href="#future-speculations" title="Permanent link">&para;</a></h2>
+<h3 id="ai-assisted-metadata">AI-Assisted Metadata<a class="headerlink" href="#ai-assisted-metadata" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Use LLM to suggest missing fields</li>
+<li>Auto-generate descriptions from code</li>
+<li>Detect author information from git history</li>
+</ul>
+<h3 id="blockchain-verification">Blockchain Verification<a class="headerlink" href="#blockchain-verification" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Anchor metadata hashes on blockchain</li>
+<li>Prove metadata existed at certain time</li>
+<li>Immutable audit trail</li>
+</ul>
+<h3 id="decentralized-registry">Decentralized Registry<a class="headerlink" href="#decentralized-registry" title="Permanent link">&para;</a></h3>
+<ul>
+<li>IPFS-based metadata storage</li>
+<li>ENS domain integration</li>
+<li>Web3 package discovery</li>
+</ul>
+<hr />
+<h2 id="feature-priority-matrix">📋 Feature Priority Matrix<a class="headerlink" href="#feature-priority-matrix" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Complexity</th>
+<th>Impact</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PDM/Hatch support</td>
+<td>Low</td>
+<td>High</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>Configuration file</td>
+<td>Medium</td>
+<td>High</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>Diff/preview mode</td>
+<td>Low</td>
+<td>High</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>GitHub Action</td>
+<td>Medium</td>
+<td>High</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>Watch mode</td>
+<td>Medium</td>
+<td>Medium</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Template system</td>
+<td>Medium</td>
+<td>Medium</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Interactive wizard</td>
+<td>Medium</td>
+<td>Medium</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Extended fields</td>
+<td>Low</td>
+<td>Medium</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>Pre-commit hook</td>
+<td>Low</td>
+<td>Medium</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>IDE integration</td>
+<td>High</td>
+<td>Medium</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>Multi-language</td>
+<td>Medium</td>
+<td>Low</td>
+<td>P3</td>
+</tr>
+<tr>
+<td>Plugin system</td>
+<td>High</td>
+<td>Medium</td>
+<td>P3</td>
+</tr>
+<tr>
+<td>AI assistance</td>
+<td>High</td>
+<td>Low</td>
+<td>P3</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="release-roadmap">🗺 Release Roadmap<a class="headerlink" href="#release-roadmap" title="Permanent link">&para;</a></h2>
+<h3 id="v02-configuration-templates">v0.2 - Configuration &amp; Templates<a class="headerlink" href="#v02-configuration-templates" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>.metametameta.toml</code> configuration</li>
+<li>Template system</li>
+<li>Diff/preview mode</li>
+</ul>
+<h3 id="v03-cicd-integration">v0.3 - CI/CD Integration<a class="headerlink" href="#v03-cicd-integration" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Official GitHub Action</li>
+<li>Pre-commit hook</li>
+<li>Configuration file support</li>
+</ul>
+<h3 id="v04-watch-interactive">v0.4 - Watch &amp; Interactive<a class="headerlink" href="#v04-watch-interactive" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Watch mode</li>
+<li>Interactive wizard</li>
+<li>Extended field support</li>
+</ul>
+<h3 id="v05-ecosystem">v0.5 - Ecosystem<a class="headerlink" href="#v05-ecosystem" title="Permanent link">&para;</a></h3>
+<ul>
+<li>PDM/Hatch support</li>
+<li>Multi-language converters</li>
+<li>Package index integration</li>
+</ul>
+<h3 id="v10-stable">v1.0 - Stable<a class="headerlink" href="#v10-stable" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Plugin system</li>
+<li>GraphQL API</li>
+<li>Full documentation</li>
+</ul>
+<hr />
+<p><em>This roadmap is a living document. Priorities may shift based on community feedback and usage patterns.</em></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../MAINTENANCE/" class="btn btn-neutral float-left" title="Maintenance"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../TODO/" class="btn btn-neutral float-right" title="TODO">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/matthewdeanmartin/metametameta" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../MAINTENANCE/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../TODO/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

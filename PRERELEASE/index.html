@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Matthew Dean Martin <matthewdeanmartin@gmail.com>" /><link rel="canonical" href="https://metametameta.readthedocs.io/PRERELEASE/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Pre-release - metametameta</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Pre-release";
+        var mkdocs_page_input_path = "PRERELEASE.md";
+        var mkdocs_page_url = "/PRERELEASE/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> metametameta
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../usage/">Usage</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING/">Contributing</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Pre-release</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#1-sync-code-metadata-readme-and-docs">1. Sync code, metadata, README, and docs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-make-sure-the-version-is-safe-to-publish">2. Make sure the version is safe to publish</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-verify-the-development-status-classifier">3. Verify the Development Status classifier</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#4-run-doc-checks-that-match-this-repo">4. Run doc checks that match this repo</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#5-run-the-project-checks">5. Run the project checks</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#6-final-human-review-before-publish">6. Final human review before publish</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../MAINTENANCE/">Maintenance</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../KILO_ROAD_MAP/">Roadmap</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../TODO/">TODO</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../CHANGELOG/">Changelog</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">metametameta</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Pre-release</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/matthewdeanmartin/metametameta/edit/main/docs/PRERELEASE.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="pre-release-checklist">Pre-release checklist<a class="headerlink" href="#pre-release-checklist" title="Permanent link">&para;</a></h1>
+<p>Use this before publishing <code>metametameta</code> to PyPI.</p>
+<h2 id="1-sync-code-metadata-readme-and-docs">1. Sync code, metadata, README, and docs<a class="headerlink" href="#1-sync-code-metadata-readme-and-docs" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Treat <code>pyproject.toml</code> as the canonical package metadata source.</li>
+<li>Regenerate or verify <code>metametameta/__about__.py</code> before release work:</li>
+</ul>
+<p><code>bash
+  uv run metametameta pep621 --source pyproject.toml --output metametameta/__about__.py
+  uv run metametameta sync-check</code></p>
+<ul>
+<li>Review <code>README.md</code>, <code>docs/usage.md</code>, <code>docs/installation.md</code>, and <code>docs/CONTRIBUTING.md</code> together so examples, supported commands, and packaging guidance agree.</li>
+<li>Confirm the CLI help still matches the docs:</li>
+</ul>
+<p><code>bash
+  uv run metametameta --help</code></p>
+<h2 id="2-make-sure-the-version-is-safe-to-publish">2. Make sure the version is safe to publish<a class="headerlink" href="#2-make-sure-the-version-is-safe-to-publish" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Check that all local version sources agree:</li>
+</ul>
+<p><code>bash
+  uv run metametameta sync-check</code></p>
+<ul>
+<li>Check that the local version is newer than the latest PyPI release:</li>
+</ul>
+<p><code>bash
+  uv run python scripts/prerelease_version_check.py</code></p>
+<ul>
+<li>To perform the normal patch release bump and refresh generated metadata:</li>
+</ul>
+<p><code>bash
+  make bump-patch
+  # or
+  just bump-patch</code></p>
+<h2 id="3-verify-the-development-status-classifier">3. Verify the Development Status classifier<a class="headerlink" href="#3-verify-the-development-status-classifier" title="Permanent link">&para;</a></h2>
+<p>This project already ships a <code>Development Status</code> classifier, so verify it instead of guessing:</p>
+<div class="codehilite"><pre><span></span><code>uvx<span class="w"> </span>--from<span class="w"> </span>troml-dev-status<span class="w"> </span>troml-dev-status<span class="w"> </span>verify<span class="w"> </span>.
+</code></pre></div>
+
+<h2 id="4-run-doc-checks-that-match-this-repo">4. Run doc checks that match this repo<a class="headerlink" href="#4-run-doc-checks-that-match-this-repo" title="Permanent link">&para;</a></h2>
+<p>This repo builds docs with MkDocs and Read the Docs, not <code>pdoc</code>.</p>
+<div class="codehilite"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>build<span class="w"> </span>--strict<span class="w"> </span>--clean
+uv<span class="w"> </span>run<span class="w"> </span>interrogate<span class="w"> </span>metametameta<span class="w"> </span>--verbose<span class="w"> </span>--fail-under<span class="w"> </span><span class="m">70</span>
+uv<span class="w"> </span>run<span class="w"> </span>pydoctest<span class="w"> </span>--config<span class="w"> </span>.pydoctest.json
+uvx<span class="w"> </span>--from<span class="w"> </span>pydoclint<span class="w"> </span>pydoclint<span class="w"> </span>--quiet<span class="w"> </span>--config<span class="o">=</span>pyproject.toml<span class="w"> </span>metametameta
+</code></pre></div>
+
+<p><code>pydoclint</code> is here to catch wrong docstrings, such as stale parameter or return sections. Missing docstrings are acceptable; incorrect documented signatures are not.</p>
+<h2 id="5-run-the-project-checks">5. Run the project checks<a class="headerlink" href="#5-run-the-project-checks" title="Permanent link">&para;</a></h2>
+<p>Full prerelease run:</p>
+<div class="codehilite"><pre><span></span><code>just<span class="w"> </span>prerelease
+<span class="c1"># or</span>
+make<span class="w"> </span>prerelease
+</code></pre></div>
+
+<p>Low-noise LLM-friendly run:</p>
+<div class="codehilite"><pre><span></span><code>just<span class="w"> </span>prerelease-llm
+<span class="c1"># or</span>
+make<span class="w"> </span>prerelease-llm
+</code></pre></div>
+
+<p>For a quieter test-only run:</p>
+<div class="codehilite"><pre><span></span><code>just<span class="w"> </span>test-llm
+<span class="c1"># or</span>
+make<span class="w"> </span>test-llm
+</code></pre></div>
+
+<h2 id="6-final-human-review-before-publish">6. Final human review before publish<a class="headerlink" href="#6-final-human-review-before-publish" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>CHANGELOG.md</code> reflects the release.</li>
+<li>README badges and links still resolve.</li>
+<li>The docs nav includes the release-facing pages you expect.</li>
+<li>The release version is greater than the last PyPI release.</li>
+<li><code>metametameta/__about__.py</code>, <code>pyproject.toml</code>, and the published docs all agree on the current state of the project.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../CONTRIBUTING/" class="btn btn-neutral float-left" title="Contributing"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../MAINTENANCE/" class="btn btn-neutral float-right" title="Maintenance">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/matthewdeanmartin/metametameta" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../CONTRIBUTING/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../MAINTENANCE/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
