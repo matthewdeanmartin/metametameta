@@ -165,8 +165,9 @@ make_docs:
 	$(VENV) mkdocs build --strict --clean
 
 check_md:
-	$(VENV) linkcheckMarkdown README.md
 	$(VENV) mdformat README.md docs/*.md
+	# Fails with 429 if it exists, 404 if it doesn't. Hmm...
+	# $(VENV) linkcheckMarkdown README.md
 	# This isn't avail on github actions atm
 	# $(VENV) markdownlint README.md --config .markdownlintrc
 
