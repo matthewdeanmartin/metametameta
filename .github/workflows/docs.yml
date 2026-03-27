@@ -5,6 +5,11 @@ on:
     paths:
       - README.md
       - docs/**
+      - mkdocs.yml
+      - .github/workflows/docs.yml
+
+permissions:
+  contents: write
 
 jobs:
   deploy:
@@ -12,12 +17,16 @@ jobs:
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
-        persist-credentials: false
+        persist-credentials: true
     - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
       with:
         python-version: '3.14'
     - name: Install dependencies
       run: |
         pip install mkdocs mkdocs-material mkdocstrings[python]
+    - name: Configure git for Pages deploy
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
     - name: Deploy
       run: mkdocs gh-deploy --force
