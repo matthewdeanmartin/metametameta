@@ -202,3 +202,13 @@ check_self:
 #audit:
 #	# $(VENV) python -m metametameta audit
 #	$(VENV) tool_audit single metametameta --version=">=2.0.0"
+
+
+.PHONY: lint-actions
+lint-actions:
+	@uv run zizmor . --config .zizmor.yml --min-severity informational --persona pedantic
+	@uv run check-jsonschema --schemafile https://json.schemastore.org/github-workflow.json .github/workflows/*.yml
+
+.PHONY: fix-actions
+fix-actions:
+	@uv run gha-update

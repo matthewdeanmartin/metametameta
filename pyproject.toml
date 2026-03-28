@@ -1,6 +1,6 @@
 [project]
 name = "metametameta"
-version = "0.1.7"
+version = "0.1.8"
 description = "Generate __about__.py with dunder meta."
 authors = [
     {name = "Matthew Martin", email = "matthewdeanmartin@gmail.com"},
@@ -37,6 +37,9 @@ dependencies = [
 [project.scripts]
 metametameta = 'metametameta.__main__:main'
 mmm = 'metametameta.__main__:main'
+
+[project.gui-scripts]
+metametameta-gui = 'metametameta.gui.app:launch_gui'
 
 [build-system]
 requires = ["hatchling"]
@@ -80,11 +83,9 @@ dev = [
     "tqdm; python_version >= '3.8'",
     "requests-cache; python_version >= '3.8'",
     "platformdirs; python_version >= '3.8'",
-
     # mpy
     "mypy; python_version >= '3.8'",
     "types-toml; python_version >= '3.8'",
-
     # reports
     "jinja2; python_version >= '3.8'",
     "bug-trail-core>=3.1.0; python_version >= '3.9'",
@@ -95,7 +96,6 @@ dev = [
     "hatch>=1.16.5; python_version >= '3.10'",
     "ruff>=0.12.0; python_version >= '3.8'",
     "pylint; python_version >= '3.8'",
-
     # testing tools
     "pytest; python_version >= '3.8'",
     "pytest-cov; python_version >= '3.8'",
@@ -107,7 +107,6 @@ dev = [
     "hypothesis[cli]; python_version >= '3.8'",
     "detect-test-pollution",
     "pytest-timeout>=2.4.0",
-
     # docs
     "interrogate>=1.5.0; python_version >= '3.8'",
     "pydoctest==0.2.1; python_version >= '3.8'",
@@ -116,18 +115,16 @@ dev = [
     "linkcheckmd>=1.4.0; python_version >= '3.8'",
     "codespell>=2.2.6; python_version >= '3.8'",
     "pyenchant>=3.2.2; python_version >= '3.8'",
-    "keepachangelog-manager>= 4.0.0; python_version >= '3.10'"
-
-# more testing (optional)
-# pytest-snapshot = { version = ">=0.9.0", python = ">=3.9" }
-# pytest-asyncio = { version = ">=0.23.2", python = ">=3.9" }
-# anyio = { version = ">=4.2.0", python = ">=3.9" }
-# trio = { version = ">=0.23.2", python = ">=3.9" }
-
-# contract (optional)
-# griffe = { version = ">=0.38.1", python = ">=3.9" }
-
-
+    # more testing (optional)
+    # pytest-snapshot = { version = ">=0.9.0", python = ">=3.9" }
+    # pytest-asyncio = { version = ">=0.23.2", python = ">=3.9" }
+    # anyio = { version = ">=4.2.0", python = ">=3.9" }
+    # trio = { version = ">=0.23.2", python = ">=3.9" }
+    # contract (optional)
+    # griffe = { version = ">=0.38.1", python = ">=3.9" }
+    "keepachangelog-manager>= 4.0.0; python_version >= '3.10'",
+    "zizmor>=1.2.0",
+    "check-jsonschema>=0.30.0",
 ]
 
 [tool.black]

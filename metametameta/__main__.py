@@ -217,6 +217,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     parser.add_argument("--verbose", action="store_true", help="verbose output")
     parser.add_argument("--quiet", action="store_true", help="minimal output")
+    parser.add_argument("--gui", action="store_true", help="launch the graphical interface")
 
     subparsers = parser.add_subparsers(help="sub-command help", dest="source")
 
@@ -297,7 +298,17 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser_sync_check.add_argument("--output", type=str, default="__about__.py", help="The metadata file to check")
     parser_sync_check.set_defaults(func=handle_sync_check)
 
+    # Subparser: gui
+    parser_gui = subparsers.add_parser("gui", help="Launch the graphical interface")
+    parser_gui.set_defaults(func=None, _gui=True)
+
     args = parser.parse_args(argv)
+
+    if getattr(args, "gui", False) or getattr(args, "_gui", False):
+        from metametameta.gui.app import launch_gui
+
+        launch_gui()
+        return 0
 
     if totalhelp and getattr(args, "totalhelp", False):
         doc = totalhelp.full_help_from_parser(parser, fmt=getattr(args, "format", "text"))

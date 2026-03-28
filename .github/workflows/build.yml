@@ -2,31 +2,36 @@ name: Build and Test
 
 on: [push]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
+    name: Build and Test
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         persist-credentials: false
-    - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+
+    - uses: hynek/setup-cached-uv@4300ec2180bc77d705e626a34e381b81a4772c51 # v2.5.0
+
+    - name: Using Python 3.14
+      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
       with:
         python-version: '3.14'
-    - name: Install uv and pipx
-      run: |
-        pip install uv && pip install pipx
-
-    - name: Install global dependencies
-      run: |
-        pipx install isort && pipx install black && pipx install bandit && \
-        pipx install pylint && pipx install pre-commit && pipx install uv
 
     - name: Install Dependencies
-      run: uv sync
+      run: uv sync --all-extras
 
     - name: Run Makefile
       run: make check
+
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 # v6.0.0
       with:
