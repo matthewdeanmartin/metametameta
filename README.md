@@ -21,11 +21,12 @@ pipx install metametameta
 
 Defaults to putting an `__about__.py` file in the module directory, assuming your package name is your main module name.
 
-Make best guess what your metadata source is. Give up if there are two possibilities.
+Make best guess what your metadata source is. `auto` mode gives up if there are two possibilities.
 
 ```bash
 metametameta auto 
 ```
+Try out the GUI, `mmm gui` or `metametameta gui` to help with feature discoverability.
 
 Run on CI server to see if your about file is out of sync
 
