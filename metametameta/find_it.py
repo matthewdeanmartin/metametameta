@@ -1,3 +1,5 @@
+"""Find metadata in a Python module/package."""
+
 from __future__ import annotations
 
 import argparse
@@ -60,6 +62,7 @@ def find_metadata_in_module(module_path: Path) -> dict[str, dict[str, Any]]:
 
 
 def main(argv: list[str] | None = None) -> None:
+    """Find metadata in a Python module/package."""
     parser = argparse.ArgumentParser(description="Find metadata in a Python module/package.")
     parser.add_argument("module", type=str, help="The name of the module/package to inspect.")
     args = parser.parse_args(argv)

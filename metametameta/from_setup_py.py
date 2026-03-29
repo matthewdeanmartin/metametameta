@@ -20,6 +20,7 @@ class SetupKwargsVisitor(ast.NodeVisitor):
     """An AST visitor to find keyword arguments in a setup() call."""
 
     def __init__(self) -> None:
+        """Initialize the AST visitor to find keyword arguments in a setup() call."""
         self.kwargs: dict[str, Any] = {}
         self._found = False
 

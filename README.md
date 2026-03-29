@@ -26,6 +26,7 @@ Make best guess what your metadata source is. `auto` mode gives up if there are 
 ```bash
 metametameta auto 
 ```
+
 Try out the GUI, `mmm gui` or `metametameta gui` to help with feature discoverability.
 
 Run on CI server to see if your about file is out of sync

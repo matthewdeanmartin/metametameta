@@ -42,6 +42,12 @@ class _BackgroundRunner:
     """Run functions off the UI thread, post results back via root.after()."""
 
     def __init__(self, root: tk.Tk) -> None:
+        """
+        Initialize the background runner.
+
+        Args:
+            root: The root Tkinter window to use for scheduling callbacks.
+        """
         self._root = root
 
     def run(
@@ -52,7 +58,17 @@ class _BackgroundRunner:
         on_success: Callable[..., Any] | None = None,
         on_error: Callable[[Exception], Any] | None = None,
     ) -> None:
+        """
+        Run a function in a background thread.
+
+        Args:
+            func: The function to run.
+            args: Arguments to pass to the function.
+            on_success: Callback to run on success (in the UI thread).
+            on_error: Callback to run on error (in the UI thread).
+        """
         def _worker() -> None:
+            """Internal worker function to execute the task and handle callbacks."""
             try:
                 result = func(*args)
                 if on_success:
@@ -199,7 +215,17 @@ def _make_entry_row(parent: tk.Widget, label: str, default: str = "") -> tuple[t
 
 
 class _BasePanel(tk.Frame):
+    """Base class for all GUI panels."""
+
     def __init__(self, parent: tk.Widget, runner: _BackgroundRunner, status_var: tk.StringVar) -> None:
+        """
+        Initialize the base panel.
+
+        Args:
+            parent: The parent widget.
+            runner: The background runner instance.
+            status_var: The status bar string variable.
+        """
         super().__init__(parent, bg=_CLR_BG)
         self._runner = runner
         self._status = status_var
@@ -212,6 +238,14 @@ class DashboardPanel(_BasePanel):
     """Overview: auto-detect source and show current project metadata."""
 
     def __init__(self, parent: tk.Widget, runner: _BackgroundRunner, status_var: tk.StringVar) -> None:
+        """
+        Initialize the dashboard panel.
+
+        Args:
+            parent: The parent widget.
+            runner: The background runner instance.
+            status_var: The status bar string variable.
+        """
         super().__init__(parent, runner, status_var)
         _make_heading(self, "Dashboard")
         _make_label(self, "Detect your project's metadata source and preview what will be generated.")
@@ -230,11 +264,13 @@ class DashboardPanel(_BasePanel):
         self.after(50, self._detect)
 
     def _browse(self) -> None:
+        """Open a directory browser and update the project root variable."""
         d = filedialog.askdirectory(initialdir=self._dir_var.get())
         if d:
             self._dir_var.set(d)
 
     def _detect(self) -> None:
+        """Initiate auto-detection of the metadata source in the background."""
         self._status.set("Detecting metadata source...")
         self._runner.run(
             self._fetch,
@@ -245,6 +281,15 @@ class DashboardPanel(_BasePanel):
 
     @staticmethod
     def _fetch(project_root_str: str) -> dict[str, Any]:
+        """
+        Fetch metadata from the detected source.
+
+        Args:
+            project_root_str: Path to the project root directory.
+
+        Returns:
+            Dictionary containing the detected source type and metadata.
+        """
         from metametameta.autodetect import detect_source
 
         root = Path(project_root_str)
@@ -270,6 +315,12 @@ class DashboardPanel(_BasePanel):
         return {"source_type": source_type, "metadata": metadata}
 
     def _display(self, result: dict[str, Any]) -> None:
+        """
+        Display the detection results in the output area.
+
+        Args:
+            result: Dictionary containing the source type and metadata.
+        """
         source_type = result["source_type"]
         metadata = result["metadata"]
         lines = [f"Detected source: {source_type}", ""]
@@ -279,6 +330,12 @@ class DashboardPanel(_BasePanel):
         self._status.set(f"Detected: {source_type}")
 
     def _on_error(self, exc: Exception) -> None:
+        """
+        Handle errors during metadata detection.
+
+        Args:
+            exc: The exception encountered.
+        """
         _output_set(self._output, f"Error: {exc}")
         self._status.set("Detection failed")
 
