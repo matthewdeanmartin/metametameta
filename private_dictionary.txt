@@ -53,4 +53,11 @@ src
 Autodetects
 CWD
 myprog
+Tkinter
+func
+UI
+treeview
+colour
+stringvar
+scrollbar
 
