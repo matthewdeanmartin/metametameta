@@ -13,7 +13,7 @@ from metametameta.general import any_metadict, merge_sections, validate_about_fi
 
 logger = logging.getLogger(__name__)
 
-_SKIPPED_PREFIXES = (
+SKIPPED_PREFIXES = (
     "-r",
     "--requirement",
     "-c",
@@ -27,44 +27,44 @@ _SKIPPED_PREFIXES = (
 )
 
 
-def _strip_matching_quotes(value: str) -> str:
+def strip_matching_quotes(value: str) -> str:
     """Strip matching single or double quotes from a string."""
     if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
         return value[1:-1]
     return value
 
 
-def _strip_inline_comment(line: str) -> str:
+def strip_inline_comment(line: str) -> str:
     """Strip trailing comments while preserving URL fragments like #egg."""
     if " #" in line:
         return line.split(" #", maxsplit=1)[0].rstrip()
     return line.rstrip()
 
 
-def _parse_requirement_line(line: str) -> str | None:
+def parse_requirement_line(line: str) -> str | None:
     """Parse a single requirements.txt line into a dependency string."""
     stripped = line.strip()
     if not stripped or stripped.startswith("#"):
         return None
 
-    if stripped.startswith(_SKIPPED_PREFIXES):
+    if stripped.startswith(SKIPPED_PREFIXES):
         return None
 
     if stripped.startswith(("-e ", "--editable ")):
         parts = stripped.split(maxsplit=1)
         stripped = parts[1].strip() if len(parts) == 2 else ""
 
-    stripped = _strip_inline_comment(stripped)
+    stripped = strip_inline_comment(stripped)
     if not stripped:
         return None
 
     if "#egg=" in stripped:
-        return _strip_matching_quotes(stripped.split("#egg=", maxsplit=1)[1].strip())
+        return strip_matching_quotes(stripped.split("#egg=", maxsplit=1)[1].strip())
 
-    return _strip_matching_quotes(stripped)
+    return strip_matching_quotes(stripped)
 
 
-def _infer_project_name(source_path: Path) -> str:
+def infer_project_name(source_path: Path) -> str:
     """Infer a project name from the requirements file location."""
     return source_path.resolve().parent.name
 
@@ -83,11 +83,11 @@ def read_requirements_txt_metadata(source: str = "requirements.txt", name: str =
     source_path = Path(source)
     requirements = []
     for line in source_path.read_text(encoding="utf-8").splitlines():
-        parsed = _parse_requirement_line(line)
+        parsed = parse_requirement_line(line)
         if parsed:
             requirements.append(parsed)
 
-    project_name = name or _infer_project_name(source_path)
+    project_name = name or infer_project_name(source_path)
     metadata: dict[str, Any] = {"name": project_name}
     if requirements:
         metadata["dependencies"] = requirements

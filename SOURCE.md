@@ -144,7 +144,7 @@ logger = logging.getLogger(__name__)
 # --- Private Helper Functions ---
 
 
-def _find_existing_package_dir(base_path: Path, package_name: str) -> Path | None:
+def find_existing_package_dir(base_path: Path, package_name: str) -> Path | None:
     """
     Search for an existing package directory using common layouts.
 
@@ -178,7 +178,7 @@ def _find_existing_package_dir(base_path: Path, package_name: str) -> Path | Non
     return None
 
 
-def _determine_target_dir(base_path: Path, package_name: str) -> Path:
+def determine_target_dir(base_path: Path, package_name: str) -> Path:
     """
     Determines the ideal target directory for a package.
 
@@ -186,7 +186,7 @@ def _determine_target_dir(base_path: Path, package_name: str) -> Path:
     the best location to create one (e.g., inside 'src/' if it exists).
     """
     # 1. Try to find an existing directory first.
-    existing_dir = _find_existing_package_dir(base_path, package_name)
+    existing_dir = find_existing_package_dir(base_path, package_name)
     if existing_dir:
         return existing_dir
 
@@ -227,7 +227,7 @@ def write_to_package_dir(
     Returns:
         The full path to the file that was written as a string.
     """
-    target_dir = _determine_target_dir(project_root, package_dir_name)
+    target_dir = determine_target_dir(project_root, package_dir_name)
     output_path = target_dir / output_filename
 
     try:
@@ -345,6 +345,8 @@ def get_meta(module_file: Any) -> dict[str, str]:
 ```
 ## File: find_it.py
 ```python
+"""Find metadata in a Python module/package."""
+
 from __future__ import annotations
 
 import argparse
@@ -407,6 +409,7 @@ def find_metadata_in_module(module_path: Path) -> dict[str, dict[str, Any]]:
 
 
 def main(argv: list[str] | None = None) -> None:
+    """Find metadata in a Python module/package."""
     parser = argparse.ArgumentParser(description="Find metadata in a Python module/package.")
     parser.add_argument("module", type=str, help="The name of the module/package to inspect.")
     args = parser.parse_args(argv)
@@ -446,21 +449,21 @@ from metametameta.general import any_metadict, merge_sections, validate_about_fi
 logger = logging.getLogger(__name__)
 
 
-def _strip_matching_quotes(value: str) -> str:
+def strip_matching_quotes(value: str) -> str:
     """Strip matching single or double quotes from a string."""
     if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
         return value[1:-1]
     return value
 
 
-def _strip_comment(value: str) -> str:
+def strip_comment(value: str) -> str:
     """Strip YAML-style comments from a line."""
     if " #" in value:
         return value.split(" #", maxsplit=1)[0].rstrip()
     return value.rstrip()
 
 
-def _infer_project_name(source_path: Path) -> str:
+def infer_project_name(source_path: Path) -> str:
     """Infer a project name from the recipe location."""
     parent = source_path.resolve().parent
     if parent.name == "conda" and parent.parent.name:
@@ -485,7 +488,7 @@ def read_conda_meta_metadata(source: str = "conda/meta.yaml", name: str = "") ->
     current_subsection = ""
 
     for raw_line in source_path.read_text(encoding="utf-8").splitlines():
-        without_comment = _strip_comment(raw_line)
+        without_comment = strip_comment(raw_line)
         stripped = without_comment.strip()
         if not stripped or stripped.startswith("{%"):
             continue
@@ -502,7 +505,7 @@ def read_conda_meta_metadata(source: str = "conda/meta.yaml", name: str = "") ->
             continue
 
         if stripped.startswith("- "):
-            item = _strip_matching_quotes(stripped[2:].strip())
+            item = strip_matching_quotes(stripped[2:].strip())
             if current_section == "requirements" and current_subsection:
                 parsed["requirements"].setdefault(current_subsection, []).append(item)
             continue
@@ -511,7 +514,7 @@ def read_conda_meta_metadata(source: str = "conda/meta.yaml", name: str = "") ->
             continue
 
         key, value = stripped.split(":", maxsplit=1)
-        cleaned_value = _strip_matching_quotes(value.strip())
+        cleaned_value = strip_matching_quotes(value.strip())
         if current_section in {"package", "about"}:
             parsed[current_section][key.strip()] = cleaned_value
 
@@ -519,7 +522,7 @@ def read_conda_meta_metadata(source: str = "conda/meta.yaml", name: str = "") ->
     about_data = parsed.get("about", {})
     run_dependencies = parsed.get("requirements", {}).get("run", [])
 
-    project_name = name or package_data.get("name") or _infer_project_name(source_path)
+    project_name = name or package_data.get("name") or infer_project_name(source_path)
 
     metadata: dict[str, Any] = {"name": project_name}
     if package_data.get("version"):
@@ -633,7 +636,7 @@ def generate_from_importlib(name: str, source: str = "", output: str = "__about_
         if validate:
             validate_about_file(file_path, pkg_metadata)
         return file_path
-    message = "No [project] section found in pyproject.toml."
+    message = f"No metadata found for package '{name}' via importlib."
     logger.debug(message)
     return message
 
@@ -804,7 +807,7 @@ def generate_from_poetry(
             for package_data in packages_data_list:
                 include_part = None
                 from_part = None  # subfolder(s)
-                _format_part = None  # can be dist, i.e not a folder
+
                 for key, value in package_data.items():
                     if key == "include":
                         include_part = value
@@ -865,7 +868,7 @@ from metametameta.general import any_metadict, merge_sections, validate_about_fi
 
 logger = logging.getLogger(__name__)
 
-_SKIPPED_PREFIXES = (
+SKIPPED_PREFIXES = (
     "-r",
     "--requirement",
     "-c",
@@ -879,44 +882,44 @@ _SKIPPED_PREFIXES = (
 )
 
 
-def _strip_matching_quotes(value: str) -> str:
+def strip_matching_quotes(value: str) -> str:
     """Strip matching single or double quotes from a string."""
     if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
         return value[1:-1]
     return value
 
 
-def _strip_inline_comment(line: str) -> str:
+def strip_inline_comment(line: str) -> str:
     """Strip trailing comments while preserving URL fragments like #egg."""
     if " #" in line:
         return line.split(" #", maxsplit=1)[0].rstrip()
     return line.rstrip()
 
 
-def _parse_requirement_line(line: str) -> str | None:
+def parse_requirement_line(line: str) -> str | None:
     """Parse a single requirements.txt line into a dependency string."""
     stripped = line.strip()
     if not stripped or stripped.startswith("#"):
         return None
 
-    if stripped.startswith(_SKIPPED_PREFIXES):
+    if stripped.startswith(SKIPPED_PREFIXES):
         return None
 
     if stripped.startswith(("-e ", "--editable ")):
         parts = stripped.split(maxsplit=1)
         stripped = parts[1].strip() if len(parts) == 2 else ""
 
-    stripped = _strip_inline_comment(stripped)
+    stripped = strip_inline_comment(stripped)
     if not stripped:
         return None
 
     if "#egg=" in stripped:
-        return _strip_matching_quotes(stripped.split("#egg=", maxsplit=1)[1].strip())
+        return strip_matching_quotes(stripped.split("#egg=", maxsplit=1)[1].strip())
 
-    return _strip_matching_quotes(stripped)
+    return strip_matching_quotes(stripped)
 
 
-def _infer_project_name(source_path: Path) -> str:
+def infer_project_name(source_path: Path) -> str:
     """Infer a project name from the requirements file location."""
     return source_path.resolve().parent.name
 
@@ -935,11 +938,11 @@ def read_requirements_txt_metadata(source: str = "requirements.txt", name: str =
     source_path = Path(source)
     requirements = []
     for line in source_path.read_text(encoding="utf-8").splitlines():
-        parsed = _parse_requirement_line(line)
+        parsed = parse_requirement_line(line)
         if parsed:
             requirements.append(parsed)
 
-    project_name = name or _infer_project_name(source_path)
+    project_name = name or infer_project_name(source_path)
     metadata: dict[str, Any] = {"name": project_name}
     if requirements:
         metadata["dependencies"] = requirements
@@ -1092,8 +1095,9 @@ class SetupKwargsVisitor(ast.NodeVisitor):
     """An AST visitor to find keyword arguments in a setup() call."""
 
     def __init__(self) -> None:
+        """Initialize the AST visitor to find keyword arguments in a setup() call."""
         self.kwargs: dict[str, Any] = {}
-        self._found = False
+        self.found = False
 
     def visit_Call(self, node: ast.Call) -> None:
         """
@@ -1103,7 +1107,7 @@ class SetupKwargsVisitor(ast.NodeVisitor):
         Only captures the first valid setup() call found.
         """
         # Only capture the first valid setup() call we find.
-        if self._found:
+        if self.found:
             return
 
         func_is_setup = False
@@ -1124,7 +1128,7 @@ class SetupKwargsVisitor(ast.NodeVisitor):
                         logger.warning(
                             f"Could not statically parse value for '{keyword.arg}' in setup.py. Only literals (strings, numbers, lists, etc.) are supported."
                         )
-            self._found = True
+            self.found = True
 
         # Continue traversing to find the call if it's nested
         self.generic_visit(node)
@@ -1209,7 +1213,7 @@ from typing import Any
 logger = logging.getLogger(__name__)
 
 
-def _get_all_primitive_values(data: Any) -> Iterable[str]:
+def get_all_primitive_values(data: Any) -> Iterable[str]:
     """Finds all top level primitive values (str, int, float) in a nested structure."""
     if isinstance(data, str):
         yield data
@@ -1217,7 +1221,7 @@ def _get_all_primitive_values(data: Any) -> Iterable[str]:
         yield str(data)
     elif isinstance(data, (list, tuple, set)):
         for item in data:
-            yield from _get_all_primitive_values(item)
+            yield from get_all_primitive_values(item)
 
 
 def validate_about_file(file_path: str, metadata: dict[str, Any]) -> None:
@@ -1251,7 +1255,7 @@ def validate_about_file(file_path: str, metadata: dict[str, Any]) -> None:
     metadata_to_validate.pop("authors", None)
     metadata_to_validate.pop("name", None)  # 'name' is transformed to '__title__'
 
-    primitive_values = set(_get_all_primitive_values(metadata_to_validate))
+    primitive_values = set(get_all_primitive_values(metadata_to_validate))
 
     for value in primitive_values:
         if value not in content:
@@ -1437,7 +1441,7 @@ def generate_config(level: str = "DEBUG") -> dict[str, Any]:
     """
     config: dict[str, Any] = {
         "version": 1,
-        "disable_existing_loggers": True,
+        "disable_existing_loggers": False,
         "formatters": {
             "standard": {"format": "[%(levelname)s] %(name)s: %(message)s"},
             "colored": {
@@ -1498,14 +1502,14 @@ KEY_MAP = {
 }
 
 
-def _is_supported_sync_value(value: Any) -> bool:
+def is_supported_sync_value(value: Any) -> bool:
     """Return True for metadata values that can be compared for sync."""
     if isinstance(value, str):
         return True
     return isinstance(value, list) and all(isinstance(item, str) for item in value)
 
 
-def _normalize_sync_value(value: Any) -> Any:
+def normalize_sync_value(value: Any) -> Any:
     """Normalize supported metadata values for comparison."""
     if isinstance(value, str):
         return value.strip()
@@ -1538,16 +1542,26 @@ def read_about_file_ast(file_path: Path) -> dict[str, Any]:
     metadata = {}
 
     for node in ast.walk(tree):
-        if isinstance(node, ast.Assign):
-            for target in node.targets:
-                if isinstance(target, ast.Name) and target.id.startswith("__"):
+        if isinstance(node, ast.AnnAssign):
+            target = node.target
+            value_node = node.value
+            if isinstance(target, ast.Name) and target.id.startswith("__") and value_node is not None:
+                try:
+                    value = ast.literal_eval(value_node)
+                    if is_supported_sync_value(value):
+                        metadata[target.id] = value
+                except ValueError:
+                    logger.debug(f"Skipping non-literal annotation-assignment for {target.id}")
+        elif isinstance(node, ast.Assign):
+            for assign_target in node.targets:
+                if isinstance(assign_target, ast.Name) and assign_target.id.startswith("__"):
                     try:
                         value = ast.literal_eval(node.value)
-                        if _is_supported_sync_value(value):
-                            metadata[target.id] = value
+                        if is_supported_sync_value(value):
+                            metadata[assign_target.id] = value
                     except ValueError:
                         # Ignore values that aren't simple literals (e.g., function calls)
-                        logger.debug(f"Skipping non-literal assignment for {target.id}")
+                        logger.debug(f"Skipping non-literal assignment for {assign_target.id}")
     return metadata
 
 
@@ -1578,13 +1592,13 @@ def check_sync(source_metadata: dict[str, Any], about_path: Path) -> list[str]:
             source_value = normalized_source.get(source_key)
             about_value = about_metadata.get(about_key)
 
-            if not _is_supported_sync_value(source_value):
+            if not is_supported_sync_value(source_value):
                 logger.debug(f"Skipping sync check for non-string source key '{source_key}'")
                 continue
 
             if about_value is None:
                 mismatches.append(f"'{about_key}' is missing from {about_path.name}")
-            elif _normalize_sync_value(source_value) != _normalize_sync_value(about_value):
+            elif normalize_sync_value(source_value) != normalize_sync_value(about_value):
                 mismatch_msg = (
                     f"'{about_key}' is out of sync. Source: '{source_value}', {about_path.name}: '{about_value}'"
                 )
@@ -1610,7 +1624,7 @@ __all__ = [
 ]
 
 __title__ = "metametameta"
-__version__ = "0.1.7"
+__version__ = "0.1.9"
 __description__ = "Generate __about__.py with dunder meta."
 __credits__ = [{"name": "Matthew Martin", "email": "matthewdeanmartin@gmail.com"}]
 __readme__ = "README.md"
@@ -1640,7 +1654,7 @@ from rich_argparse import RichHelpFormatter
 
 from metametameta import __about__, logging_config
 from metametameta.autodetect import detect_source
-from metametameta.filesystem import _find_existing_package_dir
+from metametameta.filesystem import find_existing_package_dir
 from metametameta.from_conda_meta import generate_from_conda_meta, read_conda_meta_metadata
 from metametameta.from_importlib import generate_from_importlib
 from metametameta.from_pep621 import generate_from_pep621, read_pep621_metadata
@@ -1796,12 +1810,14 @@ def handle_sync_check(args: argparse.Namespace) -> None:
             sys.exit(1)
 
         # Find the __about__.py file
-        package_dir = _find_existing_package_dir(project_root, project_name)
-        if not package_dir:
-            print(f"❌ Error: Could not find package directory for '{project_name}'.", file=sys.stderr)
-            sys.exit(1)
-
-        about_path = package_dir / args.output
+        if args.output != "__about__.py" and ("/" in args.output or "\\" in args.output):
+            about_path = project_root / args.output
+        else:
+            package_dir = find_existing_package_dir(project_root, project_name)
+            if not package_dir:
+                print(f"❌ Error: Could not find package directory for '{project_name}'.", file=sys.stderr)
+                sys.exit(1)
+            about_path = package_dir / args.output
 
         # Perform the sync check
         mismatches = check_sync(source_metadata, about_path)
@@ -1923,11 +1939,11 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     # Subparser: gui
     parser_gui = subparsers.add_parser("gui", help="Launch the graphical interface")
-    parser_gui.set_defaults(func=None, _gui=True)
+    parser_gui.set_defaults(func=None, gui_requested=True)
 
     args = parser.parse_args(argv)
 
-    if getattr(args, "gui", False) or getattr(args, "_gui", False):
+    if getattr(args, "gui", False) or getattr(args, "gui_requested", False):
         from metametameta.gui.app import launch_gui
 
         launch_gui()
@@ -1957,7 +1973,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main([]))
+    sys.exit(main())
 ```
 ## File: gui\app.py
 ```python
@@ -1980,32 +1996,38 @@ from typing import Any
 
 # ── Colour palette (Catppuccin Mocha inspired) ──────────────
 
-_CLR_OK = "#22c55e"  # green  -- valid / success
-_CLR_WARN = "#eab308"  # yellow -- warnings
-_CLR_ERR = "#ef4444"  # red    -- errors
-_CLR_DIM = "#9ca3af"  # grey   -- secondary text
-_CLR_BG = "#1e1e2e"  # dark   -- main background
-_CLR_BG_ALT = "#252536"  # slightly lighter -- text widgets
-_CLR_FG = "#cdd6f4"  # light  -- primary text
-_CLR_ACCENT = "#89b4fa"  # blue   -- headings, active sidebar
-_CLR_SIDEBAR = "#181825"  # darkest -- sidebar background
-_CLR_BTN = "#313244"  # button background
-_CLR_BTN_ACTIVE = "#45475a"  # button hover
+CLR_OK = "#22c55e"  # green  -- valid / success
+CLR_WARN = "#eab308"  # yellow -- warnings
+CLR_ERR = "#ef4444"  # red    -- errors
+CLR_DIM = "#9ca3af"  # grey   -- secondary text
+CLR_BG = "#1e1e2e"  # dark   -- main background
+CLR_BG_ALT = "#252536"  # slightly lighter -- text widgets
+CLR_FG = "#cdd6f4"  # light  -- primary text
+CLR_ACCENT = "#89b4fa"  # blue   -- headings, active sidebar
+CLR_SIDEBAR = "#181825"  # darkest -- sidebar background
+CLR_BTN = "#313244"  # button background
+CLR_BTN_ACTIVE = "#45475a"  # button hover
 
-_FONT_UI = ("Segoe UI", 10)
-_FONT_UI_BOLD = ("Segoe UI", 10, "bold")
-_FONT_HEADING = ("Segoe UI", 13, "bold")
-_FONT_MONO = ("Consolas", 10)
-_FONT_MONO_SMALL = ("Consolas", 9)
+FONT_UI = ("Segoe UI", 10)
+FONT_UI_BOLD = ("Segoe UI", 10, "bold")
+FONT_HEADING = ("Segoe UI", 13, "bold")
+FONT_MONO = ("Consolas", 10)
+FONT_MONO_SMALL = ("Consolas", 9)
 
 # ── Background runner ───────────────────────────────────────
 
 
-class _BackgroundRunner:
+class BackgroundRunner:
     """Run functions off the UI thread, post results back via root.after()."""
 
     def __init__(self, root: tk.Tk) -> None:
-        self._root = root
+        """
+        Initialize the background runner.
+
+        Args:
+            root: The root Tkinter window to use for scheduling callbacks.
+        """
+        self.root = root
 
     def run(
         self,
@@ -2015,43 +2037,54 @@ class _BackgroundRunner:
         on_success: Callable[..., Any] | None = None,
         on_error: Callable[[Exception], Any] | None = None,
     ) -> None:
-        def _worker() -> None:
+        """
+        Run a function in a background thread.
+
+        Args:
+            func: The function to run.
+            args: Arguments to pass to the function.
+            on_success: Callback to run on success (in the UI thread).
+            on_error: Callback to run on error (in the UI thread).
+        """
+
+        def worker() -> None:
+            """Internal worker function to execute the task and handle callbacks."""
             try:
                 result = func(*args)
                 if on_success:
-                    self._root.after(0, on_success, result)
+                    self.root.after(0, on_success, result)
             except Exception as exc:
                 if on_error:
-                    self._root.after(0, on_error, exc)
+                    self.root.after(0, on_error, exc)
 
-        t = threading.Thread(target=_worker, daemon=True)
+        t = threading.Thread(target=worker, daemon=True)
         t.start()
 
 
 # ── Reusable widget helpers ─────────────────────────────────
 
 
-def _make_tree(parent: tk.Widget, columns: list[str], height: int = 12) -> ttk.Treeview:
+def make_tree(parent: tk.Widget, columns: list[str], height: int = 12) -> ttk.Treeview:
     """Create a themed treeview with scrollbar and colour tags."""
     style = ttk.Style()
     style.theme_use("clam")
     style.configure(
         "Path.Treeview",
-        background=_CLR_BG_ALT,
-        foreground=_CLR_FG,
-        fieldbackground=_CLR_BG_ALT,
-        font=_FONT_MONO,
+        background=CLR_BG_ALT,
+        foreground=CLR_FG,
+        fieldbackground=CLR_BG_ALT,
+        font=FONT_MONO,
         rowheight=22,
     )
     style.configure(
         "Path.Treeview.Heading",
-        background=_CLR_BTN,
-        foreground=_CLR_FG,
-        font=_FONT_UI_BOLD,
+        background=CLR_BTN,
+        foreground=CLR_FG,
+        font=FONT_UI_BOLD,
     )
-    style.map("Path.Treeview", background=[("selected", _CLR_BTN_ACTIVE)])
+    style.map("Path.Treeview", background=[("selected", CLR_BTN_ACTIVE)])
 
-    frame = tk.Frame(parent, bg=_CLR_BG)
+    frame = tk.Frame(parent, bg=CLR_BG)
     tree = ttk.Treeview(frame, columns=columns, show="headings", height=height, style="Path.Treeview")
     for col in columns:
         tree.heading(col, text=col)
@@ -2064,23 +2097,23 @@ def _make_tree(parent: tk.Widget, columns: list[str], height: int = 12) -> ttk.T
     scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
     frame.pack(fill=tk.BOTH, expand=True, padx=8, pady=4)
 
-    tree.tag_configure("ok", foreground=_CLR_OK)
-    tree.tag_configure("warn", foreground=_CLR_WARN)
-    tree.tag_configure("error", foreground=_CLR_ERR)
-    tree.tag_configure("dim", foreground=_CLR_DIM)
+    tree.tag_configure("ok", foreground=CLR_OK)
+    tree.tag_configure("warn", foreground=CLR_WARN)
+    tree.tag_configure("error", foreground=CLR_ERR)
+    tree.tag_configure("dim", foreground=CLR_DIM)
     return tree
 
 
-def _make_output(parent: tk.Widget, height: int = 15) -> tk.Text:
+def make_output(parent: tk.Widget, height: int = 15) -> tk.Text:
     """Read-only scrolled text area for output display."""
-    frame = tk.Frame(parent, bg=_CLR_BG)
+    frame = tk.Frame(parent, bg=CLR_BG)
     text = tk.Text(
         frame,
         height=height,
-        bg=_CLR_BG_ALT,
-        fg=_CLR_FG,
-        insertbackground=_CLR_FG,
-        font=_FONT_MONO,
+        bg=CLR_BG_ALT,
+        fg=CLR_FG,
+        insertbackground=CLR_FG,
+        font=FONT_MONO,
         wrap=tk.WORD,
         relief=tk.FLAT,
         padx=8,
@@ -2096,7 +2129,7 @@ def _make_output(parent: tk.Widget, height: int = 15) -> tk.Text:
     return text
 
 
-def _output_set(text_widget: tk.Text, content: str) -> None:
+def output_set(text_widget: tk.Text, content: str) -> None:
     """Replace text content (handles enable/disable state)."""
     text_widget.configure(state=tk.NORMAL)
     text_widget.delete("1.0", tk.END)
@@ -2104,23 +2137,23 @@ def _output_set(text_widget: tk.Text, content: str) -> None:
     text_widget.configure(state=tk.DISABLED)
 
 
-def _make_toolbar(parent: tk.Widget) -> tk.Frame:
+def make_toolbar(parent: tk.Widget) -> tk.Frame:
     """Horizontal button bar."""
-    toolbar = tk.Frame(parent, bg=_CLR_BG)
+    toolbar = tk.Frame(parent, bg=CLR_BG)
     toolbar.pack(fill=tk.X, padx=8, pady=(4, 8))
     return toolbar
 
 
-def _toolbar_btn(toolbar: tk.Frame, text: str, command: Callable[[], Any]) -> tk.Button:
+def toolbar_btn(toolbar: tk.Frame, text: str, command: Callable[[], Any]) -> tk.Button:
     """Themed button inside a toolbar."""
     btn = tk.Button(
         toolbar,
         text=text,
-        bg=_CLR_BTN,
-        fg=_CLR_FG,
-        activebackground=_CLR_BTN_ACTIVE,
-        activeforeground=_CLR_FG,
-        font=_FONT_UI,
+        bg=CLR_BTN,
+        fg=CLR_FG,
+        activebackground=CLR_BTN_ACTIVE,
+        activeforeground=CLR_FG,
+        font=FONT_UI,
         relief=tk.FLAT,
         padx=12,
         pady=4,
@@ -2131,28 +2164,28 @@ def _toolbar_btn(toolbar: tk.Frame, text: str, command: Callable[[], Any]) -> tk
     return btn
 
 
-def _make_heading(parent: tk.Widget, text: str) -> tk.Label:
+def make_heading(parent: tk.Widget, text: str) -> tk.Label:
     """Section heading label."""
-    lbl = tk.Label(parent, text=text, bg=_CLR_BG, fg=_CLR_ACCENT, font=_FONT_HEADING, anchor=tk.W)
+    lbl = tk.Label(parent, text=text, bg=CLR_BG, fg=CLR_ACCENT, font=FONT_HEADING, anchor=tk.W)
     lbl.pack(fill=tk.X, padx=8, pady=(12, 4))
     return lbl
 
 
-def _make_label(parent: tk.Widget, text: str) -> tk.Label:
+def make_label(parent: tk.Widget, text: str) -> tk.Label:
     """Normal text label."""
-    lbl = tk.Label(parent, text=text, bg=_CLR_BG, fg=_CLR_FG, font=_FONT_UI, anchor=tk.W)
+    lbl = tk.Label(parent, text=text, bg=CLR_BG, fg=CLR_FG, font=FONT_UI, anchor=tk.W)
     lbl.pack(fill=tk.X, padx=8, pady=(2, 2))
     return lbl
 
 
-def _make_entry_row(parent: tk.Widget, label: str, default: str = "") -> tuple[tk.Frame, tk.Entry, tk.StringVar]:
+def make_entry_row(parent: tk.Widget, label: str, default: str = "") -> tuple[tk.Frame, tk.Entry, tk.StringVar]:
     """Label + entry on a row. Returns (frame, entry, stringvar)."""
-    frame = tk.Frame(parent, bg=_CLR_BG)
+    frame = tk.Frame(parent, bg=CLR_BG)
     frame.pack(fill=tk.X, padx=8, pady=2)
-    tk.Label(frame, text=label, bg=_CLR_BG, fg=_CLR_FG, font=_FONT_UI, width=14, anchor=tk.W).pack(side=tk.LEFT)
+    tk.Label(frame, text=label, bg=CLR_BG, fg=CLR_FG, font=FONT_UI, width=14, anchor=tk.W).pack(side=tk.LEFT)
     var = tk.StringVar(value=default)
     entry = tk.Entry(
-        frame, textvariable=var, bg=_CLR_BG_ALT, fg=_CLR_FG, insertbackground=_CLR_FG, font=_FONT_MONO, relief=tk.FLAT
+        frame, textvariable=var, bg=CLR_BG_ALT, fg=CLR_FG, insertbackground=CLR_FG, font=FONT_MONO, relief=tk.FLAT
     )
     entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(4, 0))
     return frame, entry, var
@@ -2161,53 +2194,82 @@ def _make_entry_row(parent: tk.Widget, label: str, default: str = "") -> tuple[t
 # ── Base panel ──────────────────────────────────────────────
 
 
-class _BasePanel(tk.Frame):
-    def __init__(self, parent: tk.Widget, runner: _BackgroundRunner, status_var: tk.StringVar) -> None:
-        super().__init__(parent, bg=_CLR_BG)
-        self._runner = runner
-        self._status = status_var
+class BasePanel(tk.Frame):
+    """Base class for all GUI panels."""
+
+    def __init__(self, parent: tk.Widget, runner: BackgroundRunner, status_var: tk.StringVar) -> None:
+        """
+        Initialize the base panel.
+
+        Args:
+            parent: The parent widget.
+            runner: The background runner instance.
+            status_var: The status bar string variable.
+        """
+        super().__init__(parent, bg=CLR_BG)
+        self.runner = runner
+        self.status = status_var
 
 
 # ── Dashboard panel ─────────────────────────────────────────
 
 
-class DashboardPanel(_BasePanel):
+class DashboardPanel(BasePanel):
     """Overview: auto-detect source and show current project metadata."""
 
-    def __init__(self, parent: tk.Widget, runner: _BackgroundRunner, status_var: tk.StringVar) -> None:
+    def __init__(self, parent: tk.Widget, runner: BackgroundRunner, status_var: tk.StringVar) -> None:
+        """
+        Initialize the dashboard panel.
+
+        Args:
+            parent: The parent widget.
+            runner: The background runner instance.
+            status_var: The status bar string variable.
+        """
         super().__init__(parent, runner, status_var)
-        _make_heading(self, "Dashboard")
-        _make_label(self, "Detect your project's metadata source and preview what will be generated.")
+        make_heading(self, "Dashboard")
+        make_label(self, "Detect your project's metadata source and preview what will be generated.")
 
-        _make_toolbar(self)
-        self._dir_var = tk.StringVar(value=str(Path.cwd()))
-        _, _, self._dir_var = _make_entry_row(self, "Project root:", str(Path.cwd()))
+        make_toolbar(self)
+        self.dir_var = tk.StringVar(value=str(Path.cwd()))
+        _, _, self.dir_var = make_entry_row(self, "Project root:", str(Path.cwd()))
 
-        bar2 = _make_toolbar(self)
-        _toolbar_btn(bar2, "Browse...", self._browse)
-        _toolbar_btn(bar2, "Detect Source", self._detect)
+        bar2 = make_toolbar(self)
+        toolbar_btn(bar2, "Browse...", self.browse)
+        toolbar_btn(bar2, "Detect Source", self.detect)
 
-        self._output = _make_output(self, height=18)
+        self.output = make_output(self, height=18)
 
         # Auto-run detection on panel open
-        self.after(50, self._detect)
+        self.after(50, self.detect)
 
-    def _browse(self) -> None:
-        d = filedialog.askdirectory(initialdir=self._dir_var.get())
+    def browse(self) -> None:
+        """Open a directory browser and update the project root variable."""
+        d = filedialog.askdirectory(initialdir=self.dir_var.get())
         if d:
-            self._dir_var.set(d)
+            self.dir_var.set(d)
 
-    def _detect(self) -> None:
-        self._status.set("Detecting metadata source...")
-        self._runner.run(
-            self._fetch,
-            args=(self._dir_var.get(),),
-            on_success=self._display,
-            on_error=self._on_error,
+    def detect(self) -> None:
+        """Initiate auto-detection of the metadata source in the background."""
+        self.status.set("Detecting metadata source...")
+        self.runner.run(
+            self.fetch,
+            args=(self.dir_var.get(),),
+            on_success=self.display,
+            on_error=self.on_error,
         )
 
     @staticmethod
-    def _fetch(project_root_str: str) -> dict[str, Any]:
+    def fetch(project_root_str: str) -> dict[str, Any]:
+        """
+        Fetch metadata from the detected source.
+
+        Args:
+            project_root_str: Path to the project root directory.
+
+        Returns:
+            Dictionary containing the detected source type and metadata.
+        """
         from metametameta.autodetect import detect_source
 
         root = Path(project_root_str)
@@ -2232,107 +2294,119 @@ class DashboardPanel(_BasePanel):
         metadata = readers[source_type]()
         return {"source_type": source_type, "metadata": metadata}
 
-    def _display(self, result: dict[str, Any]) -> None:
+    def display(self, result: dict[str, Any]) -> None:
+        """
+        Display the detection results in the output area.
+
+        Args:
+            result: Dictionary containing the source type and metadata.
+        """
         source_type = result["source_type"]
         metadata = result["metadata"]
         lines = [f"Detected source: {source_type}", ""]
         for key, value in metadata.items():
             lines.append(f"  {key}: {value}")
-        _output_set(self._output, "\n".join(lines))
-        self._status.set(f"Detected: {source_type}")
+        output_set(self.output, "\n".join(lines))
+        self.status.set(f"Detected: {source_type}")
 
-    def _on_error(self, exc: Exception) -> None:
-        _output_set(self._output, f"Error: {exc}")
-        self._status.set("Detection failed")
+    def on_error(self, exc: Exception) -> None:
+        """
+        Handle errors during metadata detection.
+
+        Args:
+            exc: The exception encountered.
+        """
+        output_set(self.output, f"Error: {exc}")
+        self.status.set("Detection failed")
 
 
 # ── Generate panel ──────────────────────────────────────────
 
 
-class GeneratePanel(_BasePanel):
+class GeneratePanel(BasePanel):
     """Generate __about__.py from a chosen source."""
 
-    def __init__(self, parent: tk.Widget, runner: _BackgroundRunner, status_var: tk.StringVar) -> None:
+    def __init__(self, parent: tk.Widget, runner: BackgroundRunner, status_var: tk.StringVar) -> None:
         super().__init__(parent, runner, status_var)
-        _make_heading(self, "Generate __about__.py")
-        _make_label(self, "Choose a metadata source and generate your __about__.py file.")
+        make_heading(self, "Generate __about__.py")
+        make_label(self, "Choose a metadata source and generate your __about__.py file.")
 
         # Source selector
-        selector_frame = tk.Frame(self, bg=_CLR_BG)
+        selector_frame = tk.Frame(self, bg=CLR_BG)
         selector_frame.pack(fill=tk.X, padx=8, pady=4)
-        tk.Label(selector_frame, text="Source:", bg=_CLR_BG, fg=_CLR_FG, font=_FONT_UI).pack(side=tk.LEFT)
+        tk.Label(selector_frame, text="Source:", bg=CLR_BG, fg=CLR_FG, font=FONT_UI).pack(side=tk.LEFT)
 
-        self._source_var = tk.StringVar(value="auto")
+        self.source_var = tk.StringVar(value="auto")
         sources = ["auto", "pep621", "poetry", "setup_cfg", "setup_py", "importlib", "requirements_txt", "conda_meta"]
         for src in sources:
             tk.Radiobutton(
                 selector_frame,
                 text=src,
-                variable=self._source_var,
+                variable=self.source_var,
                 value=src,
-                bg=_CLR_BG,
-                fg=_CLR_FG,
-                selectcolor=_CLR_BTN,
-                activebackground=_CLR_BG,
-                activeforeground=_CLR_FG,
-                font=_FONT_MONO_SMALL,
+                bg=CLR_BG,
+                fg=CLR_FG,
+                selectcolor=CLR_BTN,
+                activebackground=CLR_BG,
+                activeforeground=CLR_FG,
+                font=FONT_MONO_SMALL,
             ).pack(side=tk.LEFT, padx=4)
 
-        _, _, self._dir_var = _make_entry_row(self, "Project root:", str(Path.cwd()))
-        _, _, self._name_var = _make_entry_row(self, "Package name:", "")
-        _, _, self._output_var = _make_entry_row(self, "Output file:", "__about__.py")
+        _, _, self.dir_var = make_entry_row(self, "Project root:", str(Path.cwd()))
+        _, _, self.name_var = make_entry_row(self, "Package name:", "")
+        _, _, self.output_var = make_entry_row(self, "Output file:", "__about__.py")
 
-        toolbar = _make_toolbar(self)
-        _toolbar_btn(toolbar, "Browse...", self._browse)
-        _toolbar_btn(toolbar, "Preview", self._preview)
-        _toolbar_btn(toolbar, "Generate", self._generate)
+        toolbar = make_toolbar(self)
+        toolbar_btn(toolbar, "Browse...", self.browse)
+        toolbar_btn(toolbar, "Preview", self.preview)
+        toolbar_btn(toolbar, "Generate", self.generate)
 
-        self._validate_var = tk.BooleanVar(value=False)
+        self.validate_var = tk.BooleanVar(value=False)
         tk.Checkbutton(
             toolbar,
             text="Validate",
-            variable=self._validate_var,
-            bg=_CLR_BG,
-            fg=_CLR_FG,
-            selectcolor=_CLR_BTN,
-            activebackground=_CLR_BG,
-            activeforeground=_CLR_FG,
-            font=_FONT_UI,
+            variable=self.validate_var,
+            bg=CLR_BG,
+            fg=CLR_FG,
+            selectcolor=CLR_BTN,
+            activebackground=CLR_BG,
+            activeforeground=CLR_FG,
+            font=FONT_UI,
         ).pack(side=tk.LEFT, padx=8)
 
         # Detected source label
-        self._detected_var = tk.StringVar(value="")
-        self._detected_label = tk.Label(
+        self.detected_var = tk.StringVar(value="")
+        self.detected_label = tk.Label(
             self,
-            textvariable=self._detected_var,
-            bg=_CLR_BG,
-            fg=_CLR_OK,
-            font=_FONT_UI_BOLD,
+            textvariable=self.detected_var,
+            bg=CLR_BG,
+            fg=CLR_OK,
+            font=FONT_UI_BOLD,
             anchor=tk.W,
         )
-        self._detected_label.pack(fill=tk.X, padx=8, pady=(2, 0))
+        self.detected_label.pack(fill=tk.X, padx=8, pady=(2, 0))
 
-        self._output_text = _make_output(self, height=16)
+        self.output_text = make_output(self, height=16)
 
         # Auto-run preview on panel open
-        self.after(50, self._preview)
+        self.after(50, self.preview)
 
-    def _browse(self) -> None:
-        d = filedialog.askdirectory(initialdir=self._dir_var.get())
+    def browse(self) -> None:
+        d = filedialog.askdirectory(initialdir=self.dir_var.get())
         if d:
-            self._dir_var.set(d)
+            self.dir_var.set(d)
 
-    def _preview(self) -> None:
-        self._status.set("Generating preview...")
-        self._runner.run(
-            self._fetch_preview,
-            args=(self._source_var.get(), self._dir_var.get(), self._name_var.get()),
-            on_success=self._display_preview,
-            on_error=self._on_error,
+    def preview(self) -> None:
+        self.status.set("Generating preview...")
+        self.runner.run(
+            self.fetch_preview,
+            args=(self.source_var.get(), self.dir_var.get(), self.name_var.get()),
+            on_success=self.display_preview,
+            on_error=self.on_error,
         )
 
     @staticmethod
-    def _fetch_preview(source: str, project_root_str: str, name: str) -> dict[str, str]:
+    def fetch_preview(source: str, project_root_str: str, name: str) -> dict[str, str]:
         from metametameta.autodetect import detect_source
         from metametameta.general import any_metadict, merge_sections
 
@@ -2342,14 +2416,14 @@ class GeneratePanel(_BasePanel):
         if source == "auto":
             resolved_source = detect_source(root)
 
-        metadata = GeneratePanel._read_metadata(resolved_source, root, name)
+        metadata = GeneratePanel.read_metadata(resolved_source, root, name)
         project_name = name or metadata.get("name", "")
         content, names = any_metadict(metadata)
         preview = merge_sections(names, project_name, content)
         return {"preview": preview, "resolved_source": resolved_source}
 
     @staticmethod
-    def _read_metadata(source: str, root: Path, name: str) -> dict[str, Any]:
+    def read_metadata(source: str, root: Path, name: str) -> dict[str, Any]:
         from metametameta.from_conda_meta import read_conda_meta_metadata
         from metametameta.from_pep621 import read_pep621_metadata
         from metametameta.from_poetry import read_poetry_metadata
@@ -2377,29 +2451,29 @@ class GeneratePanel(_BasePanel):
 
         return readers[source]()
 
-    def _display_preview(self, result: dict[str, str]) -> None:
-        _output_set(self._output_text, result["preview"])
+    def display_preview(self, result: dict[str, str]) -> None:
+        output_set(self.output_text, result["preview"])
         resolved = result["resolved_source"]
-        self._detected_var.set(f"Detected source: {resolved}")
-        self._status.set(f"Preview ready ({resolved})")
+        self.detected_var.set(f"Detected source: {resolved}")
+        self.status.set(f"Preview ready ({resolved})")
 
-    def _generate(self) -> None:
-        self._status.set("Generating...")
-        self._runner.run(
-            self._do_generate,
+    def generate(self) -> None:
+        self.status.set("Generating...")
+        self.runner.run(
+            self.do_generate,
             args=(
-                self._source_var.get(),
-                self._dir_var.get(),
-                self._name_var.get(),
-                self._output_var.get(),
-                self._validate_var.get(),
+                self.source_var.get(),
+                self.dir_var.get(),
+                self.name_var.get(),
+                self.output_var.get(),
+                self.validate_var.get(),
             ),
-            on_success=self._on_generated,
-            on_error=self._on_error,
+            on_success=self.on_generated,
+            on_error=self.on_error,
         )
 
     @staticmethod
-    def _do_generate(source: str, project_root_str: str, name: str, output: str, validate: bool) -> str:
+    def do_generate(source: str, project_root_str: str, name: str, output: str, validate: bool) -> str:
         from metametameta.autodetect import detect_source
         from metametameta.from_conda_meta import generate_from_conda_meta
         from metametameta.from_importlib import generate_from_importlib
@@ -2429,57 +2503,57 @@ class GeneratePanel(_BasePanel):
         generators[source]()
         return f"Generated {output} from {source}"
 
-    def _on_generated(self, msg: str) -> None:
-        _output_set(self._output_text, msg)
-        self._status.set(msg)
+    def on_generated(self, msg: str) -> None:
+        output_set(self.output_text, msg)
+        self.status.set(msg)
         messagebox.showinfo("Success", msg)
 
-    def _on_error(self, exc: Exception) -> None:
-        _output_set(self._output_text, f"Error: {exc}")
-        self._status.set("Operation failed")
+    def on_error(self, exc: Exception) -> None:
+        output_set(self.output_text, f"Error: {exc}")
+        self.status.set("Operation failed")
 
 
 # ── Sync Check panel ────────────────────────────────────────
 
 
-class SyncCheckPanel(_BasePanel):
+class SyncCheckPanel(BasePanel):
     """Check if __about__.py is in sync with the metadata source."""
 
-    def __init__(self, parent: tk.Widget, runner: _BackgroundRunner, status_var: tk.StringVar) -> None:
+    def __init__(self, parent: tk.Widget, runner: BackgroundRunner, status_var: tk.StringVar) -> None:
         super().__init__(parent, runner, status_var)
-        _make_heading(self, "Sync Check")
-        _make_label(self, "Verify that your __about__.py matches the metadata source.")
+        make_heading(self, "Sync Check")
+        make_label(self, "Verify that your __about__.py matches the metadata source.")
 
-        _, _, self._dir_var = _make_entry_row(self, "Project root:", str(Path.cwd()))
-        _, _, self._output_var = _make_entry_row(self, "Output file:", "__about__.py")
+        _, _, self.dir_var = make_entry_row(self, "Project root:", str(Path.cwd()))
+        _, _, self.output_var = make_entry_row(self, "Output file:", "__about__.py")
 
-        toolbar = _make_toolbar(self)
-        _toolbar_btn(toolbar, "Browse...", self._browse)
-        _toolbar_btn(toolbar, "Check Sync", self._check)
+        toolbar = make_toolbar(self)
+        toolbar_btn(toolbar, "Browse...", self.browse)
+        toolbar_btn(toolbar, "Check Sync", self.check)
 
-        self._output_text = _make_output(self, height=16)
+        self.output_text = make_output(self, height=16)
 
         # Auto-run sync check on panel open
-        self.after(50, self._check)
+        self.after(50, self.check)
 
-    def _browse(self) -> None:
-        d = filedialog.askdirectory(initialdir=self._dir_var.get())
+    def browse(self) -> None:
+        d = filedialog.askdirectory(initialdir=self.dir_var.get())
         if d:
-            self._dir_var.set(d)
+            self.dir_var.set(d)
 
-    def _check(self) -> None:
-        self._status.set("Checking sync...")
-        self._runner.run(
-            self._do_check,
-            args=(self._dir_var.get(), self._output_var.get()),
-            on_success=self._display,
-            on_error=self._on_error,
+    def check(self) -> None:
+        self.status.set("Checking sync...")
+        self.runner.run(
+            self.do_check,
+            args=(self.dir_var.get(), self.output_var.get()),
+            on_success=self.display,
+            on_error=self.on_error,
         )
 
     @staticmethod
-    def _do_check(project_root_str: str, output_filename: str) -> dict[str, Any]:
+    def do_check(project_root_str: str, output_filename: str) -> dict[str, Any]:
         from metametameta.autodetect import detect_source
-        from metametameta.filesystem import _find_existing_package_dir
+        from metametameta.filesystem import find_existing_package_dir
         from metametameta.validate_sync import check_sync
 
         root = Path(project_root_str)
@@ -2502,7 +2576,7 @@ class SyncCheckPanel(_BasePanel):
         }
         metadata = readers[source_type]()
         project_name = metadata.get("name", "")
-        package_dir = _find_existing_package_dir(root, project_name)
+        package_dir = find_existing_package_dir(root, project_name)
 
         if not package_dir:
             return {"source_type": source_type, "mismatches": [f"Package directory not found for '{project_name}'"]}
@@ -2511,86 +2585,84 @@ class SyncCheckPanel(_BasePanel):
         mismatches = check_sync(metadata, about_path)
         return {"source_type": source_type, "mismatches": mismatches}
 
-    def _display(self, result: dict[str, Any]) -> None:
+    def display(self, result: dict[str, Any]) -> None:
         mismatches = result["mismatches"]
         source_type = result["source_type"]
         if mismatches:
             lines = [f"Source: {source_type}", "", "OUT OF SYNC -- mismatches found:", ""]
             for m in mismatches:
                 lines.append(f"  - {m}")
-            _output_set(self._output_text, "\n".join(lines))
-            self._status.set("Sync check: FAILED")
+            output_set(self.output_text, "\n".join(lines))
+            self.status.set("Sync check: FAILED")
         else:
-            _output_set(self._output_text, f"Source: {source_type}\n\nAll in sync!")
-            self._status.set("Sync check: PASSED")
+            output_set(self.output_text, f"Source: {source_type}\n\nAll in sync!")
+            self.status.set("Sync check: PASSED")
 
-    def _on_error(self, exc: Exception) -> None:
-        _output_set(self._output_text, f"Error: {exc}")
-        self._status.set("Sync check failed")
+    def on_error(self, exc: Exception) -> None:
+        output_set(self.output_text, f"Error: {exc}")
+        self.status.set("Sync check failed")
 
 
 # ── Inspect panel ───────────────────────────────────────────
 
 
-class InspectPanel(_BasePanel):
+class InspectPanel(BasePanel):
     """Read and display an existing __about__.py using AST, with auto-scan."""
 
-    def __init__(self, parent: tk.Widget, runner: _BackgroundRunner, status_var: tk.StringVar) -> None:
+    def __init__(self, parent: tk.Widget, runner: BackgroundRunner, status_var: tk.StringVar) -> None:
         super().__init__(parent, runner, status_var)
-        _make_heading(self, "Inspect __about__.py")
-        _make_label(self, "Select a discovered __about__.py or browse to one manually.")
+        make_heading(self, "Inspect __about__.py")
+        make_label(self, "Select a discovered __about__.py or browse to one manually.")
 
         # Top section: file list + buttons side by side
-        top = tk.Frame(self, bg=_CLR_BG)
+        top = tk.Frame(self, bg=CLR_BG)
         top.pack(fill=tk.X, padx=8, pady=4)
 
         # Listbox of discovered files
-        list_frame = tk.Frame(top, bg=_CLR_BG)
+        list_frame = tk.Frame(top, bg=CLR_BG)
         list_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        tk.Label(list_frame, text="Discovered files:", bg=_CLR_BG, fg=_CLR_DIM, font=_FONT_UI, anchor=tk.W).pack(
-            fill=tk.X
-        )
-        self._file_listbox = tk.Listbox(
+        tk.Label(list_frame, text="Discovered files:", bg=CLR_BG, fg=CLR_DIM, font=FONT_UI, anchor=tk.W).pack(fill=tk.X)
+        self.file_listbox = tk.Listbox(
             list_frame,
             height=5,
-            bg=_CLR_BG_ALT,
-            fg=_CLR_FG,
-            selectbackground=_CLR_BTN_ACTIVE,
-            selectforeground=_CLR_FG,
-            font=_FONT_MONO_SMALL,
+            bg=CLR_BG_ALT,
+            fg=CLR_FG,
+            selectbackground=CLR_BTN_ACTIVE,
+            selectforeground=CLR_FG,
+            font=FONT_MONO_SMALL,
             relief=tk.FLAT,
             activestyle="none",
         )
-        self._file_listbox.pack(fill=tk.BOTH, expand=True)
-        self._file_listbox.bind("<<ListboxSelect>>", self._on_select)
-        self._discovered_paths: list[str] = []
+        self.file_listbox.pack(fill=tk.BOTH, expand=True)
+        self.file_listbox.bind("<<ListboxSelect>>", self.on_select)
+        self.discovered_paths: list[str] = []
 
-        btn_frame = tk.Frame(top, bg=_CLR_BG)
+        btn_frame = tk.Frame(top, bg=CLR_BG)
         btn_frame.pack(side=tk.LEFT, fill=tk.Y, padx=(8, 0))
-        _toolbar_btn(btn_frame, "Re-scan", self._scan)
-        _toolbar_btn(btn_frame, "Browse...", self._browse)
+        toolbar_btn(btn_frame, "Re-scan", self.scan)
+        toolbar_btn(btn_frame, "Browse...", self.browse)
 
-        _, _, self._file_var = _make_entry_row(self, "Selected:", "")
+        _, _, self.file_var = make_entry_row(self, "Selected:", "")
 
-        toolbar = _make_toolbar(self)
-        _toolbar_btn(toolbar, "Inspect", self._inspect)
+        toolbar = make_toolbar(self)
+        toolbar_btn(toolbar, "Inspect", self.inspect)
 
-        self._tree = _make_tree(self, ["Variable", "Value"], height=10)
+        self.tree = make_tree(self, ["Variable", "Value"], height=10)
 
         # Auto-scan on panel open
-        self.after(50, self._scan)
+        self.after(50, self.scan)
 
-    def _scan(self) -> None:
-        self._status.set("Scanning for __about__.py...")
-        self._runner.run(
-            self._do_scan,
+    def scan(self) -> None:
+        self.status.set("Scanning for __about__.py...")
+        self.runner.run(
+            self.do_scan,
             args=(str(Path.cwd()),),
-            on_success=self._display_scan,
-            on_error=self._on_error,
+            on_success=self.display_scan,
+            on_error=self.on_error,
         )
 
     @staticmethod
-    def _do_scan(root_str: str) -> list[str]:
+    def do_scan(root_str: str) -> list[str]:
         """Walk up to 2 levels deep, cap at 100 folders, find __about__.py files."""
         root = Path(root_str)
         results: list[str] = []
@@ -2645,9 +2717,9 @@ class InspectPanel(_BasePanel):
                 pass
         return results
 
-    def _display_scan(self, paths: list[str]) -> None:
-        self._discovered_paths = paths
-        self._file_listbox.delete(0, tk.END)
+    def display_scan(self, paths: list[str]) -> None:
+        self.discovered_paths = paths
+        self.file_listbox.delete(0, tk.END)
         root_str = str(Path.cwd())
         for p in paths:
             # Show relative path for readability
@@ -2655,79 +2727,79 @@ class InspectPanel(_BasePanel):
                 display = str(Path(p).relative_to(root_str))
             except ValueError:
                 display = p
-            self._file_listbox.insert(tk.END, display)
+            self.file_listbox.insert(tk.END, display)
         count = len(paths)
-        self._status.set(f"Found {count} __about__.py file{'s' if count != 1 else ''}")
+        self.status.set(f"Found {count} __about__.py file{'s' if count != 1 else ''}")
         # Auto-select and inspect the first one
         if paths:
-            self._file_listbox.select_set(0)
-            self._file_var.set(paths[0])
-            self.after(10, self._inspect)
+            self.file_listbox.select_set(0)
+            self.file_var.set(paths[0])
+            self.after(10, self.inspect)
 
-    def _on_select(self, _event: tk.Event) -> None:  # type: ignore[type-arg]
-        sel = self._file_listbox.curselection()
-        if sel and sel[0] < len(self._discovered_paths):
-            self._file_var.set(self._discovered_paths[sel[0]])
-            self._inspect()
+    def on_select(self, _event: tk.Event) -> None:  # type: ignore[type-arg]
+        sel = self.file_listbox.curselection()
+        if sel and sel[0] < len(self.discovered_paths):
+            self.file_var.set(self.discovered_paths[sel[0]])
+            self.inspect()
 
-    def _browse(self) -> None:
+    def browse(self) -> None:
         f = filedialog.askopenfilename(
             initialdir=str(Path.cwd()),
             filetypes=[("Python files", "*.py"), ("All files", "*.*")],
         )
         if f:
-            self._file_var.set(f)
-            self._inspect()
+            self.file_var.set(f)
+            self.inspect()
 
-    def _inspect(self) -> None:
-        path = self._file_var.get().strip()
+    def inspect(self) -> None:
+        path = self.file_var.get().strip()
         if not path:
             return
-        self._status.set("Inspecting...")
-        self._runner.run(
-            self._do_inspect,
+        self.status.set("Inspecting...")
+        self.runner.run(
+            self.do_inspect,
             args=(path,),
-            on_success=self._display,
-            on_error=self._on_error,
+            on_success=self.display,
+            on_error=self.on_error,
         )
 
     @staticmethod
-    def _do_inspect(file_path_str: str) -> dict[str, Any]:
+    def do_inspect(file_path_str: str) -> dict[str, Any]:
         from metametameta.validate_sync import read_about_file_ast
 
         return read_about_file_ast(Path(file_path_str))
 
-    def _display(self, metadata: dict[str, Any]) -> None:
-        for item in self._tree.get_children():
-            self._tree.delete(item)
+    def display(self, metadata: dict[str, Any]) -> None:
+        for item in self.tree.get_children():
+            self.tree.delete(item)
         for key, value in metadata.items():
             tag = "ok" if value else "dim"
-            self._tree.insert("", tk.END, values=(key, str(value)), tags=(tag,))
-        self._status.set(f"Found {len(metadata)} variables")
+            self.tree.insert("", tk.END, values=(key, str(value)), tags=(tag,))
+        self.status.set(f"Found {len(metadata)} variables")
 
-    def _on_error(self, exc: Exception) -> None:
-        for item in self._tree.get_children():
-            self._tree.delete(item)
-        self._tree.insert("", tk.END, values=("Error", str(exc)), tags=("error",))
-        self._status.set("Inspect failed")
+    def on_error(self, exc: Exception) -> None:
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+        self.tree.insert("", tk.END, values=("Error", str(exc)), tags=("error",))
+        self.status.set("Inspect failed")
 
 
 # ── Help panel ──────────────────────────────────────────────
 
 
-class HelpPanel(_BasePanel):
+class HelpPanel(BasePanel):
     """Reference information about metametameta."""
 
-    def __init__(self, parent: tk.Widget, runner: _BackgroundRunner, status_var: tk.StringVar) -> None:
+    def __init__(self, parent: tk.Widget, runner: BackgroundRunner, status_var: tk.StringVar) -> None:
         super().__init__(parent, runner, status_var)
-        _make_heading(self, "Help")
+        make_heading(self, "Help")
 
-        self._output = _make_output(self, height=24)
-        _output_set(self._output, _HELP_TEXT)
-        self._status.set("Help")
+        self.output = make_output(self, height=24)
+        output_set(self.output, HELP_TEXT)
+        self.status.set("Help")
 
 
-_HELP_TEXT = """\
+HELP_TEXT = """\
 metametameta - Generate __about__.py from various metadata sources
 
 WHAT IT DOES
@@ -2783,33 +2855,33 @@ class MetametametaApp:
     """Main application window."""
 
     def __init__(self) -> None:
-        self._root = tk.Tk()
-        self._root.title("metametameta")
-        self._root.geometry("960x640")
-        self._root.minsize(800, 500)
-        self._root.configure(bg=_CLR_BG)
+        self.root = tk.Tk()
+        self.root.title("metametameta")
+        self.root.geometry("960x640")
+        self.root.minsize(800, 500)
+        self.root.configure(bg=CLR_BG)
 
-        self._runner = _BackgroundRunner(self._root)
-        self._status_var = tk.StringVar(value="Ready")
-        self._current_panel: tk.Frame | None = None
-        self._sidebar_buttons: dict[str, tk.Button] = {}
+        self.runner = BackgroundRunner(self.root)
+        self.status_var = tk.StringVar(value="Ready")
+        self.current_panel: tk.Frame | None = None
+        self.sidebar_buttons: dict[str, tk.Button] = {}
 
-        self._build_ui()
-        self._bind_keys()
-        self._show_panel("dashboard")
+        self.build_ui()
+        self.bind_keys()
+        self.show_panel("dashboard")
 
-    def _build_ui(self) -> None:
+    def build_ui(self) -> None:
         # Main horizontal layout: sidebar | content | (help is a panel, not persistent)
-        self._sidebar = tk.Frame(self._root, bg=_CLR_SIDEBAR, width=140)
-        self._sidebar.pack(side=tk.LEFT, fill=tk.Y)
-        self._sidebar.pack_propagate(False)
+        self.sidebar = tk.Frame(self.root, bg=CLR_SIDEBAR, width=140)
+        self.sidebar.pack(side=tk.LEFT, fill=tk.Y)
+        self.sidebar.pack_propagate(False)
 
         # Sidebar title
         tk.Label(
-            self._sidebar,
+            self.sidebar,
             text="mmm",
-            bg=_CLR_SIDEBAR,
-            fg=_CLR_ACCENT,
+            bg=CLR_SIDEBAR,
+            fg=CLR_ACCENT,
             font=("Segoe UI", 16, "bold"),
             pady=12,
         ).pack(fill=tk.X)
@@ -2824,59 +2896,59 @@ class MetametametaApp:
         ]
         for key, label in items:
             btn = tk.Button(
-                self._sidebar,
+                self.sidebar,
                 text=label,
-                bg=_CLR_SIDEBAR,
-                fg=_CLR_FG,
-                activebackground=_CLR_BTN_ACTIVE,
-                activeforeground=_CLR_FG,
-                font=_FONT_UI,
+                bg=CLR_SIDEBAR,
+                fg=CLR_FG,
+                activebackground=CLR_BTN_ACTIVE,
+                activeforeground=CLR_FG,
+                font=FONT_UI,
                 relief=tk.FLAT,
                 anchor=tk.W,
                 padx=16,
                 pady=6,
                 cursor="hand2",
-                command=lambda k=key: self._show_panel(k),  # type: ignore[misc]
+                command=lambda k=key: self.show_panel(k),  # type: ignore[misc]
             )
             btn.pack(fill=tk.X)
-            self._sidebar_buttons[key] = btn
+            self.sidebar_buttons[key] = btn
 
         # Content area
-        self._content = tk.Frame(self._root, bg=_CLR_BG)
-        self._content.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.content = tk.Frame(self.root, bg=CLR_BG)
+        self.content.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
         # Status bar at bottom
-        status_bar = tk.Frame(self._root, bg=_CLR_SIDEBAR, height=24)
+        status_bar = tk.Frame(self.root, bg=CLR_SIDEBAR, height=24)
         status_bar.pack(side=tk.BOTTOM, fill=tk.X)
         status_bar.pack_propagate(False)
         tk.Label(
             status_bar,
-            textvariable=self._status_var,
-            bg=_CLR_SIDEBAR,
-            fg=_CLR_DIM,
-            font=_FONT_MONO_SMALL,
+            textvariable=self.status_var,
+            bg=CLR_SIDEBAR,
+            fg=CLR_DIM,
+            font=FONT_MONO_SMALL,
             anchor=tk.W,
             padx=8,
         ).pack(fill=tk.BOTH, expand=True)
 
-    def _bind_keys(self) -> None:
-        self._root.bind("<Control-q>", lambda _: self._root.destroy())
-        self._root.bind("<Control-d>", lambda _: self._show_panel("dashboard"))
-        self._root.bind("<Control-g>", lambda _: self._show_panel("generate"))
+    def bind_keys(self) -> None:
+        self.root.bind("<Control-q>", lambda _: self.root.destroy())
+        self.root.bind("<Control-d>", lambda _: self.show_panel("dashboard"))
+        self.root.bind("<Control-g>", lambda _: self.show_panel("generate"))
 
-    def _show_panel(self, name: str) -> None:
+    def show_panel(self, name: str) -> None:
         """Destroy current panel and create a new one."""
-        if self._current_panel:
-            self._current_panel.destroy()
+        if self.current_panel:
+            self.current_panel.destroy()
 
         # Update sidebar highlight
-        for key, btn in self._sidebar_buttons.items():
+        for key, btn in self.sidebar_buttons.items():
             if key == name:
-                btn.configure(bg=_CLR_BTN, fg=_CLR_ACCENT)
+                btn.configure(bg=CLR_BTN, fg=CLR_ACCENT)
             else:
-                btn.configure(bg=_CLR_SIDEBAR, fg=_CLR_FG)
+                btn.configure(bg=CLR_SIDEBAR, fg=CLR_FG)
 
-        builders: dict[str, type[_BasePanel]] = {
+        builders: dict[str, type[BasePanel]] = {
             "dashboard": DashboardPanel,
             "generate": GeneratePanel,
             "sync_check": SyncCheckPanel,
@@ -2884,11 +2956,11 @@ class MetametametaApp:
             "help": HelpPanel,
         }
         panel_cls = builders[name]
-        self._current_panel = panel_cls(self._content, self._runner, self._status_var)
-        self._current_panel.pack(fill=tk.BOTH, expand=True)
+        self.current_panel = panel_cls(self.content, self.runner, self.status_var)
+        self.current_panel.pack(fill=tk.BOTH, expand=True)
 
     def run(self) -> None:
-        self._root.mainloop()
+        self.root.mainloop()
 
 
 def launch_gui() -> None:

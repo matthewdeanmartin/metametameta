@@ -22,7 +22,7 @@ class SetupKwargsVisitor(ast.NodeVisitor):
     def __init__(self) -> None:
         """Initialize the AST visitor to find keyword arguments in a setup() call."""
         self.kwargs: dict[str, Any] = {}
-        self._found = False
+        self.found = False
 
     def visit_Call(self, node: ast.Call) -> None:
         """
@@ -32,7 +32,7 @@ class SetupKwargsVisitor(ast.NodeVisitor):
         Only captures the first valid setup() call found.
         """
         # Only capture the first valid setup() call we find.
-        if self._found:
+        if self.found:
             return
 
         func_is_setup = False
@@ -53,7 +53,7 @@ class SetupKwargsVisitor(ast.NodeVisitor):
                         logger.warning(
                             f"Could not statically parse value for '{keyword.arg}' in setup.py. Only literals (strings, numbers, lists, etc.) are supported."
                         )
-            self._found = True
+            self.found = True
 
         # Continue traversing to find the call if it's nested
         self.generic_visit(node)

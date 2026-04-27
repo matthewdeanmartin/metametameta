@@ -62,7 +62,7 @@ def generate_from_poetry(
             for package_data in packages_data_list:
                 include_part = None
                 from_part = None  # subfolder(s)
-                _format_part = None  # can be dist, i.e not a folder
+
                 for key, value in package_data.items():
                     if key == "include":
                         include_part = value

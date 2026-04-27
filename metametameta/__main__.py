@@ -17,7 +17,7 @@ from rich_argparse import RichHelpFormatter
 
 from metametameta import __about__, logging_config
 from metametameta.autodetect import detect_source
-from metametameta.filesystem import _find_existing_package_dir
+from metametameta.filesystem import find_existing_package_dir
 from metametameta.from_conda_meta import generate_from_conda_meta, read_conda_meta_metadata
 from metametameta.from_importlib import generate_from_importlib
 from metametameta.from_pep621 import generate_from_pep621, read_pep621_metadata
@@ -173,12 +173,14 @@ def handle_sync_check(args: argparse.Namespace) -> None:
             sys.exit(1)
 
         # Find the __about__.py file
-        package_dir = _find_existing_package_dir(project_root, project_name)
-        if not package_dir:
-            print(f"❌ Error: Could not find package directory for '{project_name}'.", file=sys.stderr)
-            sys.exit(1)
-
-        about_path = package_dir / args.output
+        if args.output != "__about__.py" and ("/" in args.output or "\\" in args.output):
+            about_path = project_root / args.output
+        else:
+            package_dir = find_existing_package_dir(project_root, project_name)
+            if not package_dir:
+                print(f"❌ Error: Could not find package directory for '{project_name}'.", file=sys.stderr)
+                sys.exit(1)
+            about_path = package_dir / args.output
 
         # Perform the sync check
         mismatches = check_sync(source_metadata, about_path)
@@ -300,11 +302,11 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     # Subparser: gui
     parser_gui = subparsers.add_parser("gui", help="Launch the graphical interface")
-    parser_gui.set_defaults(func=None, _gui=True)
+    parser_gui.set_defaults(func=None, gui_requested=True)
 
     args = parser.parse_args(argv)
 
-    if getattr(args, "gui", False) or getattr(args, "_gui", False):
+    if getattr(args, "gui", False) or getattr(args, "gui_requested", False):
         from metametameta.gui.app import launch_gui
 
         launch_gui()
@@ -334,4 +336,4 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main([]))
+    sys.exit(main())

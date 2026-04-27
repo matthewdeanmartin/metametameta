@@ -57,11 +57,11 @@ def setup_py_file(tmp_path: Path):
     """
     file_path = tmp_path / "setup.py"
 
-    def _create_file(content: str):
+    def create_file(content: str):
         file_path.write_text(content, encoding="utf-8")
         return file_path
 
-    return _create_file
+    return create_file
 
 
 # This test was already safe because it used the fixture correctly.

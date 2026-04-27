@@ -25,14 +25,14 @@ KEY_MAP = {
 }
 
 
-def _is_supported_sync_value(value: Any) -> bool:
+def is_supported_sync_value(value: Any) -> bool:
     """Return True for metadata values that can be compared for sync."""
     if isinstance(value, str):
         return True
     return isinstance(value, list) and all(isinstance(item, str) for item in value)
 
 
-def _normalize_sync_value(value: Any) -> Any:
+def normalize_sync_value(value: Any) -> Any:
     """Normalize supported metadata values for comparison."""
     if isinstance(value, str):
         return value.strip()
@@ -65,16 +65,26 @@ def read_about_file_ast(file_path: Path) -> dict[str, Any]:
     metadata = {}
 
     for node in ast.walk(tree):
-        if isinstance(node, ast.Assign):
-            for target in node.targets:
-                if isinstance(target, ast.Name) and target.id.startswith("__"):
+        if isinstance(node, ast.AnnAssign):
+            target = node.target
+            value_node = node.value
+            if isinstance(target, ast.Name) and target.id.startswith("__") and value_node is not None:
+                try:
+                    value = ast.literal_eval(value_node)
+                    if is_supported_sync_value(value):
+                        metadata[target.id] = value
+                except ValueError:
+                    logger.debug(f"Skipping non-literal annotation-assignment for {target.id}")
+        elif isinstance(node, ast.Assign):
+            for assign_target in node.targets:
+                if isinstance(assign_target, ast.Name) and assign_target.id.startswith("__"):
                     try:
                         value = ast.literal_eval(node.value)
-                        if _is_supported_sync_value(value):
-                            metadata[target.id] = value
+                        if is_supported_sync_value(value):
+                            metadata[assign_target.id] = value
                     except ValueError:
                         # Ignore values that aren't simple literals (e.g., function calls)
-                        logger.debug(f"Skipping non-literal assignment for {target.id}")
+                        logger.debug(f"Skipping non-literal assignment for {assign_target.id}")
     return metadata
 
 
@@ -105,13 +115,13 @@ def check_sync(source_metadata: dict[str, Any], about_path: Path) -> list[str]:
             source_value = normalized_source.get(source_key)
             about_value = about_metadata.get(about_key)
 
-            if not _is_supported_sync_value(source_value):
+            if not is_supported_sync_value(source_value):
                 logger.debug(f"Skipping sync check for non-string source key '{source_key}'")
                 continue
 
             if about_value is None:
                 mismatches.append(f"'{about_key}' is missing from {about_path.name}")
-            elif _normalize_sync_value(source_value) != _normalize_sync_value(about_value):
+            elif normalize_sync_value(source_value) != normalize_sync_value(about_value):
                 mismatch_msg = (
                     f"'{about_key}' is out of sync. Source: '{source_value}', {about_path.name}: '{about_value}'"
                 )

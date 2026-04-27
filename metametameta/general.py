@@ -13,7 +13,7 @@ from typing import Any
 logger = logging.getLogger(__name__)
 
 
-def _get_all_primitive_values(data: Any) -> Iterable[str]:
+def get_all_primitive_values(data: Any) -> Iterable[str]:
     """Finds all top level primitive values (str, int, float) in a nested structure."""
     if isinstance(data, str):
         yield data
@@ -21,7 +21,7 @@ def _get_all_primitive_values(data: Any) -> Iterable[str]:
         yield str(data)
     elif isinstance(data, (list, tuple, set)):
         for item in data:
-            yield from _get_all_primitive_values(item)
+            yield from get_all_primitive_values(item)
 
 
 def validate_about_file(file_path: str, metadata: dict[str, Any]) -> None:
@@ -55,7 +55,7 @@ def validate_about_file(file_path: str, metadata: dict[str, Any]) -> None:
     metadata_to_validate.pop("authors", None)
     metadata_to_validate.pop("name", None)  # 'name' is transformed to '__title__'
 
-    primitive_values = set(_get_all_primitive_values(metadata_to_validate))
+    primitive_values = set(get_all_primitive_values(metadata_to_validate))
 
     for value in primitive_values:
         if value not in content:

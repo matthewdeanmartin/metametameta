@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 # --- Private Helper Functions ---
 
 
-def _find_existing_package_dir(base_path: Path, package_name: str) -> Path | None:
+def find_existing_package_dir(base_path: Path, package_name: str) -> Path | None:
     """
     Search for an existing package directory using common layouts.
 
@@ -50,7 +50,7 @@ def _find_existing_package_dir(base_path: Path, package_name: str) -> Path | Non
     return None
 
 
-def _determine_target_dir(base_path: Path, package_name: str) -> Path:
+def determine_target_dir(base_path: Path, package_name: str) -> Path:
     """
     Determines the ideal target directory for a package.
 
@@ -58,7 +58,7 @@ def _determine_target_dir(base_path: Path, package_name: str) -> Path:
     the best location to create one (e.g., inside 'src/' if it exists).
     """
     # 1. Try to find an existing directory first.
-    existing_dir = _find_existing_package_dir(base_path, package_name)
+    existing_dir = find_existing_package_dir(base_path, package_name)
     if existing_dir:
         return existing_dir
 
@@ -99,7 +99,7 @@ def write_to_package_dir(
     Returns:
         The full path to the file that was written as a string.
     """
-    target_dir = _determine_target_dir(project_root, package_dir_name)
+    target_dir = determine_target_dir(project_root, package_dir_name)
     output_path = target_dir / output_filename
 
     try:

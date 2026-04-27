@@ -18,7 +18,7 @@ __all__ = [
 
 __metadata_version__ = "2.4"
 __title__ = "metametameta"
-__version__ = "0.1.8"
+__version__ = "0.1.9"
 __project_url__ = "Change Log, https://github.com/matthewdeanmartin/metametameta/blob/main/CHANGELOG.md"
 __author_email__ = "Matthew Martin <matthewdeanmartin@gmail.com>"
 __license__ = "MIT"

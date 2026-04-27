@@ -4,12 +4,20 @@ Tests for high-risk areas: metadata parsing (general.py) and the CLI (__main__.p
 
 from __future__ import annotations
 
+import importlib
+import importlib.metadata as md
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
 
 from metametameta.__main__ import main as cli_main
+from metametameta.find_it import find_metadata_in_module
+from metametameta.find_it import main as find_it_main
+from metametameta.from_importlib import generate_from_importlib, get_package_metadata
+from metametameta.from_setup_cfg import generate_from_setup_cfg, read_setup_cfg_metadata
 from metametameta.general import any_metadict, merge_sections, safe_quote
+from metametameta.validate_sync import check_sync, normalize_sync_value, read_about_file_ast
 
 # --- Tests for general.py ---
 
@@ -137,3 +145,132 @@ def test_cli_no_subcommand(mock_print_help: MagicMock):
     """Tests if running with no subcommand prints help."""
     cli_main([])
     mock_print_help.assert_called_once()
+
+
+# --- Additional Coverage Gap Tests ---
+
+
+def test_get_package_metadata_not_found():
+    """Test get_package_metadata when package is not found."""
+    with patch("importlib.metadata.metadata") as mock_metadata:
+        mock_metadata.side_effect = md.PackageNotFoundError
+        result = get_package_metadata("non_existent_package_12345")
+        assert result == {}
+
+
+def test_generate_from_importlib_not_found():
+    """Test generate_from_importlib when package is not found."""
+    with patch("metametameta.from_importlib.get_package_metadata") as mock_get:
+        mock_get.return_value = {}
+        result = generate_from_importlib("non_existent_package_12345")
+        assert "No metadata found for package 'non_existent_package_12345' via importlib." in result
+
+
+def test_read_setup_cfg_metadata_none():
+    """Test read_setup_cfg_metadata with None (defaults to setup.cfg)."""
+    with patch("configparser.ConfigParser.read") as mock_read:
+        read_setup_cfg_metadata(None)
+        mock_read.assert_called_with(Path("setup.cfg"))
+
+
+def test_generate_from_setup_cfg_no_metadata(tmp_path):
+    """Test generate_from_setup_cfg when no [metadata] section is found."""
+    setup_cfg = tmp_path / "setup.cfg"
+    setup_cfg.write_text("[other]\nkey = value", encoding="utf-8")
+    result = generate_from_setup_cfg(source=str(setup_cfg))
+    assert "No [metadata] section found in setup.cfg." in result
+
+
+def test_generate_from_setup_cfg_with_slash(tmp_path):
+    """Test generate_from_setup_cfg when output has a slash."""
+    setup_cfg = tmp_path / "setup.cfg"
+    setup_cfg.write_text("[metadata]\nname = myproject\nversion = 0.1.0", encoding="utf-8")
+
+    with patch("metametameta.from_setup_cfg.write_to_file") as mock_write:
+        mock_write.return_value = "sub/__about__.py"
+        generate_from_setup_cfg(source=str(setup_cfg), output="sub/__about__.py", validate=False)
+        mock_write.assert_called()
+        args, _ = mock_write.call_args
+        assert args[0] == "./"
+
+
+def test_find_it_main():
+    """Test main function of find_it."""
+    # Test with metametameta itself
+    find_it_main(["metametameta"])
+
+    # Direct check of the core logic
+    module = importlib.import_module("metametameta")
+    assert module.__file__ is not None
+    module_path = Path(module.__file__).parent
+    results = find_metadata_in_module(module_path)
+    assert "__about__" in results
+    assert "version" in results["__about__"]
+
+
+def test_generate_from_setup_cfg_exception(tmp_path):
+    """Test generate_from_setup_cfg when any_metadict raises an exception."""
+    setup_cfg = tmp_path / "setup.cfg"
+    setup_cfg.write_text("[metadata]\nname = myproject\nversion = 0.1.0", encoding="utf-8")
+
+    with patch("metametameta.from_setup_cfg.any_metadict") as mock_any:
+        mock_any.side_effect = Exception("Parsing error")
+        with pytest.raises(Exception, match="Parsing error"):
+            generate_from_setup_cfg(source=str(setup_cfg))
+
+
+def test_find_it_main_no_file():
+    """Test main function of find_it with a module that has no file."""
+    with patch("importlib.import_module") as mock_import:
+        mock_mod = MagicMock()
+        mock_mod.__file__ = None
+        mock_import.return_value = mock_mod
+        with pytest.raises(ValueError, match="has no file attribute"):
+            find_it_main(["sys"])
+
+
+def test_normalize_sync_value_other():
+    """Test normalize_sync_value with other types."""
+    assert normalize_sync_value(123) == 123
+
+
+def test_read_about_file_ast_annotated(tmp_path):
+    """Test read_about_file_ast with annotated assignments."""
+    about_file = tmp_path / "__about__.py"
+    about_file.write_text(
+        '__version__: str = "1.2.3"\n__title__: str = "test"\n__ignored__ = lambda x: x', encoding="utf-8"
+    )
+    result = read_about_file_ast(about_file)
+    assert result["__version__"] == "1.2.3"
+    assert result["__title__"] == "test"
+    assert "__ignored__" not in result
+
+
+def test_read_about_file_ast_non_literal(tmp_path):
+    """Test read_about_file_ast with non-literal assignments."""
+    about_file = tmp_path / "__about__.py"
+    about_file.write_text(
+        '__version__ = "1.2.3"\n__title__ = some_func()\n__annotated__: str = other_func()', encoding="utf-8"
+    )
+    result = read_about_file_ast(about_file)
+    assert result["__version__"] == "1.2.3"
+    assert "__title__" not in result
+    assert "__annotated__" not in result
+
+
+def test_check_sync_non_string_source(tmp_path):
+    """Test check_sync with non-string source value."""
+    about_file = tmp_path / "__about__.py"
+    about_file.write_text('__title__ = "test"\n', encoding="utf-8")
+    source_metadata = {"name": {"not": "a string"}}
+    result = check_sync(source_metadata, about_file)
+    assert result == []
+
+
+def test_check_sync_missing_about_value(tmp_path):
+    """Test check_sync with missing value in about file."""
+    about_file = tmp_path / "__about__.py"
+    about_file.write_text('__version__ = "1.2.3"\n', encoding="utf-8")
+    source_metadata = {"name": "test", "version": "1.2.3"}
+    result = check_sync(source_metadata, about_file)
+    assert any("__title__" in m and "missing" in m for m in result)

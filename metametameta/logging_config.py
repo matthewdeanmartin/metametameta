@@ -17,7 +17,7 @@ def generate_config(level: str = "DEBUG") -> dict[str, Any]:
     """
     config: dict[str, Any] = {
         "version": 1,
-        "disable_existing_loggers": True,
+        "disable_existing_loggers": False,
         "formatters": {
             "standard": {"format": "[%(levelname)s] %(name)s: %(message)s"},
             "colored": {

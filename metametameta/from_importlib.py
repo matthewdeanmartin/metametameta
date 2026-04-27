@@ -59,7 +59,7 @@ def generate_from_importlib(name: str, source: str = "", output: str = "__about_
         if validate:
             validate_about_file(file_path, pkg_metadata)
         return file_path
-    message = "No [project] section found in pyproject.toml."
+    message = f"No metadata found for package '{name}' via importlib."
     logger.debug(message)
     return message
 

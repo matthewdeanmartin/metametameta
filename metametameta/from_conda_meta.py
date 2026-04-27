@@ -14,21 +14,21 @@ from metametameta.general import any_metadict, merge_sections, validate_about_fi
 logger = logging.getLogger(__name__)
 
 
-def _strip_matching_quotes(value: str) -> str:
+def strip_matching_quotes(value: str) -> str:
     """Strip matching single or double quotes from a string."""
     if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
         return value[1:-1]
     return value
 
 
-def _strip_comment(value: str) -> str:
+def strip_comment(value: str) -> str:
     """Strip YAML-style comments from a line."""
     if " #" in value:
         return value.split(" #", maxsplit=1)[0].rstrip()
     return value.rstrip()
 
 
-def _infer_project_name(source_path: Path) -> str:
+def infer_project_name(source_path: Path) -> str:
     """Infer a project name from the recipe location."""
     parent = source_path.resolve().parent
     if parent.name == "conda" and parent.parent.name:
@@ -53,7 +53,7 @@ def read_conda_meta_metadata(source: str = "conda/meta.yaml", name: str = "") ->
     current_subsection = ""
 
     for raw_line in source_path.read_text(encoding="utf-8").splitlines():
-        without_comment = _strip_comment(raw_line)
+        without_comment = strip_comment(raw_line)
         stripped = without_comment.strip()
         if not stripped or stripped.startswith("{%"):
             continue
@@ -70,7 +70,7 @@ def read_conda_meta_metadata(source: str = "conda/meta.yaml", name: str = "") ->
             continue
 
         if stripped.startswith("- "):
-            item = _strip_matching_quotes(stripped[2:].strip())
+            item = strip_matching_quotes(stripped[2:].strip())
             if current_section == "requirements" and current_subsection:
                 parsed["requirements"].setdefault(current_subsection, []).append(item)
             continue
@@ -79,7 +79,7 @@ def read_conda_meta_metadata(source: str = "conda/meta.yaml", name: str = "") ->
             continue
 
         key, value = stripped.split(":", maxsplit=1)
-        cleaned_value = _strip_matching_quotes(value.strip())
+        cleaned_value = strip_matching_quotes(value.strip())
         if current_section in {"package", "about"}:
             parsed[current_section][key.strip()] = cleaned_value
 
@@ -87,7 +87,7 @@ def read_conda_meta_metadata(source: str = "conda/meta.yaml", name: str = "") ->
     about_data = parsed.get("about", {})
     run_dependencies = parsed.get("requirements", {}).get("run", [])
 
-    project_name = name or package_data.get("name") or _infer_project_name(source_path)
+    project_name = name or package_data.get("name") or infer_project_name(source_path)
 
     metadata: dict[str, Any] = {"name": project_name}
     if package_data.get("version"):
