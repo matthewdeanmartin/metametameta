@@ -125,6 +125,7 @@ dev = [
     "keepachangelog-manager>= 4.0.0; python_version >= '3.10'",
     "zizmor>=1.2.0",
     "check-jsonschema>=0.30.0",
+    "bandit; python_version >= '3.12'"
 ]
 
 [tool.black]
