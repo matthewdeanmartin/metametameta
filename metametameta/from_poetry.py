@@ -17,9 +17,33 @@ from metametameta.general import any_metadict, merge_sections, validate_about_fi
 logger = logging.getLogger(__name__)
 
 
+def format_poetry_dependency(name: str, spec: Any) -> str | None:
+    """Convert a poetry dependency entry into a string requirement."""
+    if name == "python":
+        return None
+    if isinstance(spec, str):
+        return name if spec == "*" else f"{name}{spec}"
+    if not isinstance(spec, dict):
+        return name
+
+    extras = spec.get("extras", [])
+    extras_suffix = f"[{','.join(extras)}]" if isinstance(extras, list) and extras else ""
+
+    if "version" in spec and isinstance(spec["version"], str):
+        version = spec["version"]
+        return f"{name}{extras_suffix}" if version == "*" else f"{name}{extras_suffix}{version}"
+    if "git" in spec and isinstance(spec["git"], str):
+        return f"{name}{extras_suffix} @ {spec['git']}"
+    if "url" in spec and isinstance(spec["url"], str):
+        return f"{name}{extras_suffix} @ {spec['url']}"
+    if "path" in spec and isinstance(spec["path"], str):
+        return f"{name}{extras_suffix} @ {spec['path']}"
+    return f"{name}{extras_suffix}"
+
+
 def read_poetry_metadata(
     source: str = "pyproject.toml",
-) -> Any:
+) -> dict[str, Any]:
     """
     Read the pyproject.toml file and extract the [tool.poetry] section.
 
@@ -35,7 +59,16 @@ def read_poetry_metadata(
 
     # Extract the [tool.poetry] section
     poetry_data = data.get("tool", {}).get("poetry", {})
-    return poetry_data
+    normalized_data = dict(poetry_data)
+    dependencies = poetry_data.get("dependencies")
+    if isinstance(dependencies, dict):
+        normalized_dependencies: list[str] = []
+        for dependency_name, dependency_spec in dependencies.items():
+            requirement = format_poetry_dependency(dependency_name, dependency_spec)
+            if isinstance(requirement, str):
+                normalized_dependencies.append(requirement)
+        normalized_data["dependencies"] = normalized_dependencies
+    return normalized_data
 
 
 # pylint: disable=unused-argument
@@ -56,7 +89,7 @@ def generate_from_poetry(
     """
     poetry_data = read_poetry_metadata(source)
     if poetry_data:
-        candidate_packages = []
+        candidate_packages: list[str] = []
         packages_data_list = poetry_data.get("packages")
         if packages_data_list:
             for package_data in packages_data_list:
@@ -82,6 +115,8 @@ def generate_from_poetry(
 
         project_name = poetry_data.get("name")
         if not candidate_packages:
+            if not isinstance(project_name, str) or not project_name:
+                raise ValueError("Project name not found in [tool.poetry] section of pyproject.toml.")
             candidate_packages.append(project_name)
         written = []
         for candidate in candidate_packages:
@@ -99,6 +134,9 @@ def generate_from_poetry(
                 validate_about_file(file_path, poetry_data)
 
             written.append(file_path)
+        if len(written) == 1:
+            return written[0]
+        return ", ".join(written)
     logger.debug("No [tool.poetry] section found in pyproject.toml.")
     return "No [tool.poetry] section found in pyproject.toml."
 

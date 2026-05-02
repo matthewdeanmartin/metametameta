@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.10] - 2026-05-02
 
+### Fixed
+
+- Zero-dependency projects now generate a valid `__about__.py` with a typed
+  `__dependencies__: list[str] = []` entry instead of dropping dependency
+  metadata. The fix now covers PEP 621, Poetry, setup.cfg, setup.py,
+  requirements.txt, and conda metadata inputs.
+
 ### Changed
 
 - When the package directory cannot be located from the project name (the

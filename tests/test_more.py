@@ -53,7 +53,11 @@ from metametameta.validate_sync import check_sync, normalize_sync_value, read_ab
         ({"keywords": ["one", "two"]}, ["__keywords__ = ['one', 'two']"], ["__keywords__"]),
         # Test case 8: Empty keywords list should be ignored
         ({"keywords": []}, [], []),
-        # Test case 9: Unsupported value type (dict) should be skipped
+        # Test case 9: Empty dependency list should stay typed for mypy/sync checks
+        ({"dependencies": []}, ["__dependencies__: list[str] = []"], ["__dependencies__"]),
+        # Test case 10: install_requires should normalize to dependencies
+        ({"install_requires": []}, ["__dependencies__: list[str] = []"], ["__dependencies__"]),
+        # Test case 11: Unsupported value type (dict) should be skipped
         ({"unsupported": {"a": 1}}, [], []),
     ],
 )
@@ -171,6 +175,36 @@ def test_read_setup_cfg_metadata_none():
     with patch("configparser.ConfigParser.read") as mock_read:
         read_setup_cfg_metadata(None)
         mock_read.assert_called_with(Path("setup.cfg"))
+
+
+def test_read_setup_cfg_metadata_preserves_empty_install_requires(tmp_path):
+    """Test read_setup_cfg_metadata keeps empty dependency lists."""
+    setup_cfg = tmp_path / "setup.cfg"
+    setup_cfg.write_text(
+        "[metadata]\nname = myproject\nversion = 0.1.0\n\n[options]\ninstall_requires =\n",
+        encoding="utf-8",
+    )
+
+    metadata = read_setup_cfg_metadata(setup_cfg)
+
+    assert metadata["dependencies"] == []
+
+
+def test_generate_from_setup_cfg_with_no_dependencies_writes_typed_empty_list(tmp_path, monkeypatch):
+    """Test generate_from_setup_cfg writes typed empty dependency lists."""
+    setup_cfg = tmp_path / "setup.cfg"
+    setup_cfg.write_text(
+        "[metadata]\nname = myproject\nversion = 0.1.0\n\n[options]\ninstall_requires =\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "myproject").mkdir()
+    monkeypatch.chdir(tmp_path)
+
+    generated_path = generate_from_setup_cfg(source=str(setup_cfg), validate=True)
+    generated_content = (tmp_path / "myproject" / "__about__.py").read_text(encoding="utf-8")
+
+    assert generated_path.endswith("__about__.py")
+    assert "__dependencies__: list[str] = []" in generated_content
 
 
 def test_generate_from_setup_cfg_no_metadata(tmp_path):

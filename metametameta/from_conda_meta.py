@@ -100,8 +100,7 @@ def read_conda_meta_metadata(source: str = "conda/meta.yaml", name: str = "") ->
         metadata["license"] = about_data["license"]
     if about_data.get("home"):
         metadata["homepage"] = about_data["home"]
-    if run_dependencies:
-        metadata["dependencies"] = run_dependencies
+    metadata["dependencies"] = run_dependencies
 
     return metadata
 

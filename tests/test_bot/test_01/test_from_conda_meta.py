@@ -113,7 +113,31 @@ about:
 
     metadata = read_conda_meta_metadata(source=str(meta_path))
 
-    assert metadata == {"name": "sample-project", "summary": "Demo package"}
+    assert metadata == {"name": "sample-project", "summary": "Demo package", "dependencies": []}
+
+
+def test_generate_from_conda_meta_with_no_dependencies_writes_typed_empty_list(tmp_path, monkeypatch):
+    conda_dir = tmp_path / "conda"
+    conda_dir.mkdir()
+    meta_path = conda_dir / "meta.yaml"
+    meta_path.write_text(
+        """
+package:
+  name: demo-app
+
+about:
+  summary: Demo package
+""".strip(),
+        encoding="utf-8",
+    )
+    (tmp_path / "demo_app").mkdir()
+    monkeypatch.chdir(tmp_path)
+
+    generated_path = generate_from_conda_meta(source=str(meta_path), validate=True)
+    generated_content = (tmp_path / "demo_app" / "__about__.py").read_text(encoding="utf-8")
+
+    assert generated_path.endswith("__about__.py")
+    assert "__dependencies__: list[str] = []" in generated_content
 
 
 def test_generate_from_conda_meta_supports_custom_output_path(tmp_path, monkeypatch):

@@ -56,3 +56,28 @@ def test_generate_from_pep621_file_not_found():
     # Test case for FileNotFoundError
     with pytest.raises(FileNotFoundError):
         generate_from_pep621(source="non_existent_file.toml")
+
+
+def test_generate_from_pep621_with_no_dependencies_writes_typed_empty_list(tmp_path, monkeypatch):
+    pyproject_file = tmp_path / "pyproject.toml"
+    pyproject_file.write_text(
+        toml.dumps(
+            {
+                "project": {
+                    "name": "demo-app",
+                    "version": "0.1.0",
+                    "description": "Demo package",
+                    "dependencies": [],
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    (tmp_path / "demo_app").mkdir()
+    monkeypatch.chdir(tmp_path)
+
+    generated_path = generate_from_pep621(source=str(pyproject_file), validate=True)
+    generated_content = (tmp_path / "demo_app" / "__about__.py").read_text(encoding="utf-8")
+
+    assert generated_path.endswith("__about__.py")
+    assert "__dependencies__: list[str] = []" in generated_content

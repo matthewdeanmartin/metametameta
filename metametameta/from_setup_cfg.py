@@ -15,6 +15,11 @@ from metametameta.general import any_metadict, merge_sections, validate_about_fi
 logger = logging.getLogger(__name__)
 
 
+def parse_cfg_list(value: str) -> list[str]:
+    """Parse a setup.cfg multiline list value."""
+    return [line.strip() for line in value.splitlines() if line.strip()]
+
+
 def read_setup_cfg_metadata(setup_cfg_path: Path | None = None) -> dict[str, Any]:
     """
     Read the setup.cfg file and extract the [metadata] section.
@@ -34,7 +39,9 @@ def read_setup_cfg_metadata(setup_cfg_path: Path | None = None) -> dict[str, Any
     config.read(setup_cfg_path)
 
     # Extract the [metadata] section
-    metadata = dict(config.items("metadata")) if config.has_section("metadata") else {}
+    metadata: dict[str, Any] = dict(config.items("metadata")) if config.has_section("metadata") else {}
+    if config.has_section("options") and config.has_option("options", "install_requires"):
+        metadata["dependencies"] = parse_cfg_list(config.get("options", "install_requires"))
     return metadata
 
 

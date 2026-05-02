@@ -35,6 +35,11 @@ from metametameta.general import any_metadict, safe_quote
             ["__title__", "__dependencies__"],
         ),
         (
+            {"name": "my_package", "dependencies": []},
+            '__title__ = "my_package"\n__dependencies__: list[str] = []\n',
+            ["__title__", "__dependencies__"],
+        ),
+        (
             {"name": "my_package", "some-value": "example"},
             '__title__ = "my_package"\n__some_value__ = "example"\n',
             ["__title__", "__some_value__"],

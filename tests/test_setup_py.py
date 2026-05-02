@@ -48,6 +48,16 @@ setup(
 )
 """
 
+ZERO_DEP_SETUP_PY_CONTENT = """
+from setuptools import setup
+
+setup(
+    name="zero-dep-package",
+    version="1.2.3",
+    install_requires=[],
+)
+"""
+
 
 @pytest.fixture
 def setup_py_file(tmp_path: Path):
@@ -158,3 +168,18 @@ def test_generate_from_setup_py_no_name(tmp_path: Path, monkeypatch):
     with patch("metametameta.from_setup_py.read_setup_py_metadata", return_value={"version": "1.0"}):
         with pytest.raises(ValueError, match="Project 'name' not found"):
             generate_from_setup_py()  # Uses default source="setup.py" in the isolated CWD
+
+
+def test_generate_from_setup_py_with_no_dependencies_writes_typed_empty_list(
+    setup_py_file, tmp_path: Path, monkeypatch
+):
+    """Tests zero-dependency setup.py generation."""
+    file_path = setup_py_file(ZERO_DEP_SETUP_PY_CONTENT)
+    (tmp_path / "zero-dep-package").mkdir()
+    monkeypatch.chdir(tmp_path)
+
+    generated_path = generate_from_setup_py(source=str(file_path), validate=True)
+    generated_content = (tmp_path / "zero-dep-package" / "__about__.py").read_text(encoding="utf-8")
+
+    assert generated_path.endswith("__about__.py")
+    assert "__dependencies__: list[str] = []" in generated_content

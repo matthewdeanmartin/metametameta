@@ -65,7 +65,20 @@ def test_read_requirements_txt_metadata_without_dependencies_returns_only_name(t
 
     metadata = read_requirements_txt_metadata(source=str(requirements_path), name="demo-app")
 
-    assert metadata == {"name": "demo-app"}
+    assert metadata == {"name": "demo-app", "dependencies": []}
+
+
+def test_generate_from_requirements_txt_with_no_dependencies_writes_typed_empty_list(tmp_path, monkeypatch):
+    requirements_path = tmp_path / "requirements.txt"
+    requirements_path.write_text("# comment only\n", encoding="utf-8")
+    (tmp_path / "demo_app").mkdir()
+    monkeypatch.chdir(tmp_path)
+
+    generated_path = generate_from_requirements_txt(name="demo-app", source=str(requirements_path), validate=True)
+    generated_content = (tmp_path / "demo_app" / "__about__.py").read_text(encoding="utf-8")
+
+    assert generated_path.endswith("__about__.py")
+    assert "__dependencies__: list[str] = []" in generated_content
 
 
 def test_generate_from_requirements_txt_supports_custom_output_path(tmp_path, monkeypatch):

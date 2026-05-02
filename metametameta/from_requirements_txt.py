@@ -88,9 +88,7 @@ def read_requirements_txt_metadata(source: str = "requirements.txt", name: str =
             requirements.append(parsed)
 
     project_name = name or infer_project_name(source_path)
-    metadata: dict[str, Any] = {"name": project_name}
-    if requirements:
-        metadata["dependencies"] = requirements
+    metadata: dict[str, Any] = {"name": project_name, "dependencies": requirements}
     return metadata
 
 

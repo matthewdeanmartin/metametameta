@@ -13,6 +13,13 @@ from typing import Any
 logger = logging.getLogger(__name__)
 
 
+def render_string_list(variable_name: str, values: list[str]) -> str:
+    """Render a string list assignment, annotating empty lists for static typing."""
+    if values:
+        return f"__{variable_name}__ = {values}"
+    return f"__{variable_name}__: list[str] = []"
+
+
 def get_all_primitive_values(data: Any) -> Iterable[str]:
     """Finds all top level primitive values (str, int, float) in a nested structure."""
     if isinstance(data, str):
@@ -78,6 +85,8 @@ def any_metadict(metadata: dict[str, str | int | float | list[str]]) -> tuple[st
     """
     # Normalize keys to lowercase for consistent processing from different sources.
     processed_meta = {k.lower().replace("-", "_"): v for k, v in metadata.items()}
+    if "install_requires" in processed_meta and "dependencies" not in processed_meta:
+        processed_meta["dependencies"] = processed_meta.pop("install_requires")
 
     # Prioritize 'summary' (from importlib.metadata) for the short description.
     # If 'summary' exists, use it for 'description', overwriting the long one.
@@ -124,8 +133,8 @@ def any_metadict(metadata: dict[str, str | int | float | list[str]]) -> tuple[st
         elif key == "keywords" and isinstance(value, list) and value:
             lines.append(f"__keywords__ = {value}")
             names.append("__keywords__")
-        elif key == "dependencies" and isinstance(value, list) and value:
-            lines.append(f"__dependencies__ = {value}")
+        elif key == "dependencies" and isinstance(value, list):
+            lines.append(render_string_list("dependencies", value))
             names.append("__dependencies__")
 
         # elif key in meta:
