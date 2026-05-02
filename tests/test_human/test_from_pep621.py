@@ -15,6 +15,9 @@ def test_generate_from_pep621(tmp_path):
         file.write("description = 'A sample PEP 621 compliant project.'\n")
         # Add more [project] fields as needed
 
+    # Pre-create the package directory; metametameta no longer invents one.
+    (tmp_path / "MyPEP621Project").mkdir()
+
     # Store the original cwd and temporarily change cwd to tmp_path
     original_cwd = os.getcwd()
     os.chdir(tmp_path)

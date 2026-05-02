@@ -9,7 +9,13 @@ from pathlib import Path
 import pytest
 
 # Functions to test, including the private ones
-from metametameta.filesystem import determine_target_dir, find_existing_package_dir, write_to_file, write_to_package_dir
+from metametameta.filesystem import (
+    PackageDirectoryNotFoundError,
+    determine_target_dir,
+    find_existing_package_dir,
+    write_to_file,
+    write_to_package_dir,
+)
 
 # --- Tests for find_existing_package_dir ---
 
@@ -61,26 +67,30 @@ def test_determine_target_dir_returns_existing(tmp_path: Path):
     assert result == tmp_path / "src" / "existing_package"
 
 
-def test_determine_target_dir_creates_in_src(tmp_path: Path):
-    """Should choose a path inside 'src' for creation if 'src' exists."""
+def test_determine_target_dir_raises_when_src_dir_missing(tmp_path: Path):
+    """If only an empty 'src' directory exists (and no package dir), refuse to guess."""
     (tmp_path / "src").mkdir()
-    result = determine_target_dir(tmp_path, "new-package")
-    assert result == tmp_path / "src" / "new_package"
+    with pytest.raises(PackageDirectoryNotFoundError):
+        determine_target_dir(tmp_path, "new-package")
 
 
-def test_determine_target_dir_creates_in_root(tmp_path: Path):
-    """Should choose a path in the root for creation if 'src' does not exist."""
-    result = determine_target_dir(tmp_path, "new-package")
-    assert result == tmp_path / "new_package"
+def test_determine_target_dir_raises_when_no_package_dir(tmp_path: Path):
+    """If no candidate directory exists, refuse to guess and raise."""
+    with pytest.raises(PackageDirectoryNotFoundError) as exc_info:
+        determine_target_dir(tmp_path, "new-package")
+    msg = str(exc_info.value)
+    assert "new-package" in msg
+    assert "--output" in msg
 
 
 # --- Tests for write_to_package_dir (New Deterministic Function) ---
 
 
-def test_write_to_package_dir_creates_flat_layout(tmp_path: Path):
-    """Should create a directory and file in a flat layout."""
+def test_write_to_package_dir_writes_into_existing_flat_layout(tmp_path: Path):
+    """Should write a file into a pre-existing flat layout package."""
     project_root = tmp_path
     package_name = "my-new-app"
+    (project_root / "my_new_app").mkdir()
     file_content = "__version__ = '1.0.0'"
 
     result_path_str = write_to_package_dir(
@@ -93,10 +103,11 @@ def test_write_to_package_dir_creates_flat_layout(tmp_path: Path):
     assert expected_path.read_text(encoding="utf-8") == file_content
 
 
-def test_write_to_package_dir_creates_src_layout(tmp_path: Path):
-    """Should create a directory and file correctly in a 'src' layout."""
+def test_write_to_package_dir_writes_into_existing_src_layout(tmp_path: Path):
+    """Should write a file into a pre-existing src-layout package."""
     project_root = tmp_path
     (project_root / "src").mkdir()
+    (project_root / "src" / "my_src_app").mkdir()
     package_name = "my-src-app"
     file_content = "__version__ = '1.0.0'"
 
@@ -108,6 +119,17 @@ def test_write_to_package_dir_creates_src_layout(tmp_path: Path):
     assert Path(result_path_str) == expected_path
     assert expected_path.is_file()
     assert expected_path.read_text(encoding="utf-8") == file_content
+
+
+def test_write_to_package_dir_raises_when_dir_missing(tmp_path: Path):
+    """If the target package directory does not exist, raise rather than create it."""
+    with pytest.raises(PackageDirectoryNotFoundError):
+        write_to_package_dir(
+            project_root=tmp_path, package_dir_name="my-new-app", about_content="__version__ = '0.0.0'"
+        )
+    # Confirm no directory was silently created.
+    assert not (tmp_path / "my_new_app").exists()
+    assert not (tmp_path / "my-new-app").exists()
 
 
 def test_write_to_package_dir_uses_existing_dir(tmp_path: Path):
@@ -137,6 +159,7 @@ def test_write_to_file_legacy_wrapper(tmp_path: Path, monkeypatch: pytest.Monkey
     monkeypatch.chdir(tmp_path)
 
     package_name = "legacy-app"
+    (tmp_path / "legacy_app").mkdir()
     file_content = "__license__ = 'MIT'"
 
     # Call the old function signature
@@ -147,3 +170,11 @@ def test_write_to_file_legacy_wrapper(tmp_path: Path, monkeypatch: pytest.Monkey
     assert Path(result_path_str) == expected_path
     assert expected_path.is_file()
     assert expected_path.read_text(encoding="utf-8") == file_content
+
+
+def test_write_to_file_legacy_wrapper_raises_when_dir_missing(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    """The legacy wrapper must surface PackageDirectoryNotFoundError too."""
+    monkeypatch.chdir(tmp_path)
+    with pytest.raises(PackageDirectoryNotFoundError):
+        write_to_file(directory="legacy-app", about_content="__license__ = 'MIT'")
+    assert not (tmp_path / "legacy_app").exists()

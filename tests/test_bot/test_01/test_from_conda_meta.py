@@ -54,6 +54,7 @@ about:
 """.strip(),
         encoding="utf-8",
     )
+    (tmp_path / "demo_app").mkdir()
     monkeypatch.chdir(tmp_path)
 
     generated_path = generate_from_conda_meta(source=str(meta_path), validate=True)

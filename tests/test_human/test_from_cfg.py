@@ -14,6 +14,9 @@ def test_generate_from_setup_cfg(tmp_path):
         file.write("version = 1.0.0\n")
         # Add more metadata fields as needed
 
+    # Pre-create the package directory; metametameta no longer invents one.
+    (tmp_path / "MyProject").mkdir()
+
     # Store the original cwd and temporarily change cwd to tmp_path
     original_cwd = os.getcwd()
     os.chdir(tmp_path)

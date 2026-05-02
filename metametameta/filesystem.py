@@ -50,29 +50,50 @@ def find_existing_package_dir(base_path: Path, package_name: str) -> Path | None
     return None
 
 
+class PackageDirectoryNotFoundError(FileNotFoundError):
+    """Raised when the package directory cannot be located by the project name."""
+
+
+def _format_missing_package_message(base_path: Path, package_name: str) -> str:
+    """Build a helpful error message describing how to point at the right module."""
+    # Normalize names like "./demo-app" or ".\demo-app" to a bare package name
+    # for the suggestion, so the hint reads cleanly.
+    bare_name = package_name.lstrip("./").lstrip(".\\")
+    bare_name_underscore = bare_name.replace("-", "_")
+    searched = [
+        base_path / bare_name_underscore,
+        base_path / bare_name,
+        base_path / "src" / bare_name_underscore,
+        base_path / "src" / bare_name,
+    ]
+    searched_lines = "\n".join(f"  - {p}" for p in searched)
+    suggested_output = f"{bare_name_underscore}/__about__.py"
+    return (
+        f"Could not locate a package directory for '{bare_name}' under {base_path}.\n"
+        f"Searched:\n{searched_lines}\n\n"
+        "metametameta will not create a new top-level package directory because "
+        "guessing the module name from the project name is unreliable.\n\n"
+        "To fix this, either:\n"
+        f"  1. Create the package directory yourself (e.g. `{bare_name_underscore}/`) "
+        "and re-run the command, or\n"
+        f"  2. Pass an explicit path via --output, e.g. `--output {suggested_output}` "
+        "(or `--output src/your_module/__about__.py` for a src-layout project)."
+    )
+
+
 def determine_target_dir(base_path: Path, package_name: str) -> Path:
     """
-    Determines the ideal target directory for a package.
+    Determines the target directory for a package.
 
-    It first tries to find an existing directory. If none is found, it decides
-    the best location to create one (e.g., inside 'src/' if it exists).
+    Locates an existing directory matching the package name. Raises
+    :class:`PackageDirectoryNotFoundError` if no such directory exists, rather
+    than guessing a location and creating an empty package.
     """
-    # 1. Try to find an existing directory first.
     existing_dir = find_existing_package_dir(base_path, package_name)
     if existing_dir:
         return existing_dir
 
-    # 2. If not found, decide where to create it.
-    package_name_underscore = package_name.replace("-", "_")
-    if (base_path / "src").is_dir():
-        # Prefer 'src' layout if a 'src' directory exists.
-        target_dir = base_path / "src" / package_name_underscore
-    else:
-        # Default to a flat layout.
-        target_dir = base_path / package_name_underscore
-
-    logger.debug(f"No existing directory found. Determined target for creation: {target_dir}")
-    return target_dir
+    raise PackageDirectoryNotFoundError(_format_missing_package_message(base_path, package_name))
 
 
 # --- New, Preferred Public Function ---
@@ -103,7 +124,8 @@ def write_to_package_dir(
     output_path = target_dir / output_filename
 
     try:
-        target_dir.mkdir(parents=True, exist_ok=True)
+        # target_dir is guaranteed to exist (determine_target_dir would have raised
+        # otherwise). Only create parents needed for a nested output_filename.
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(about_content, encoding="utf-8")
         logger.info(f"Successfully wrote metadata to {output_path}")

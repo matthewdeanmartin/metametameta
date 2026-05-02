@@ -13,7 +13,7 @@ __all__ = [
 ]
 
 __title__ = "metametameta"
-__version__ = "0.1.9"
+__version__ = "0.1.10"
 __description__ = "Generate __about__.py with dunder meta."
 __credits__ = [{"name": "Matthew Martin", "email": "matthewdeanmartin@gmail.com"}]
 __readme__ = "README.md"

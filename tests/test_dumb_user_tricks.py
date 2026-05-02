@@ -70,6 +70,23 @@ def test_auto_reports_ambiguous_metadata_sources(tmp_path, monkeypatch, capsys):
     assert "Multiple viable metadata sources found: setup_cfg, setup_py" in captured.err
 
 
+def test_pep621_errors_when_package_dir_missing(tmp_path, monkeypatch, capsys):
+    """When the project name does not match a real folder, error out instead of inventing one."""
+    write_pep621_pyproject(tmp_path, name="weirdname-xyz", version="0.0.1")
+    monkeypatch.chdir(tmp_path)
+
+    exit_code = cli_main(["pep621"])
+
+    captured = capsys.readouterr()
+
+    assert exit_code == 1
+    assert "Could not locate a package directory" in captured.err
+    assert "--output" in captured.err
+    # The bogus folder must not have been created on disk.
+    assert not (tmp_path / "weirdname-xyz").exists()
+    assert not (tmp_path / "weirdname_xyz").exists()
+
+
 def test_sync_check_reports_missing_metadata_file(tmp_path, monkeypatch, capsys):
     write_pep621_pyproject(tmp_path)
     (tmp_path / "demo_app").mkdir()

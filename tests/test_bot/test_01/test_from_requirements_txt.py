@@ -23,6 +23,7 @@ def test_read_requirements_txt_metadata(tmp_path):
 def test_generate_from_requirements_txt(tmp_path, monkeypatch):
     requirements_path = tmp_path / "requirements.txt"
     requirements_path.write_text("click>=8\nrich\n", encoding="utf-8")
+    (tmp_path / "demo_app").mkdir()
     monkeypatch.chdir(tmp_path)
 
     generated_path = generate_from_requirements_txt(name="demo-app", source=str(requirements_path), validate=True)

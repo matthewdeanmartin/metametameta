@@ -17,7 +17,7 @@ from rich_argparse import RichHelpFormatter
 
 from metametameta import __about__, logging_config
 from metametameta.autodetect import detect_source
-from metametameta.filesystem import find_existing_package_dir
+from metametameta.filesystem import PackageDirectoryNotFoundError, find_existing_package_dir
 from metametameta.from_conda_meta import generate_from_conda_meta, read_conda_meta_metadata
 from metametameta.from_importlib import generate_from_importlib
 from metametameta.from_pep621 import generate_from_pep621, read_pep621_metadata
@@ -328,7 +328,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     logging.config.dictConfig(config)
 
     if hasattr(args, "func") and args.func:
-        args.func(args)
+        try:
+            args.func(args)
+        except PackageDirectoryNotFoundError as e:
+            print(f"❌ {e}", file=sys.stderr)
+            return 1
         return 0
 
     parser.print_help()

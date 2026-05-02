@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.10] - 2026-05-02
+
+### Changed
+
+- When the package directory cannot be located from the project name (the
+  common case where, e.g. the project is `my-cool-tool` but the actual module
+  is named something different), metametameta now raises
+  `PackageDirectoryNotFoundError` and prints a helpful message instead of
+  silently creating an empty folder and writing `__about__.py` into it. The
+  error message lists the locations searched and tells the user how to point
+  at the correct module — either by creating the package directory or by
+  passing an explicit path via `--output path/to/module/__about__.py`.
+
 ## [0.1.9] - 2026-04-26
 
 ### Fixed
