@@ -33,10 +33,16 @@ def read_setup_cfg_metadata(setup_cfg_path: Path | None = None) -> dict[str, Any
     # Path to the setup.cfg file
     if setup_cfg_path is None:
         setup_cfg_path = Path("setup.cfg")
+        use_default_encoding = True
+    else:
+        use_default_encoding = False
 
     # Initialize the parser and read the file
-    config = configparser.ConfigParser()
-    config.read(setup_cfg_path)
+    config = configparser.ConfigParser(interpolation=None)
+    if use_default_encoding:
+        config.read(setup_cfg_path)
+    else:
+        config.read(setup_cfg_path, encoding="utf-8")
 
     # Extract the [metadata] section
     metadata: dict[str, Any] = dict(config.items("metadata")) if config.has_section("metadata") else {}
