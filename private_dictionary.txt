@@ -60,4 +60,5 @@ treeview
 colour
 stringvar
 scrollbar
+multiline
 
