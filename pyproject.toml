@@ -1,6 +1,6 @@
 [project]
 name = "metametameta"
-version = "0.1.11"
+version = "0.1.12"
 description = "Generate __about__.py with dunder meta."
 authors = [
     {name = "Matthew Martin", email = "matthewdeanmartin@gmail.com"},
@@ -33,6 +33,7 @@ dependencies = [
 [project.urls]
 "Bug Tracker" = "https://github.com/matthewdeanmartin/metametameta/issues"
 "Change Log" = "https://github.com/matthewdeanmartin/metametameta/blob/main/CHANGELOG.md"
+"Documentation" = "https://metametameta.readthedocs.io/en/latest/"
 
 [project.scripts]
 metametameta = 'metametameta.__main__:main'

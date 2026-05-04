@@ -41,3 +41,12 @@ def test_check_sync_reports_mismatched_dependency_lists(tmp_path):
 
     assert len(mismatches) == 1
     assert "__dependencies__" in mismatches[0]
+
+
+def test_check_sync_allows_missing_empty_dependency_list(tmp_path):
+    about_path = tmp_path / "__about__.py"
+    about_path.write_text('__title__ = "demo-app"\n', encoding="utf-8")
+
+    mismatches = check_sync({"name": "demo-app", "dependencies": []}, about_path)
+
+    assert not mismatches

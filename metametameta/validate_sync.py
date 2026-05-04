@@ -41,6 +41,16 @@ def normalize_sync_value(value: Any) -> Any:
     return value
 
 
+def is_empty_sync_value(value: Any) -> bool:
+    """Return True when a supported sync value carries no metadata."""
+    normalized_value = normalize_sync_value(value)
+    if isinstance(normalized_value, str):
+        return normalized_value == ""
+    if isinstance(normalized_value, list):
+        return len(normalized_value) == 0
+    return False
+
+
 def read_about_file_ast(file_path: Path) -> dict[str, Any]:
     """
     Safely reads an __about__.py file using AST to extract metadata.
@@ -120,6 +130,8 @@ def check_sync(source_metadata: dict[str, Any], about_path: Path) -> list[str]:
                 continue
 
             if about_value is None:
+                if is_empty_sync_value(source_value):
+                    continue
                 mismatches.append(f"'{about_key}' is missing from {about_path.name}")
             elif normalize_sync_value(source_value) != normalize_sync_value(about_value):
                 mismatch_msg = (
