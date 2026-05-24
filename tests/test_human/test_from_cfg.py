@@ -37,13 +37,11 @@ def test_generate_from_setup_cfg(tmp_path):
         # Define the expected content based on the metadata in setup.cfg
         expected_content = '''"""Metadata for MyProject."""
 
-__all__ = [
-    "__title__",
-    "__version__"
-]
+__all__ = ["__title__", "__version__"]
 
 __title__ = "MyProject"
-__version__ = "1.0.0"'''
+__version__ = "1.0.0"
+'''
         assert content == expected_content, "Content of the file does not match the expected content"
     finally:
         # Revert the cwd back to the original

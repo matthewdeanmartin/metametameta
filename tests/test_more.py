@@ -40,7 +40,7 @@ from metametameta.validate_sync import check_sync, normalize_sync_value, read_ab
         # Test case 3: Single author without email
         ({"authors": ["Just A. Name"]}, ['__author__ = "Just A. Name"'], ["__author__"]),
         # Test case 4: Multiple authors become credits
-        ({"authors": ["Dev One", "Dev Two"]}, ["__credits__ = ['Dev One', 'Dev Two']"], ["__credits__"]),
+        ({"authors": ["Dev One", "Dev Two"]}, ['__credits__ = ["Dev One", "Dev Two"]'], ["__credits__"]),
         # Test case 5: Empty authors list should be ignored
         ({"authors": []}, [], []),
         # Test case 6: Classifiers for status
@@ -50,7 +50,7 @@ from metametameta.validate_sync import check_sync, normalize_sync_value, read_ab
             ["__status__"],
         ),
         # Test case 7: Keywords list
-        ({"keywords": ["one", "two"]}, ["__keywords__ = ['one', 'two']"], ["__keywords__"]),
+        ({"keywords": ["one", "two"]}, ['__keywords__ = ["one", "two"]'], ["__keywords__"]),
         # Test case 8: Empty keywords list should be ignored
         ({"keywords": []}, [], []),
         # Test case 9: Empty dependency list should stay typed for mypy/sync checks
@@ -73,15 +73,13 @@ def test_any_metadict(metadata, expected_lines, expected_names):
 
 def test_merge_sections():
     """Tests the merging of docstring, __all__, and content."""
-    names = ["__title__", "__version__"]
+    names = ["__version__", "__title__", "__title__"]
     project_name = "my-project"
     about_content = '__title__ = "my-project"'
     result = merge_sections(names, project_name, about_content)
 
     assert '"""Metadata for my-project."""' in result
-    assert "__all__ = [" in result
-    assert '"__title__"' in result
-    assert '"__version__"' in result
+    assert '__all__ = ["__title__", "__version__"]' in result
     assert '__title__ = "my-project"' in result
 
 
@@ -271,9 +269,7 @@ def test_normalize_sync_value_other():
 def test_read_about_file_ast_annotated(tmp_path):
     """Test read_about_file_ast with annotated assignments."""
     about_file = tmp_path / "__about__.py"
-    about_file.write_text(
-        '__version__: str = "1.2.3"\n__title__: str = "test"\n__ignored__ = lambda x: x', encoding="utf-8"
-    )
+    about_file.write_text('__version__: str = "1.2.3"\n__title__: str = "test"\n__ignored__ = lambda x: x', encoding="utf-8")
     result = read_about_file_ast(about_file)
     assert result["__version__"] == "1.2.3"
     assert result["__title__"] == "test"
@@ -283,9 +279,7 @@ def test_read_about_file_ast_annotated(tmp_path):
 def test_read_about_file_ast_non_literal(tmp_path):
     """Test read_about_file_ast with non-literal assignments."""
     about_file = tmp_path / "__about__.py"
-    about_file.write_text(
-        '__version__ = "1.2.3"\n__title__ = some_func()\n__annotated__: str = other_func()', encoding="utf-8"
-    )
+    about_file.write_text('__version__ = "1.2.3"\n__title__ = some_func()\n__annotated__: str = other_func()', encoding="utf-8")
     result = read_about_file_ast(about_file)
     assert result["__version__"] == "1.2.3"
     assert "__title__" not in result

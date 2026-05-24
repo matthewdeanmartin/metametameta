@@ -33,7 +33,7 @@ def test_any_metadict(metadata, expected_output):
             ["__title__"],
             "MyProject",
             '__title__ = "MyProject"\n',
-            '"""Metadata for MyProject."""\n\n__all__ = [\n    "__title__"\n]\n\n__title__ = "MyProject"\n',
+            '"""Metadata for MyProject."""\n\n__all__ = ["__title__"]\n\n__title__ = "MyProject"\n\n',
         ),
         # Add more test cases as needed
     ],

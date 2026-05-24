@@ -4,6 +4,7 @@ Utilities for generating source code metadata from existing metadata files.
 
 from __future__ import annotations
 
+import json
 import logging
 import re
 from collections.abc import Iterable
@@ -11,12 +12,71 @@ from pathlib import Path
 from typing import Any
 
 logger = logging.getLogger(__name__)
+preferred_line_length = 120
+
+
+def indent_multiline_value(value: str, indent: str) -> str:
+    """Indent each line in a multiline rendered value."""
+    return "\n".join(f"{indent}{line}" for line in value.splitlines())
+
+
+def render_python_value(value: Any, indent: int = 0) -> str:
+    """Render a Python literal using double quotes and stable trailing commas."""
+    if isinstance(value, str):
+        return json.dumps(value, ensure_ascii=True)
+    if isinstance(value, bool):
+        return "True" if value else "False"
+    if value is None:
+        return "None"
+    if isinstance(value, (int, float)):
+        return str(value)
+    if isinstance(value, list):
+        inline = "[" + ", ".join(render_python_value(item) for item in value) + "]"
+        if len(inline) <= preferred_line_length - indent:
+            return inline
+        inner_indent = " " * (indent + 4)
+        rendered_items = []
+        for item in value:
+            rendered_item = render_python_value(item, indent + 4)
+            if "\n" in rendered_item:
+                rendered_items.append(f"{indent_multiline_value(rendered_item, inner_indent)},")
+            else:
+                rendered_items.append(f"{inner_indent}{rendered_item},")
+        closing_indent = " " * indent
+        return "[\n" + "\n".join(rendered_items) + f"\n{closing_indent}]"
+    if isinstance(value, dict):
+        inline_parts = [f"{json.dumps(str(key), ensure_ascii=True)}: {render_python_value(item)}" for key, item in value.items()]
+        inline = "{" + ", ".join(inline_parts) + "}"
+        if len(inline) <= preferred_line_length - indent:
+            return inline
+        inner_indent = " " * (indent + 4)
+        rendered_items = []
+        for key, item in value.items():
+            rendered_item = render_python_value(item, indent + 4)
+            if "\n" in rendered_item:
+                first_line = f"{inner_indent}{json.dumps(str(key), ensure_ascii=True)}: {rendered_item.splitlines()[0]}"
+                remaining_lines = [f"{inner_indent}{line}" for line in rendered_item.splitlines()[1:]]
+                rendered_items.append("\n".join([first_line, *remaining_lines]) + ",")
+            else:
+                rendered_items.append(f"{inner_indent}{json.dumps(str(key), ensure_ascii=True)}: {rendered_item},")
+        closing_indent = " " * indent
+        return "{\n" + "\n".join(rendered_items) + f"\n{closing_indent}}}"
+    return repr(value)
+
+
+def render_collection_assignment(variable_name: str, value: list[Any] | dict[str, Any]) -> str:
+    """Render a collection assignment in a formatter-stable layout."""
+    inline_assignment = f"__{variable_name}__ = {render_python_value(value)}"
+    if len(inline_assignment) <= preferred_line_length:
+        return inline_assignment
+    multiline_value = render_python_value(value)
+    return f"__{variable_name}__ = {multiline_value}"
 
 
 def render_string_list(variable_name: str, values: list[str]) -> str:
     """Render a string list assignment, annotating empty lists for static typing."""
     if values:
-        return f"__{variable_name}__ = {values}"
+        return render_collection_assignment(variable_name, values)
     return f"__{variable_name}__: list[str] = []"
 
 
@@ -66,9 +126,7 @@ def validate_about_file(file_path: str, metadata: dict[str, Any]) -> None:
 
     for value in primitive_values:
         if value not in content:
-            raise ValueError(
-                f"Validation failed: Value '{value}' not found in {file_path}. The file may be incomplete or missing critical metadata."
-            )
+            raise ValueError(f"Validation failed: Value '{value}' not found in {file_path}. The file may be incomplete or missing critical metadata.")
 
     logger.info("Validation successful.")
 
@@ -122,7 +180,7 @@ def any_metadict(metadata: dict[str, str | int | float | list[str]]) -> tuple[st
 
             else:
                 # BUG 1 FIX: Do not wrap the list in quotes.
-                lines.append(f"__credits__ = {value}")
+                lines.append(render_collection_assignment("credits", value))
                 names.append("__credits__")
         elif key == "classifiers" and isinstance(value, list) and value:
             for trove in value:
@@ -131,7 +189,7 @@ def any_metadict(metadata: dict[str, str | int | float | list[str]]) -> tuple[st
                     names.append("__status__")
 
         elif key == "keywords" and isinstance(value, list) and value:
-            lines.append(f"__keywords__ = {value}")
+            lines.append(render_collection_assignment("keywords", value))
             names.append("__keywords__")
         elif key == "dependencies" and isinstance(value, list):
             lines.append(render_string_list("dependencies", value))
@@ -168,14 +226,16 @@ def merge_sections(names: list[str] | None, project_name: str, about_content: st
     """
     if names is None:
         names = []
-    # Define the content to write to the __about__.py file
-    names = [f'\n    "{item}"' for item in names]
-    all_header = "__all__ = [" + ",".join(names) + "\n]"
+    names = sorted(dict.fromkeys(names))
+    exported_names = render_python_value(names)
+    all_header = f"__all__ = {exported_names}"
+    if len(all_header) > preferred_line_length:
+        all_header = f"__all__ = {render_python_value(names)}"
     if project_name:
         docstring = f"""\"\"\"Metadata for {project_name}.\"\"\"\n\n"""
     else:
         docstring = """\"\"\"Metadata.\"\"\"\n\n"""
-    return f"{docstring}{all_header}\n\n{about_content}"
+    return f"{docstring}{all_header}\n\n{about_content}\n"
 
 
 def safe_quote(value: int | float | str) -> str:

@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.13] - 2026-05-24
+
+### Fixed
+
+- Generated `__about__.py` files now sort `__all__` entries so the output passes
+  Ruff linting without any post-generation edits.
+
+### Changed
+
+- Quality-gate coverage now generates `__about__.py` files through the CLI in
+  subprocess-based tests and verifies they pass Ruff format/lint, pylint,
+  isort, black, and mypy unchanged.
+
 ## [0.1.10] - 2026-05-02
 
 ### Fixed
@@ -93,4 +106,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Application created.
-

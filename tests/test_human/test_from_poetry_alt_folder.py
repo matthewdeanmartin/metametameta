@@ -41,15 +41,12 @@ def test_generate_from_poetry_alt(tmp_path):
         # Define the expected content based on the metadata in pyproject.toml
         expected_content = '''"""Metadata for my_package."""
 
-__all__ = [
-    "__title__",
-    "__version__",
-    "__description__"
-]
+__all__ = ["__description__", "__title__", "__version__"]
 
 __title__ = "MyPoetryProject"
 __version__ = "1.0.1"
-__description__ = "A sample poetry project."'''
+__description__ = "A sample poetry project."
+'''
         assert content == expected_content, "Content of the file does not match the expected content"
     finally:
         # Revert the cwd back to the original

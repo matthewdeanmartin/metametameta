@@ -31,7 +31,7 @@ def test_generate_from_requirements_txt(tmp_path, monkeypatch):
 
     assert generated_path.endswith("__about__.py")
     assert '__title__ = "demo-app"' in generated_content
-    assert "__dependencies__ = ['click>=8', 'rich']" in generated_content
+    assert '__dependencies__ = ["click>=8", "rich"]' in generated_content
 
 
 @pytest.mark.parametrize(
@@ -47,9 +47,7 @@ def test_generate_from_requirements_txt(tmp_path, monkeypatch):
         ),
     ],
 )
-def test_read_requirements_txt_metadata_skips_options_and_strips_quotes(
-    tmp_path, requirements_text, expected_dependencies
-):
+def test_read_requirements_txt_metadata_skips_options_and_strips_quotes(tmp_path, requirements_text, expected_dependencies):
     requirements_path = tmp_path / "requirements.txt"
     requirements_path.write_text(requirements_text, encoding="utf-8")
 
@@ -87,9 +85,7 @@ def test_generate_from_requirements_txt_supports_custom_output_path(tmp_path, mo
     requirements_path.write_text("click>=8\n", encoding="utf-8")
     monkeypatch.chdir(tmp_path)
 
-    generated_path = generate_from_requirements_txt(
-        name="demo-app", source=str(requirements_path), output=str(nested_output), validate=True
-    )
+    generated_path = generate_from_requirements_txt(name="demo-app", source=str(requirements_path), output=str(nested_output), validate=True)
 
     assert generated_path == str(nested_output)
-    assert "__dependencies__ = ['click>=8']" in nested_output.read_text(encoding="utf-8")
+    assert '__dependencies__ = ["click>=8"]' in nested_output.read_text(encoding="utf-8")

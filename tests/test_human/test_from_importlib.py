@@ -39,17 +39,13 @@ def test_generate_from_importlib(tmp_path, mocker):
         # Define the expected content based on the simulated metadata
         expected_content = '''"""Metadata for SimulatedPackage."""
 
-__all__ = [
-    "__title__",
-    "__version__",
-    "__author__",
-    "__author_email__"
-]
+__all__ = ["__author__", "__author_email__", "__title__", "__version__"]
 
 __title__ = "SimulatedPackage"
 __version__ = "1.0.2"
 __author__ = "Author Name"
-__author_email__ = "author@example.com"'''
+__author_email__ = "author@example.com"
+'''
         assert content == expected_content, "Content of the file does not match the expected content"
     finally:
         # Revert the cwd back to the original

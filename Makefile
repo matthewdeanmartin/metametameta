@@ -92,14 +92,14 @@ test: clean uv.lock
 	@echo "Running unit tests"
 	# $(VENV) pytest --doctest-modules metametameta
 	# $(VENV) python -m unittest discover
-	$(VENV) pytest tests -vv -n 2 --cov=metametameta --cov-report=html --cov-fail-under 65 --cov-branch --cov-report=xml --junitxml=junit.xml -o junit_family=legacy --timeout=5 --session-timeout=600
+	$(VENV) pytest tests -vv -n 2 --cov=metametameta --cov-report=html --cov-fail-under 65 --cov-branch --cov-report=xml --junitxml=junit.xml -o junit_family=legacy --timeout=60 --session-timeout=600
 	$(VENV) bash ./scripts/basic_checks.sh
 #	$(VENV) bash basic_test_with_logging.sh
 
 .PHONY: test-llm
 test-llm: clean uv.lock
 	@echo "Running quiet unit tests"
-	$(VENV) pytest tests -q -x --maxfail=1 --disable-warnings --timeout=5 --session-timeout=600
+	$(VENV) pytest tests -q -x --maxfail=1 --disable-warnings --timeout=60 --session-timeout=600
 
 .PHONY: tests-llm
 tests-llm: test-llm
