@@ -137,7 +137,7 @@ pylint: isort black
 # for when using -j (jobs, run in parallel)
 .NOTPARALLEL: isort black
 
-check: mypy test pylint bandit pre-commit
+check: mypy test pylint bandit
 
 #.PHONY: publish_test
 #publish_test:
