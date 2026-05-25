@@ -272,3 +272,6 @@ python = {name = "python", version = ">=3.11.1", schema = "semver", tags = ["bui
 
 [tool.strict-build-script]
 minimum_test_coverage = 60
+
+[tool.uv]
+universal = true
