@@ -13,7 +13,7 @@ __all__ = [
     "__requires_python__",
     "__requires_dist__",
     "__description_content_type__",
-    "__description__"
+    "__description__",
 ]
 
 __metadata_version__ = "2.4"

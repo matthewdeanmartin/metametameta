@@ -11,7 +11,7 @@ __all__ = [
     "__platform__",
     "__classifier__",
     "__requires_python__",
-    "__description__"
+    "__description__",
 ]
 
 __metadata_version__ = "2.1"

@@ -9,7 +9,7 @@ __all__ = [
     "__long_description__",
     "__keywords__",
     "__license__",
-    "__classifiers__"
+    "__classifiers__",
 ]
 
 __title__ = "metametameta"

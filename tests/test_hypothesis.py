@@ -9,12 +9,12 @@ import toml
 from hypothesis import HealthCheck, given, settings
 
 from metametameta import (
+    generate_from_conda_meta,
     generate_from_pep621,
     generate_from_poetry,
+    generate_from_requirements_txt,
     generate_from_setup_cfg,
     generate_from_setup_py,
-    generate_from_conda_meta,
-    generate_from_requirements_txt,
 )
 
 # --- Strategies ---
@@ -29,32 +29,25 @@ versions = st.from_regex(r"^\d+\.\d+\.\d+(-[a-zA-Z0-9.]+)?$", fullmatch=True)
 # third-party serializer bugs in the `toml` package.
 toml_safe_ascii = st.characters(min_codepoint=32, max_codepoint=126, exclude_characters='"\\')
 
-descriptions = st.text(
-    alphabet=toml_safe_ascii,
-    min_size=1,
-    max_size=100
-)
+descriptions = st.text(alphabet=toml_safe_ascii, min_size=1, max_size=100)
 
 # Authors: list of dicts for PEP 621
 authors_pep621 = st.lists(
-    st.fixed_dictionaries({
-        "name": st.text(
-            alphabet=toml_safe_ascii,
-            min_size=1,
-            max_size=50
-        ),
-        "email": st.from_regex(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", fullmatch=True)
-    }),
+    st.fixed_dictionaries(
+        {
+            "name": st.text(alphabet=toml_safe_ascii, min_size=1, max_size=50),
+            "email": st.from_regex(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", fullmatch=True),
+        }
+    ),
     min_size=0,
-    max_size=3
+    max_size=3,
 )
 
 # Dependencies: list of strings
 dependencies = st.lists(
-    st.from_regex(r"^[a-zA-Z0-9_\-]+([><=]+\d+\.\d+\.\d+)?$", fullmatch=True),
-    min_size=0,
-    max_size=5
+    st.from_regex(r"^[a-zA-Z0-9_\-]+([><=]+\d+\.\d+\.\d+)?$", fullmatch=True), min_size=0, max_size=5
 )
+
 
 @st.composite
 def pep621_metadata(draw):
@@ -71,6 +64,7 @@ def pep621_metadata(draw):
         data["dependencies"] = draw(dependencies)
     return data
 
+
 @st.composite
 def poetry_metadata(draw):
     name = draw(project_names)
@@ -83,7 +77,9 @@ def poetry_metadata(draw):
     }
     return data
 
+
 # --- Helper ---
+
 
 def setup_test_dir(tmp_path, project_name):
     # Some generators expect the project directory to exist
@@ -91,7 +87,9 @@ def setup_test_dir(tmp_path, project_name):
     # Normalize project name as the code might replace - with _
     (tmp_path / project_name.replace("-", "_")).mkdir(parents=True, exist_ok=True)
 
+
 # --- Tests ---
+
 
 @settings(deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])
 @given(metadata=pep621_metadata())
@@ -116,6 +114,7 @@ def test_hypothesis_pep621(tmp_path, metadata):
         # Clean up tmp_path because hypothesis runs many times
         shutil.rmtree(tmp_path, ignore_errors=True)
         os.makedirs(tmp_path, exist_ok=True)
+
 
 @settings(deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])
 @given(metadata=poetry_metadata())
@@ -143,6 +142,7 @@ def test_hypothesis_poetry(tmp_path, metadata):
         shutil.rmtree(tmp_path, ignore_errors=True)
         os.makedirs(tmp_path, exist_ok=True)
 
+
 @settings(deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])
 @given(name=project_names, version=versions, description=descriptions)
 def test_hypothesis_setup_cfg(tmp_path, name, version, description):
@@ -166,6 +166,7 @@ def test_hypothesis_setup_cfg(tmp_path, name, version, description):
         os.chdir(original_cwd)
         shutil.rmtree(tmp_path, ignore_errors=True)
         os.makedirs(tmp_path, exist_ok=True)
+
 
 @settings(deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])
 @given(name=project_names, version=versions, description=descriptions)
@@ -193,6 +194,7 @@ def test_hypothesis_setup_py(tmp_path, name, version, description):
         shutil.rmtree(tmp_path, ignore_errors=True)
         os.makedirs(tmp_path, exist_ok=True)
 
+
 @settings(deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])
 @given(name=project_names, version=versions, description=descriptions)
 def test_hypothesis_conda_meta(tmp_path, name, version, description):
@@ -217,6 +219,7 @@ def test_hypothesis_conda_meta(tmp_path, name, version, description):
         os.chdir(original_cwd)
         shutil.rmtree(tmp_path, ignore_errors=True)
         os.makedirs(tmp_path, exist_ok=True)
+
 
 @settings(deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])
 @given(name=project_names, deps=dependencies)

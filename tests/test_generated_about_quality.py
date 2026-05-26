@@ -47,8 +47,7 @@ def read_all_entries(about_path: Path) -> list[str]:
         (
             "pyproject.toml",
             ["pep621", "--source", "pyproject.toml"],
-            textwrap.dedent(
-                """
+            textwrap.dedent("""
                 [project]
                 name = "demo-app"
                 version = "0.1.0"
@@ -58,15 +57,12 @@ def read_all_entries(about_path: Path) -> list[str]:
                 dependencies = ["click>=8", "rich>=13"]
                 classifiers = ["Development Status :: 4 - Beta"]
                 authors = [{name = "Demo Dev", email = "dev@example.com"}]
-                """
-            ).strip()
-            + "\n",
+                """).strip() + "\n",
         ),
         (
             "setup.cfg",
             ["setup_cfg", "--source", "setup.cfg"],
-            textwrap.dedent(
-                """
+            textwrap.dedent("""
                 [metadata]
                 name = demo-app
                 version = 0.1.0
@@ -81,9 +77,7 @@ def read_all_entries(about_path: Path) -> list[str]:
                 install_requires =
                     click>=8
                     rich>=13
-                """
-            ).strip()
-            + "\n",
+                """).strip() + "\n",
         ),
     ],
 )
@@ -106,7 +100,10 @@ def test_generated_about_cli_output_passes_quality_gates(tmp_path, source_name, 
         ),
         ("ruff check", [sys.executable, "-m", "ruff", "check", "--config", str(pyproject_path), str(about_path)]),
         ("pylint", [sys.executable, "-m", "pylint", "--rcfile", str(pylint_config_path), str(about_path)]),
-        ("isort", [sys.executable, "-m", "isort", "--settings-path", str(pyproject_path), "--check-only", str(about_path)]),
+        (
+            "isort",
+            [sys.executable, "-m", "isort", "--settings-path", str(pyproject_path), "--check-only", str(about_path)],
+        ),
         ("black", [sys.executable, "-m", "black", "--config", str(pyproject_path), "--check", str(about_path)]),
         (
             "mypy",

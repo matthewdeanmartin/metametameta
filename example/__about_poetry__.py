@@ -12,7 +12,7 @@ __all__ = [
     "__readme__",
     "__repository__",
     "__homepage__",
-    "__documentation__"
+    "__documentation__",
 ]
 
 __title__ = "metametameta"
@@ -20,7 +20,7 @@ __version__ = "0.1.4"
 __description__ = "Generate __about__.py with dunder meta."
 __author__ = "Matthew Martin"
 __author_email__ = "matthewdeanmartin@gmail.com"
-__keywords__ = ['packaging', 'metadata']
+__keywords__ = ["packaging", "metadata"]
 __status__ = "4 - Beta"
 __license__ = "MIT"
 __readme__ = "README.md"

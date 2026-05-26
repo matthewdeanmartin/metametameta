@@ -45,7 +45,9 @@ def render_python_value(value: Any, indent: int = 0) -> str:
         closing_indent = " " * indent
         return "[\n" + "\n".join(rendered_items) + f"\n{closing_indent}]"
     if isinstance(value, dict):
-        inline_parts = [f"{json.dumps(str(key), ensure_ascii=True)}: {render_python_value(item)}" for key, item in value.items()]
+        inline_parts = [
+            f"{json.dumps(str(key), ensure_ascii=True)}: {render_python_value(item)}" for key, item in value.items()
+        ]
         inline = "{" + ", ".join(inline_parts) + "}"
         if len(inline) <= preferred_line_length - indent:
             return inline
@@ -126,7 +128,9 @@ def validate_about_file(file_path: str, metadata: dict[str, Any]) -> None:
 
     for value in primitive_values:
         if value not in content:
-            raise ValueError(f"Validation failed: Value '{value}' not found in {file_path}. The file may be incomplete or missing critical metadata.")
+            raise ValueError(
+                f"Validation failed: Value '{value}' not found in {file_path}. The file may be incomplete or missing critical metadata."
+            )
 
     logger.info("Validation successful.")
 

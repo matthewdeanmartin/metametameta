@@ -1,4 +1,5 @@
 """Tests targeting coverage gaps in general.py and from_poetry.py."""
+
 from __future__ import annotations
 
 import pytest
@@ -11,7 +12,6 @@ from metametameta.general import (
     render_python_value,
     validate_about_file,
 )
-
 
 # --- general.py: render_python_value multiline branches ---
 

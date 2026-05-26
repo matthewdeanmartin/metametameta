@@ -9,14 +9,11 @@ from metametameta.__main__ import main as cli_main
 
 def write_pep621_pyproject(tmp_path, name: str = "demo-app", version: str = "1.2.3") -> None:
     (tmp_path / "pyproject.toml").write_text(
-        dedent(
-            f"""
+        dedent(f"""
             [project]
             name = "{name}"
             version = "{version}"
-            """
-        ).strip()
-        + "\n",
+            """).strip() + "\n",
         encoding="utf-8",
     )
 

@@ -269,7 +269,9 @@ def test_normalize_sync_value_other():
 def test_read_about_file_ast_annotated(tmp_path):
     """Test read_about_file_ast with annotated assignments."""
     about_file = tmp_path / "__about__.py"
-    about_file.write_text('__version__: str = "1.2.3"\n__title__: str = "test"\n__ignored__ = lambda x: x', encoding="utf-8")
+    about_file.write_text(
+        '__version__: str = "1.2.3"\n__title__: str = "test"\n__ignored__ = lambda x: x', encoding="utf-8"
+    )
     result = read_about_file_ast(about_file)
     assert result["__version__"] == "1.2.3"
     assert result["__title__"] == "test"
@@ -279,7 +281,9 @@ def test_read_about_file_ast_annotated(tmp_path):
 def test_read_about_file_ast_non_literal(tmp_path):
     """Test read_about_file_ast with non-literal assignments."""
     about_file = tmp_path / "__about__.py"
-    about_file.write_text('__version__ = "1.2.3"\n__title__ = some_func()\n__annotated__: str = other_func()', encoding="utf-8")
+    about_file.write_text(
+        '__version__ = "1.2.3"\n__title__ = some_func()\n__annotated__: str = other_func()', encoding="utf-8"
+    )
     result = read_about_file_ast(about_file)
     assert result["__version__"] == "1.2.3"
     assert "__title__" not in result
