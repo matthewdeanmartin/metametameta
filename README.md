@@ -103,8 +103,8 @@ mmm.generate_from_pep621()
 
 Docs are built with MkDocs and published through Read the Docs.
 
-- Contributor guide: [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md)
-- Pre-release checklist: [`docs/PRERELEASE.md`](docs/PRERELEASE.md)
+- Contributor guide: [`docs/CONTRIBUTING.md`](https://github.com/matthewdeanmartin/metametameta/blob/main/docs/CONTRIBUTING.md)
+- Pre-release checklist: [`docs/PRERELEASE.md`](https://github.com/matthewdeanmartin/metametameta/blob/main/docs/PRERELEASE.md)
 - Local docs build: `uv run mkdocs build --strict --clean`
 
 ## Motivation
@@ -166,3 +166,11 @@ item for `__mailing_address__` you could easily do it with source code metadata.
 |-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Open Issues** | ![GitHub issues](https://img.shields.io/github/issues/matthewdeanmartin/metametameta) |
 | **Stars** | ![GitHub Repo stars](https://img.shields.io/github/stars/matthewdeanmartin/metametameta?style=social) |
+
+## Project Links
+
+- [GitHub](https://github.com/matthewdeanmartin/metametameta)
+- [PyPI](https://pypi.org/project/metametameta/)
+- [Documentation](https://metametameta.readthedocs.io/en/latest/)
+- [Bug Tracker](https://github.com/matthewdeanmartin/metametameta/issues)
+- [Change Log](https://github.com/matthewdeanmartin/metametameta/blob/main/CHANGELOG.md)
