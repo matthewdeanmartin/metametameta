@@ -7,7 +7,7 @@ authors = [
 ]
 license = {text = "MIT"}
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 keywords = ["packaging", "metadata", ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -127,12 +127,11 @@ dev = [
     # trio = { version = ">=0.23.2", python = ">=3.9" }
     # contract (optional)
     # griffe = { version = ">=0.38.1", python = ">=3.9" }
-    "keepachangelog-manager>= 4.0.0; python_version >= '3.10'",
     "zizmor>=1.2.0",
     "check-jsonschema>=0.30.0",
     "bandit; python_version >= '3.12'",
     "pre-commit",
-    "keepachangelog-manager-fork>=6.1.1,<7",
+    "keepachangelog-manager-fork[all]>=6.5.0",
 ]
 
 [tool.black]
