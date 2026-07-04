@@ -74,7 +74,7 @@ class BackgroundRunner:
                 result = func(*args)
                 if on_success:
                     self.root.after(0, on_success, result)
-            except Exception as exc:
+            except Exception as exc:  # pylint: disable=broad-exception-caught
                 if on_error:
                     self.root.after(0, on_error, exc)
 

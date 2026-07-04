@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `sync-check --output` with a full relative path (e.g. `pkg/__about__.py`) no longer double-joins the package directory, matching how the `pep621` subcommand accepts the same value
+- `read_about_file_ast` now reads annotated assignments (`__dependencies__: list[str] = []`), so idiomatic type-annotated `__about__.py` files no longer report metadata as missing during sync-check
+- Console output no longer crashes on non-UTF-8 terminals: streams are reconfigured to UTF-8 with `errors="replace"` at startup, and status emoji are kept off error-payload prints so a rendering failure can't mask the real diagnostic (Windows cp1252 consoles)
+
 ## [0.1.13] - 2026-05-24
 
 ### Fixed

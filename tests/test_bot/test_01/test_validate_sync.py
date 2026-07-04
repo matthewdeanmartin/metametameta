@@ -18,6 +18,35 @@ def test_read_about_file_ast_reads_list_metadata(tmp_path):
     }
 
 
+def test_read_about_file_ast_reads_annotated_assignments(tmp_path):
+    """Annotated assignments (``x: T = value``) must be read, not silently skipped."""
+    about_path = tmp_path / "__about__.py"
+    about_path.write_text(
+        '__title__: str = "demo-app"\n__dependencies__: list[str] = ["click>=8", "rich"]\n',
+        encoding="utf-8",
+    )
+
+    metadata = read_about_file_ast(about_path)
+
+    assert metadata == {
+        "__title__": "demo-app",
+        "__dependencies__": ["click>=8", "rich"],
+    }
+
+
+def test_check_sync_accepts_annotated_empty_dependency_list(tmp_path):
+    """An idiomatic ``__dependencies__: list[str] = []`` must not report as missing."""
+    about_path = tmp_path / "__about__.py"
+    about_path.write_text(
+        '__title__ = "demo-app"\n__dependencies__: list[str] = []\n',
+        encoding="utf-8",
+    )
+
+    mismatches = check_sync({"name": "demo-app", "dependencies": []}, about_path)
+
+    assert not mismatches
+
+
 def test_check_sync_accepts_matching_dependency_lists(tmp_path):
     about_path = tmp_path / "__about__.py"
     about_path.write_text(

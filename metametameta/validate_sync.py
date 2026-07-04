@@ -83,7 +83,7 @@ def read_about_file_ast(file_path: Path) -> dict[str, Any]:
                     value = ast.literal_eval(value_node)
                     if is_supported_sync_value(value):
                         metadata[target.id] = value
-                except ValueError:
+                except (ValueError, TypeError, SyntaxError):
                     logger.debug(f"Skipping non-literal annotation-assignment for {target.id}")
         elif isinstance(node, ast.Assign):
             for assign_target in node.targets:
@@ -92,7 +92,7 @@ def read_about_file_ast(file_path: Path) -> dict[str, Any]:
                         value = ast.literal_eval(node.value)
                         if is_supported_sync_value(value):
                             metadata[assign_target.id] = value
-                    except ValueError:
+                    except (ValueError, TypeError, SyntaxError):
                         # Ignore values that aren't simple literals (e.g., function calls)
                         logger.debug(f"Skipping non-literal assignment for {assign_target.id}")
     return metadata

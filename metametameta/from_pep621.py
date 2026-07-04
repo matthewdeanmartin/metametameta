@@ -58,7 +58,7 @@ def generate_from_pep621(
         project_name = project_data.get("name", "")
         if not project_name:
             raise TypeError("Project name not found in [project] section of pyproject.toml.")
-        if output != "__about__.py" and "/" in output or "\\" in output:
+        if output != "__about__.py" and ("/" in output or "\\" in output):
             dir_path = "./"
         else:
             dir_path = f"./{project_name}"

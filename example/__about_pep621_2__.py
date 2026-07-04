@@ -1,23 +1,23 @@
 """Metadata for metametameta."""
 
 __all__ = [
-    "__title__",
-    "__version__",
-    "__description__",
     "__credits__",
+    "__dependencies__",
+    "__description__",
+    "__keywords__",
     "__readme__",
     "__requires_python__",
-    "__keywords__",
     "__status__",
-    "__dependencies__",
+    "__title__",
+    "__version__",
 ]
 
 __title__ = "metametameta"
-__version__ = "0.1.11"
+__version__ = "0.1.13"
 __description__ = "Generate __about__.py with dunder meta."
 __credits__ = [{"name": "Matthew Martin", "email": "matthewdeanmartin@gmail.com"}]
 __readme__ = "README.md"
-__requires_python__ = ">=3.8"
+__requires_python__ = ">=3.9"
 __keywords__ = ["packaging", "metadata"]
 __status__ = "5 - Production/Stable"
 __dependencies__ = ["rich_argparse>=1.7.1", "toml>=0.10.2", "colorlog>=6.9.0", "totalhelp>=0.1.1"]

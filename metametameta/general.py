@@ -160,7 +160,7 @@ def any_metadict(metadata: dict[str, str | int | float | list[str]]) -> tuple[st
     for key, value in processed_meta.items():
         if key == "name":
             # __name__ is a reserved name.
-            lines.append(f'__title__ = "{value}"')
+            lines.append(f"__title__ = {safe_quote(str(value))}")
             names.append("__title__")
             continue
         if key == "authors" and isinstance(value, list):
@@ -174,12 +174,12 @@ def any_metadict(metadata: dict[str, str | int | float | list[str]]) -> tuple[st
                 if match is not None:
                     email = match.groups()[0]
                     author = scalar.replace("<" + email + ">", "").strip()
-                    lines.append(f'__author__ = "{author}"')
-                    lines.append(f'__author_email__ = "{email}"')
+                    lines.append(f"__author__ = {safe_quote(author)}")
+                    lines.append(f"__author_email__ = {safe_quote(email)}")
                     names.append("__author__")
                     names.append("__author_email__")
                 else:
-                    lines.append(f'__author__ = "{scalar}"')
+                    lines.append(f"__author__ = {safe_quote(scalar)}")
                     names.append("__author__")
 
             else:
@@ -189,7 +189,13 @@ def any_metadict(metadata: dict[str, str | int | float | list[str]]) -> tuple[st
         elif key == "classifiers" and isinstance(value, list) and value:
             for trove in value:
                 if trove.startswith("Development Status"):
-                    lines.append(f'__status__ = "{trove.split("::")[1].strip()}"')
+                    parts = trove.split("::")
+                    if len(parts) < 2:
+                        # Malformed classifier without a "::" separator; skip it
+                        # rather than crashing on an out-of-range index.
+                        logger.debug(f"Skipping malformed Development Status classifier: {trove!r}")
+                        continue
+                    lines.append(f"__status__ = {safe_quote(parts[1].strip())}")
                     names.append("__status__")
 
         elif key == "keywords" and isinstance(value, list) and value:
@@ -264,12 +270,18 @@ def safe_quote(value: int | float | str) -> str:
     if not isinstance(value, str):
         return str(value)
 
-    # Use triple quotes if the string contains newlines or double quotes
-    if "\n" in value or '"' in value:
-        # If it contains the triple quote sequence, escape it
-        if '"""' in value:
-            value = value.replace('"""', r"\"\"\"")
-        return f'"""{value}"""'
-    # Otherwise, simple double quotes are fine. We don't need to escape
-    # single quotes because we are using double quotes.
-    return f'"{value}"'
+    # Escape backslashes first so they are not reinterpreted as escape
+    # sequences (e.g. a Windows path "C:\temp\new" must not become C:<tab>...).
+    escaped = value.replace("\\", "\\\\")
+
+    # Use triple quotes for multiline values so descriptions stay readable.
+    if "\n" in value:
+        # Escape every double quote inside the body. Escaping all of them (rather
+        # than only the literal `"""` sequence) is the only way to stay valid
+        # when the value contains a lone `"` or a run that abuts the closing
+        # delimiter, e.g. a value ending in `"` would otherwise form `""""`.
+        escaped = escaped.replace('"', '\\"')
+        return f'"""{escaped}"""'
+    # Single-line: a plain double-quoted literal, escaping interior quotes.
+    escaped = escaped.replace('"', '\\"')
+    return f'"{escaped}"'

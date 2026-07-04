@@ -48,7 +48,7 @@ class SetupKwargsVisitor(ast.NodeVisitor):
                     try:
                         # Safely evaluate the value of the keyword argument
                         self.kwargs[keyword.arg] = ast.literal_eval(keyword.value)
-                    except ValueError:
+                    except (ValueError, TypeError, SyntaxError):
                         # This happens if the value is not a literal (e.g., a variable)
                         logger.warning(
                             f"Could not statically parse value for '{keyword.arg}' in setup.py. Only literals (strings, numbers, lists, etc.) are supported."

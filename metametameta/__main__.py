@@ -29,6 +29,41 @@ from metametameta.utils.cli_suggestions import SmartParser
 from metametameta.validate_sync import check_sync
 
 
+def _configure_console_encoding() -> None:
+    """Best-effort reconfigure stdout/stderr to UTF-8 with replacement.
+
+    On a default Windows console ``sys.stdout.encoding`` is often cp1252, which
+    cannot encode status glyphs like ``❌``/``✅``. Without this, ``print()``
+    of such a glyph raises ``UnicodeEncodeError`` and, when the glyph shares a
+    ``print()`` with a real error payload, the codec crash masks that payload.
+    Reconfiguring with ``errors="replace"`` degrades an unencodable glyph to a
+    replacement char instead of crashing.
+    """
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is None:
+            continue
+        try:
+            reconfigure(encoding="utf-8", errors="replace")
+        except (ValueError, OSError):
+            # Stream may not support reconfiguration (e.g. already detached or
+            # a non-TextIOWrapper redirect); ignore and keep the current codec.
+            pass
+
+
+def _emit_status_glyph(glyph: str, *, file: Any = None) -> None:
+    """Print a decorative status glyph, tolerating a non-UTF-8 console.
+
+    The real diagnostic is always printed separately and first; this glyph is
+    pure decoration, so if the stream still cannot encode it (reconfigure was
+    unavailable) we swallow the codec error rather than let it mask the exit.
+    """
+    try:
+        print(glyph, file=file)
+    except UnicodeEncodeError:
+        pass
+
+
 def process_args(args: argparse.Namespace) -> dict[str, Any]:
     """
     Process the arguments from argparse.Namespace to a dict.
@@ -144,7 +179,8 @@ def handle_auto(args: argparse.Namespace) -> None:
         print(f"Successfully generated {args.output} from {source_type}.")
 
     except (FileNotFoundError, ValueError) as e:
-        print(f"❌ Auto-generation failed: {e}", file=sys.stderr)
+        print(f"Auto-generation failed: {e}", file=sys.stderr)
+        _emit_status_glyph("❌", file=sys.stderr)
         sys.exit(1)
 
 
@@ -194,7 +230,8 @@ def handle_sync_check(args: argparse.Namespace) -> None:
             print("✅ Sync check passed. Metadata is in sync.")
 
     except (FileNotFoundError, ValueError) as e:
-        print(f"❌ Error during sync check: {e}", file=sys.stderr)
+        print(f"Error during sync check: {e}", file=sys.stderr)
+        _emit_status_glyph("❌", file=sys.stderr)
         sys.exit(1)
 
 
@@ -206,6 +243,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     Returns:
         int: The exit code.
     """
+    _configure_console_encoding()
+
     formatter_class: Any = RichHelpFormatter
 
     parser = SmartParser(
@@ -331,7 +370,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         try:
             args.func(args)
         except PackageDirectoryNotFoundError as e:
-            print(f"❌ {e}", file=sys.stderr)
+            print(f"{e}", file=sys.stderr)
+            _emit_status_glyph("❌", file=sys.stderr)
             return 1
         return 0
 

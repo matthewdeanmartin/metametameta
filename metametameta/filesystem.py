@@ -57,8 +57,14 @@ class PackageDirectoryNotFoundError(FileNotFoundError):
 def _format_missing_package_message(base_path: Path, package_name: str) -> str:
     """Build a helpful error message describing how to point at the right module."""
     # Normalize names like "./demo-app" or ".\demo-app" to a bare package name
-    # for the suggestion, so the hint reads cleanly.
-    bare_name = package_name.lstrip("./").lstrip(".\\")
+    # for the suggestion, so the hint reads cleanly. Strip a leading "./" or
+    # ".\" prefix only -- lstrip(chars) would eat any leading '.', '/' or '\'
+    # characters and mangle a legitimate name such as ".config".
+    bare_name = package_name
+    for prefix in ("./", ".\\"):
+        if bare_name.startswith(prefix):
+            bare_name = bare_name[len(prefix) :]
+            break
     bare_name_underscore = bare_name.replace("-", "_")
     searched = [
         base_path / bare_name_underscore,

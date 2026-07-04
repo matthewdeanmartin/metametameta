@@ -90,12 +90,35 @@ def test_merge_sections():
         (123, "123"),
         (1.23, "1.23"),
         ("hello\nworld", '"""hello\nworld"""'),
-        ('contains """ quotes', '"""contains \\"\\"\\" quotes"""'),
+        # Single-line values (even with interior quotes) use plain double quotes
+        # with the quotes escaped; triple quotes are reserved for multiline.
+        ('contains """ quotes', '"contains \\"\\"\\" quotes"'),
     ],
 )
 def test_safe_quote(value, expected):
     """Tests the safe_quote function."""
     assert safe_quote(value) == expected
+
+
+@pytest.mark.parametrize(
+    "value",
+    [
+        'He said "hi"',
+        'ends with a quote"',
+        '"starts with a quote',
+        'a"""b',
+        "path C:\\temp\\new",
+        'multiline\nwith "quotes"',
+        "ends with a backslash\\",
+        "plain",
+    ],
+)
+def test_safe_quote_produces_valid_roundtripping_literal(value):
+    """safe_quote must emit a valid Python literal that recovers the exact value."""
+    import ast
+
+    node = ast.parse("x = " + safe_quote(value))
+    assert ast.literal_eval(node.body[0].value) == value
 
 
 # --- Tests for __main__.py ---

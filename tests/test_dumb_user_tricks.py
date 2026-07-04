@@ -115,3 +115,28 @@ def test_sync_check_accepts_hyphenated_name_with_underscored_package_dir(tmp_pat
 
     assert result == 0
     assert "Sync check passed" in captured.out
+
+
+def test_sync_check_output_with_path_is_not_double_joined(tmp_path, monkeypatch, capsys):
+    """A full relative ``--output`` path must resolve from the project root.
+
+    Passing ``--output demo_app/__about__.py`` must not be joined onto the
+    auto-resolved package dir (which would look for ``demo_app/demo_app/...``).
+    """
+    write_pep621_pyproject(tmp_path, name="demo-app", version="2.0.0")
+    package_dir = tmp_path / "demo_app"
+    package_dir.mkdir()
+    (package_dir / "__about__.py").write_text(
+        '__title__ = "demo-app"\n__version__ = "2.0.0"\n',
+        encoding="utf-8",
+    )
+    monkeypatch.chdir(tmp_path)
+
+    result = cli_main(["sync-check", "--output", "demo_app/__about__.py"])
+    captured = capsys.readouterr()
+
+    assert result == 0
+    assert "Sync check passed" in captured.out
+    # The double-joined path must never appear in any diagnostic.
+    assert "demo_app/demo_app" not in captured.out
+    assert "demo_app\\demo_app" not in captured.out

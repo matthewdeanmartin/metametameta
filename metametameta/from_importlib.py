@@ -26,9 +26,23 @@ def get_package_metadata(package_name: str) -> dict[str, Any]:
     """
     try:
         pkg_metadata: md.PackageMetadata = md.metadata(package_name)
-        # dict for 3.8 support
-        # pylint: disable=unnecessary-comprehension
-        return {key: value for key, value in cast(dict, pkg_metadata).items()}  # type: ignore[type-arg]
+        # Core-metadata headers like "Classifier" and "Project-URL" legitimately
+        # repeat. A plain dict comprehension over .items() keeps only the last
+        # occurrence, silently dropping every classifier but one. Use get_all()
+        # (available on the real message object) to preserve multi-valued fields
+        # as lists, collapsing each header only once. Fall back gracefully when
+        # the object is a plain mapping without get_all() (e.g. in tests).
+        get_all = getattr(pkg_metadata, "get_all", None)
+        result: dict[str, Any] = {}
+        for key in cast(dict, pkg_metadata).keys():  # type: ignore[type-arg]
+            if key in result:
+                continue
+            all_values = get_all(key) if get_all is not None else None
+            if all_values is not None and len(all_values) > 1:
+                result[key] = list(all_values)
+            else:
+                result[key] = pkg_metadata[key]
+        return result
     except md.PackageNotFoundError:
         print(f"Package '{package_name}' not found.")
         return {}
