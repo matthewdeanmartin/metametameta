@@ -131,7 +131,7 @@ dev = [
     "check-jsonschema>=0.30.0",
     "bandit; python_version >= '3.12'",
     "pre-commit",
-    "keepachangelog-manager-fork[all]>=6.5.0",
+    "keepachangelog-manager-fork[all]>=6.6.0,<7",
 ]
 
 [tool.black]
