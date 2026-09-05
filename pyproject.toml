@@ -6,6 +6,10 @@ authors = [
     {name = "Matthew Martin", email = "matthewdeanmartin@gmail.com"},
 ]
 license = {text = "MIT"}
+# Pin license files explicitly so the build never depends on gitignore state.
+# (The actual leak here came from the unanchored "LICENSE" pattern in the
+# hatch include lists below -- see the "/LICENSE" entries.)
+license-files = ["LICENSE"]
 readme = "README.md"
 requires-python = ">=3.9"
 keywords = ["packaging", "metadata", ]
@@ -20,7 +24,9 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
 ]
 dependencies = [
     "rich_argparse>=1.7.1",
@@ -49,7 +55,7 @@ build-backend = "hatchling.build"
 include = [
     "metametameta/**/*.py",
     "metametameta/py.typed",
-    "/README.md", "LICENSE",
+    "/README.md", "/LICENSE",
 ]
 
 exclude = [
@@ -60,7 +66,7 @@ packages = ["metametameta"]
 include = [
     "metametameta/**/*.py",
     "metametameta/py.typed",
-    "/README.md", "LICENSE",
+    "/README.md", "/LICENSE",
 ]
 
 
@@ -128,10 +134,17 @@ dev = [
     # contract (optional)
     # griffe = { version = ">=0.38.1", python = ">=3.9" }
     "zizmor>=1.2.0",
-    "check-jsonschema>=0.30.0",
+    # check-jsonschema hard-depends on `regress`, a pyo3 extension pinned to
+    # pyo3 0.26 which caps at Python 3.14 (no cp315 wheel, source build fails).
+    # Not an optional extra, so the whole tool has to wait for a regress release.
+    "check-jsonschema>=0.30.0; python_version < '3.15'",
     "bandit; python_version >= '3.12'",
     "pre-commit",
-    "keepachangelog-manager-fork[all]>=6.6.0,<7",
+    # The [all] extra pulls in google-re2, which has no cp315 wheel and fails to
+    # build on Windows (missing absl headers). The base package is pure Python and
+    # provides the `kaclm validate` functionality this repo actually uses.
+    "keepachangelog-manager-fork[all]>=6.6.0,<7; python_version < '3.15'",
+    "keepachangelog-manager-fork>=6.6.0,<7; python_version >= '3.15'",
 ]
 
 [tool.black]

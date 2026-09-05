@@ -137,7 +137,48 @@ pylint: isort black
 # for when using -j (jobs, run in parallel)
 .NOTPARALLEL: isort black
 
-check: mypy test pylint bandit
+check: mypy test pylint bandit check-dist
+
+# -- Distribution verification -----------------------------------------------
+
+.PHONY: check-dist
+check-dist:
+	@echo "Verifying distribution contents"
+	@python -c "import shutil; shutil.rmtree('.build/dist-check', ignore_errors=True)"
+	uv build --out-dir .build/dist-check --no-sources
+	$(VENV) python scripts/verify_distribution.py .build/dist-check
+
+# -- Python 3.15 trial run ---------------------------------------------------
+# Uses a dedicated venv so the normal .venv is never clobbered. See python315.md.
+
+PY315 := 3.15.0rc2
+VENV315 := .venv315rc2
+PY315_EXE := $(VENV315)/Scripts/python.exe
+
+.PHONY: venv315
+venv315:
+	@echo "Creating Python $(PY315) trial venv at $(VENV315)"
+	@test -x $(PY315_EXE) || uv venv $(VENV315) --python $(PY315)
+	uv pip install -e . --group dev --python $(PY315_EXE)
+
+.PHONY: venv315-clean
+venv315-clean:
+	@echo "Recreating Python $(PY315) trial venv from scratch"
+	uv venv $(VENV315) --python $(PY315) --clear
+	@$(MAKE) venv315
+
+.PHONY: test315
+test315: venv315
+	@echo "Running unit tests on Python $(PY315)"
+	$(PY315_EXE) -m pytest tests -q --timeout=60 -p no:randomly
+	# $(CURDIR) is a Windows-style path (C:/...) under Git Bash make; the drive
+	# colon would split PATH, so convert to a POSIX path inside the shell.
+	bash -c 'PATH="$$(cd $(VENV315)/Scripts && pwd):$$PATH"; export PATH; bash ./scripts/basic_checks.sh'
+
+.PHONY: check315
+check315: test315
+	@echo "Python $(PY315) checks passed."
+
 
 #.PHONY: publish_test
 #publish_test:
@@ -198,10 +239,6 @@ prerelease-llm: metadata-sync-check version-check dev-status-check docstrings-ch
 check_self:
 	# Can it verify itself?
 	$(VENV) ./scripts/dog_food.sh
-
-#audit:
-#	# $(VENV) python -m metametameta audit
-#	$(VENV) tool_audit single metametameta --version=">=2.0.0"
 
 
 .PHONY: lint-actions
