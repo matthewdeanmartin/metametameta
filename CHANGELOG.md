@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Python 3.15 support.
+
+### Changed
+- Requires Python 3.11 or newer; Python 3.9-3.10 are no longer supported.
+
 ## [0.1.14] - 2026-07-04
 ### Fixed
 - `sync-check --output` with a full relative path (e.g. `pkg/__about__.py`) no longer double-joins the package directory, matching how the `pep621` subcommand accepts the same value
