@@ -5,8 +5,8 @@ from __future__ import annotations
 import argparse
 import tarfile
 import zipfile
-from pathlib import Path
 from collections.abc import Iterable
+from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 PACKAGE_ROOT = PROJECT_ROOT / "metametameta"
@@ -23,9 +23,7 @@ def source_files(root: Path, pattern: str = "*") -> set[str]:
     return {
         path.relative_to(PROJECT_ROOT).as_posix()
         for path in root.rglob(pattern)
-        if path.is_file()
-        and not IGNORED_DIR_PARTS.intersection(path.parts)
-        and path.suffix not in IGNORED_SUFFIXES
+        if path.is_file() and not IGNORED_DIR_PARTS.intersection(path.parts) and path.suffix not in IGNORED_SUFFIXES
     }
 
 
@@ -95,9 +93,7 @@ def verify(directory: Path) -> None:
 
     package_python_count = sum(name.endswith(".py") for name in package_files)
     print(
-        f"Verified {wheel.name} and {sdist.name}: "
-        f"{len(package_files)} package files ({package_python_count} Python); "
-        f"{len(test_python_files)} test modules exist locally (not shipped)."
+        f"Verified {wheel.name} and {sdist.name}: {len(package_files)} package files ({package_python_count} Python); {len(test_python_files)} test modules exist locally (not shipped)."
     )
 
 

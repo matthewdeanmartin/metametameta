@@ -49,7 +49,7 @@ def assert_paths_point_to_same_file(x: str, y: str) -> None:
         relative_path_as_absolute.parts[-len(relative_path.parts) :]
     ):
         raise AssertionError(
-            f"Paths do not match: {absolute_path.parts[-len(relative_path.parts):]} != {relative_path_as_absolute.parts[-len(relative_path.parts):]}"
+            f"Paths do not match: {absolute_path.parts[-len(relative_path.parts) :]} != {relative_path_as_absolute.parts[-len(relative_path.parts) :]}"
         )
 
 
