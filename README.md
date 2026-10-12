@@ -174,3 +174,10 @@ item for `__mailing_address__` you could easily do it with source code metadata.
 - [Documentation](https://metametameta.readthedocs.io/en/latest/)
 - [Bug Tracker](https://github.com/matthewdeanmartin/metametameta/issues)
 - [Change Log](https://github.com/matthewdeanmartin/metametameta/blob/main/CHANGELOG.md)
+
+
+## Python 3.15 verification (2026-10-04)
+
+221 tests pass on RC3 stable, prerelease-allowed dependencies, and 3.14.7, including generated-code checks using wheel-installed Ruff/Pylint/isort/Black/mypy. Initial missing-tool failures were corrected in the test environment; no production source changes.
+
+Locks refreshed with `uv lock --upgrade`. Every dependency install used published wheels only in fresh environments; no source builds. Full developer groups still have wheel blockers, so unit-suite success does not certify the full developer setup. Evidence and limits: `C:/github/python315_batch6_2026-10-04.md`. Human operators review and file upstream bugs.
