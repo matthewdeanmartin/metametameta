@@ -13,13 +13,13 @@ __all__ = [
     "__version__",
 ]
 
-__metadata_version__ = "2.4"
+__metadata_version__ = "2.5"
 __title__ = "metametameta"
-__version__ = "0.1.13"
+__version__ = "0.1.14"
 __author_email__ = "Matthew Martin <matthewdeanmartin@gmail.com>"
 __license__ = "MIT"
 __license_file__ = "LICENSE"
 __keywords__ = "metadata,packaging"
-__requires_python__ = ">=3.9"
+__requires_python__ = ">=3.11"
 __description_content_type__ = "text/markdown"
 __description__ = "Generate __about__.py with dunder meta."
