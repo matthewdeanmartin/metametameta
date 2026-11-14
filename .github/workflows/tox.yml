@@ -30,7 +30,7 @@ jobs:
     - uses: hynek/setup-cached-uv@v2.6.0
 
     - name: Using Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v7.0.0
+      uses: actions/setup-python@v7.1.0
       with:
         python-version: ${{ matrix.python-version }}
 
