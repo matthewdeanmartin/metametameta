@@ -2,14 +2,13 @@
 
 Generate dunder metadata file with `__title__`, `__author__`, etc. Also tools to discover these in other packages.
 
-[![tests](https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml/badge.svg)
-](https://github.com/matthewdeanmartin/metametameta/actions/workflows/tests.yml)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/matthewdeanmartin/metametameta/main.svg)
-](https://results.pre-commit.ci/latest/github/matthewdeanmartin/metametameta/main)
+[Homepage](https://matthewdeanmartin.github.io/metametameta/) · [Documentation](https://metametameta.readthedocs.io/en/latest/)
+
+[![tests](https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml/badge.svg)](https://github.com/matthewdeanmartin/metametameta/actions/workflows/build.yml)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/matthewdeanmartin/metametameta/main.svg)](https://results.pre-commit.ci/latest/github/matthewdeanmartin/metametameta/main)
 [![Downloads](https://img.shields.io/pypi/dm/metametameta)](https://pypistats.org/packages/metametameta)
-[![Python Version](https://img.shields.io/pypi/pyversions/metametameta)
-![Release](https://img.shields.io/pypi/v/metametameta)
-](https://pypi.org/project/metametameta/)
+[![Python Version](https://img.shields.io/pypi/pyversions/metametameta)](https://pypi.org/project/metametameta/)
+[![Release](https://img.shields.io/pypi/v/metametameta)](https://pypi.org/project/metametameta/)
 
 ## Installation
 
@@ -42,7 +41,7 @@ metametameta poetry # or setup_cfg, pep621, importlib, setup_py, requirements_tx
 Or set everything explicitly:
 
 ```bash
-metametameta poetry --name "something" --source some.toml --output OUTPUT "mod/meta/__meta__.py"
+metametameta poetry --name "something" --source some.toml --output "mod/meta/__meta__.py"
 ```
 
 Subcommand per source.
@@ -174,10 +173,3 @@ item for `__mailing_address__` you could easily do it with source code metadata.
 - [Documentation](https://metametameta.readthedocs.io/en/latest/)
 - [Bug Tracker](https://github.com/matthewdeanmartin/metametameta/issues)
 - [Change Log](https://github.com/matthewdeanmartin/metametameta/blob/main/CHANGELOG.md)
-
-
-## Python 3.15 verification (2026-10-04)
-
-221 tests pass on RC3 stable, prerelease-allowed dependencies, and 3.14.7, including generated-code checks using wheel-installed Ruff/Pylint/isort/Black/mypy. Initial missing-tool failures were corrected in the test environment; no production source changes.
-
-Locks refreshed with `uv lock --upgrade`. Every dependency install used published wheels only in fresh environments; no source builds. Full developer groups still have wheel blockers, so unit-suite success does not certify the full developer setup. Evidence and limits: `C:/github/python315_batch6_2026-10-04.md`. Human operators review and file upstream bugs.

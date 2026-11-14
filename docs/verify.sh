@@ -4,9 +4,9 @@ set -euo pipefail
 echo
 echo "Formatting markdown files with mdformat"
 echo
-uv run mdformat .
+uv run --no-build mdformat .
 
 echo
-echo "Are the links okay?"
+echo "Checking documentation build and internal links"
 echo
-uv run linkcheckMarkdown .
+uv run --no-build mkdocs build --strict --clean

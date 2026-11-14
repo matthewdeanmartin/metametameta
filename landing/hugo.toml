@@ -1,0 +1,11 @@
+baseURL = "https://matthewdeanmartin.github.io/metametameta/"
+locale = "en-us"
+title = "metametameta"
+disableKinds = ["taxonomy", "term", "RSS"]
+
+[params]
+  description = "Generate and check Python package metadata modules from the project information you already maintain."
+  version = "0.1.14"
+  github = "https://github.com/matthewdeanmartin/metametameta"
+  docs = "https://metametameta.readthedocs.io/en/latest/"
+  pypi = "https://pypi.org/project/metametameta/"

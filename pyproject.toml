@@ -33,6 +33,7 @@ dependencies = [
 ]
 
 [project.urls]
+"Homepage" = "https://matthewdeanmartin.github.io/metametameta/"
 "Bug Tracker" = "https://github.com/matthewdeanmartin/metametameta/issues"
 "Change Log" = "https://github.com/matthewdeanmartin/metametameta/blob/main/CHANGELOG.md"
 "Documentation" = "https://metametameta.readthedocs.io/en/latest/"
@@ -120,7 +121,6 @@ dev = [
     "pydoctest==0.2.1",
     "pdoc3>=0.5.0",
     "mdformat>=0.5.0",
-    "linkcheckmd>=1.4.0",
     "codespell>=2.2.6",
     "pyenchant>=3.2.2",
     # more testing (optional)

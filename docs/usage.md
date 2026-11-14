@@ -9,7 +9,7 @@ metametameta poetry
 You can specify the project name, source file, or output path:
 
 ```bash
-metametameta poetry --name "something" --source some.toml --output OUTPUT "mod/meta/__meta__.py"
+metametameta poetry --name "something" --source some.toml --output "mod/meta/__meta__.py"
 ```
 
 The command line interface provides subcommands for different metadata sources:

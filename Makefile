@@ -52,7 +52,7 @@ docstrings-check:
 .PHONY: docs-build
 docs-build:
 	@echo "Building MkDocs site"
-	$(VENV) mkdocs build --strict --clean
+	uv run --no-build mkdocs build --strict --clean
 
 .PHONY: docs-serve
 docs-serve:
@@ -207,8 +207,7 @@ make_docs:
 
 check_md:
 	$(VENV) mdformat README.md docs/*.md
-	# Fails with 429 if it exists, 404 if it doesn't. Hmm...
-	# $(VENV) linkcheckMarkdown README.md
+	$(VENV) mkdocs build --strict --clean
 	# This isn't avail on github actions atm
 	# $(VENV) markdownlint README.md --config .markdownlintrc
 
