@@ -22,7 +22,7 @@ jobs:
     - uses: hynek/setup-cached-uv@v2.6.0
 
     - name: Using Python 3.14
-      uses: actions/setup-python@v7.0.0
+      uses: actions/setup-python@v7.1.0
       with:
         python-version: '3.14'
 
